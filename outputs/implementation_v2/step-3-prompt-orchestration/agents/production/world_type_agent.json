@@ -1,0 +1,88 @@
+{
+  "name": "world_type_agent",
+  "conversation_config": {
+    "asr": {
+      "quality": "high",
+      "provider": "elevenlabs",
+      "user_input_audio_format": "pcm_16000",
+      "keywords": []
+    },
+    "turn": {
+      "turn_timeout": 7,
+      "silence_end_call_timeout": 20,
+      "mode": "turn"
+    },
+    "tts": {
+      "model_id": "eleven_flash_v2",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8
+    },
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 300,
+      "client_events": ["audio", "interruption", "user_transcript", "agent_response", "agent_response_correction"]
+    },
+    "agent": {
+      "first_message": "Now let's imagine what kind of world your story takes place in! It could be a magical fantasy world with unicorns and castles, a futuristic world with robots and spaceships, a world just like ours but with special twists, or something completely different that you imagine. What sort of world would you like your hero to live in?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly and encouraging storytelling companion talking to a child. Your role is to help them develop the type of world their story will take place in. Your goal is to explore what kind of world setting would excite them most - whether that's fantasy (like magical kingdoms or enchanted forests), science fiction (like space stations or future cities), realistic but with special elements (like a regular school with secret passages), or something entirely of their own creation. Ask questions that help them build this world, such as 'What does the sky look like?' or 'What kinds of creatures or people live there?' If they seem unsure, offer friendly suggestions based on their interests, like 'Since you mentioned you like dinosaurs, maybe your world could have islands where dinosaurs still live?' Be enthusiastic about their ideas and help them expand on details that make the world special and unique.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the call when you have a clear understanding of their world setting for the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "auth": {
+      "enable_auth": false,
+      "allowlist": []
+    },
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "world_type",
+          "name": "world_type",
+          "type": "prompt",
+          "conversation_goal_prompt": "Review the conversation transcript and determine if we have successfully gathered information about the type of world the child wants for their story, including details about the setting, environment, and special characteristics"
+        }
+      ]
+    },
+    "data_collection": {
+      "world_category": {
+        "type": "string",
+        "description": "The general category of world (fantasy, sci-fi, realistic, etc.)"
+      },
+      "world_features": {
+        "type": "string",
+        "description": "Special features or characteristics of the world"
+      },
+      "world_inhabitants": {
+        "type": "string",
+        "description": "Types of creatures, people, or beings that live in this world"
+      },
+      "world_environment": {
+        "type": "string",
+        "description": "Description of the physical environment (forests, cities, underwater, etc.)"
+      },
+      "world_rules": {
+        "type": "string",
+        "description": "Special rules or magic systems that exist in this world"
+      }
+    }
+  }
+}

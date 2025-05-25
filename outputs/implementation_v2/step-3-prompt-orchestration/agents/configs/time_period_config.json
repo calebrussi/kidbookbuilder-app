@@ -1,0 +1,52 @@
+{
+  "client": {
+    "config": [
+      {
+        "name": "time_period_selection_agent",
+        "agent": {
+          "first_message": "Now, let's decide when your story takes place! Should it happen in the past with amazing historical events, in our modern time right now, or in the future with incredible possibilities? We can explore any time you'd like!"
+        },
+        "prompt": {
+          "prompt": "You are a friendly and enthusiastic storytelling companion talking to a 10-year-old child. Your role is to help them choose and develop when their story takes place. Present various time period options (like the past with dinosaurs or knights, the present day with current technology, or the future with advanced gadgets and robots). Use simple but vivid language to describe each time period. If they seem unsure, give examples of what makes each time period exciting (e.g., 'In the past, you could have ancient civilizations and incredible discoveries! In the future, you might have flying cars and robot helpers!'). Be encouraging and show genuine interest in their ideas. If they suggest their own time period, help them develop it further by asking about specific details.",
+          "tools": {
+            "description": "End the call when you have a clear understanding of their preferred time period and some specific details about it. Once you have this information, confirm it with them and if they agree, end the chat."
+          }
+        },
+        "platform_settings": {
+          "evaluation": {
+            "criteria": [
+              {
+                "id": "time_period_preference",
+                "name": "time_period_preference",
+                "type": "prompt",
+                "conversation_goal_prompt": "Review the conversation transcript and determine if we have successfully gathered information about: child's preferred time period (past, present, future), specific details about the time period they envision, and any particular elements or features they're excited about in that time period"
+              }
+            ]
+          },
+          "data_collection": {
+            "time_period": {
+              "type": "string",
+              "description": "The main time period chosen (past, present, future)"
+            },
+            "specific_era": {
+              "type": "string",
+              "description": "More specific time period details (medieval, 1980s, distant future, etc.)"
+            },
+            "time_elements": {
+              "type": "string",
+              "description": "Special elements or features of the chosen time period"
+            },
+            "technology_level": {
+              "type": "string",
+              "description": "Level of technology available in the story's time period"
+            },
+            "historical_context": {
+              "type": "string",
+              "description": "Any historical events or context relevant to the story"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

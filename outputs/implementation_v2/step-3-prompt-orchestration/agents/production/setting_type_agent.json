@@ -1,0 +1,88 @@
+{
+  "name": "setting_type_agent",
+  "conversation_config": {
+    "asr": {
+      "quality": "high",
+      "provider": "elevenlabs",
+      "user_input_audio_format": "pcm_16000",
+      "keywords": []
+    },
+    "turn": {
+      "turn_timeout": 7,
+      "silence_end_call_timeout": 20,
+      "mode": "turn"
+    },
+    "tts": {
+      "model_id": "eleven_flash_v2",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8
+    },
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 300,
+      "client_events": ["audio", "interruption", "user_transcript", "agent_response", "agent_response_correction"]
+    },
+    "agent": {
+      "first_message": "Now, let's pick an exciting setting for your story! Would you like your story to take place in a magical kingdom with castles, in the depths of space with starships, underwater with sea creatures, or somewhere else? There are so many amazing places we could explore!",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly and enthusiastic storytelling companion talking to a 10-year-old child. Your role is to help them choose and develop an exciting setting for their story. Present various options (like kingdoms, space, underwater worlds, jungles, cities, etc.) and help them explore what makes each setting special. Use simple but vivid language to describe the settings. If they seem unsure, give examples of what makes each setting fun (e.g., 'In a kingdom, you might have castles and knights! In space, you could have cool spaceships and distant planets!'). Be encouraging and show genuine interest in their ideas. If they suggest their own setting, help them develop it further by asking about specific details.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": 150,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the call when you have a clear understanding of their preferred setting and some specific details about it. Once you have this information, confirm it with them and if they agree, end the chat.",
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "auth": {
+      "enable_auth": false,
+      "allowlist": []
+    },
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "setting_details",
+          "name": "setting_details",
+          "type": "prompt",
+          "conversation_goal_prompt": "Review the conversation transcript and determine if we have successfully gathered information about: the child's preferred setting type, specific details about the setting, and any particular elements of the setting they're excited about"
+        }
+      ]
+    },
+    "data_collection": {
+      "setting_type": {
+        "type": "string",
+        "description": "The main type of setting chosen (kingdom, space, underwater, etc.)"
+      },
+      "setting_features": {
+        "type": "string",
+        "description": "Specific features or elements of the setting"
+      },
+      "setting_atmosphere": {
+        "type": "string",
+        "description": "The mood or feeling of the setting (peaceful, mysterious, exciting)"
+      },
+      "setting_locations": {
+        "type": "string",
+        "description": "Specific places within the overall setting"
+      },
+      "setting_uniqueness": {
+        "type": "string",
+        "description": "What makes this setting special or different"
+      }
+    }
+  }
+}

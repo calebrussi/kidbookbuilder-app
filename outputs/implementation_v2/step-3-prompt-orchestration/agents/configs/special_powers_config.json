@@ -1,0 +1,46 @@
+{
+  "name": "special_powers_agent",
+  "agent": {
+    "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?"
+  },
+  "prompt": {
+    "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+    "tools": {
+      "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat."
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "special_powers",
+          "name": "special_powers",
+          "type": "prompt",
+          "conversation_goal_prompt": "Review the conversation transcript and determine if we have successfully gathered information about: the child's preferred special powers and abilities for their hero, specific examples of how these powers might be used, and any particular abilities they're excited about implementing in their story"
+        }
+      ]
+    },
+    "data_collection": {
+      "power_types": {
+        "type": "string",
+        "description": "The main types of powers or abilities the hero has"
+      },
+      "power_sources": {
+        "type": "string",
+        "description": "Where or how the hero got their special powers"
+      },
+      "power_limitations": {
+        "type": "string",
+        "description": "Any limitations or constraints on the hero's powers"
+      },
+      "power_uses": {
+        "type": "string",
+        "description": "Specific ways the hero uses their powers in the story"
+      },
+      "power_development": {
+        "type": "string",
+        "description": "How the hero's powers might grow or change throughout the story"
+      }
+    }
+  }
+}

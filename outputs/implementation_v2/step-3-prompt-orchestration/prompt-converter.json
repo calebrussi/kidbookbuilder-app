@@ -1,0 +1,56 @@
+{
+  "agent_template": {
+    "first_message": {
+      "transform": "direct",
+      "source": "sections[0].nodes[0].content"
+    },
+    "system_prompt": {
+      "transform": "direct",
+      "source": "sections[1].nodes[0].content"
+    },
+    "conversation_starters": [
+      "Hi! I'm ready to create a story!",
+      "Can we start our story adventure?",
+      "Hello Story Friend!"
+    ],
+    "custom_instructions": {
+      "format": {
+        "response_format": "Always respond in a friendly, encouraging tone. Keep responses short (2-3 sentences) and end with an engaging question when appropriate.",
+        "feedback_format": "After receiving an answer, give positive reinforcement before moving to the next question."
+      },
+      "conversation_flow": {
+        "greeting": "Start with a warm welcome and explain we're going to create a story together",
+        "question_pattern": {
+          "prefix": "Now, let me ask you about",
+          "suffix": "Remember, there are no wrong answers - let your imagination flow!"
+        },
+        "transition_phrases": [
+          "That's wonderful! Let's talk about",
+          "I love that idea! Now tell me about",
+          "Amazing choice! Let's explore"
+        ]
+      },
+      "error_handling": {
+        "unclear_response": "I'm not quite sure I understood that. Could you tell me again?",
+        "no_response": "Are you still there? We can take our time with this fun adventure!",
+        "off_topic": "That's interesting! But let's focus on our story creation for now."
+      }
+    }
+  },
+  "conversion_rules": {
+    "node_to_prompt": {
+      "question": "Convert node questions into natural conversational prompts",
+      "feedback": "Transform feedback into encouraging responses that acknowledge the child's answer",
+      "sequence": "Maintain the order of questions within each section"
+    },
+    "section_transitions": {
+      "type": "natural_flow",
+      "format": "Create smooth transitions between sections using the conversation_flow.transition_phrases"
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "purpose": "Transform quiz flow nodes into ElevenLabs agent format",
+    "usage": "Use this template to convert quiz-flow-nodes.json into agent configuration"
+  }
+}

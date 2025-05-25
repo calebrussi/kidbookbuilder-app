@@ -1,0 +1,89 @@
+{
+  "name": "story_ending_agent",
+  "agent": {
+    "first_message": "Now comes one of the most exciting parts - deciding how your story will end! Would you like your hero to:\n\n🌟 Have an amazing victory (like saving the day or winning a challenge)\n💫 Make a wonderful discovery (like finding something special or learning an important lesson)\n🎉 Create a happy surprise (like making new friends or finding a magical solution)\n\nWhat kind of ending would make your story super special?",
+    "prompt": {
+      "prompt": "You are a supportive storytelling companion helping a child design a satisfying ending for their story. Guide them through different types of endings while keeping things age-appropriate and encouraging:\n\n1. Happy Endings:\n- Victory moments (saving the day, winning challenges)\n- Celebration scenes (parties, rewards, recognition)\n- Friendship triumphs (making friends, helping others)\n\n2. Learning Moments:\n- Personal growth (becoming braver, wiser, kinder)\n- Understanding (solving mysteries, discovering truths)\n- Friendship lessons (working together, forgiveness)\n\n3. Surprise Twists:\n- Magical discoveries (hidden powers, secret places)\n- Clever solutions (unexpected answers, creative ideas)\n- Happy revelations (finding lost things, meeting special characters)\n\n4. New Beginnings:\n- Future adventures (hints at more quests)\n- Positive changes (new abilities, friends, or knowledge)\n- Open possibilities (leaving room for imagination)\n\nGuide the conversation by:\n1. Asking about their favorite story endings\n2. Offering examples that match their interests\n3. Helping them develop their ideas with details\n4. Encouraging positive and satisfying conclusions",
+      "tools": {
+        "description": "End the conversation when you have:\n1. Confirmed their preferred type of ending\n2. Gathered specific details about how the story concludes\n3. Identified what their hero achieves or learns\n4. Noted how they want readers to feel",
+        "end_conversation_prompt": "What a wonderful ending you've created! Let me make sure I got everything: {summary_of_ending}. Does that sound like the perfect way to end your story?"
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "ending_type",
+          "name": "Ending Type",
+          "type": "prompt",
+          "conversation_goal_prompt": "Has the child chosen a clear type of ending (victory, discovery, surprise, etc.)?"
+        },
+        {
+          "id": "ending_details",
+          "name": "Ending Details",
+          "type": "prompt",
+          "conversation_goal_prompt": "Have we collected specific details about how the story concludes?"
+        },
+        {
+          "id": "hero_outcome",
+          "name": "Hero Outcome",
+          "type": "prompt",
+          "conversation_goal_prompt": "Did we identify what the hero achieves or learns by the end?"
+        },
+        {
+          "id": "emotional_impact",
+          "name": "Emotional Impact",
+          "type": "prompt",
+          "conversation_goal_prompt": "Did we discuss how they want readers to feel when finishing the story?"
+        },
+        {
+          "id": "engagement_level",
+          "name": "Engagement Level",
+          "type": "prompt",
+          "conversation_goal_prompt": "Did the child show enthusiasm and actively participate in creating their story's ending?"
+        }
+      ]
+    },
+    "data_collection": {
+      "ending_type": {
+        "type": "string",
+        "description": "The main type of ending chosen (victory, discovery, surprise, etc.)"
+      },
+      "conclusion_elements": {
+        "type": "array",
+        "description": "List of specific elements or events that happen in the ending"
+      },
+      "hero_achievements": {
+        "type": "object",
+        "properties": {
+          "accomplishments": {
+            "type": "array",
+            "description": "What the hero achieves or accomplishes"
+          },
+          "lessons": {
+            "type": "array",
+            "description": "What the hero learns or understands"
+          }
+        }
+      },
+      "reader_experience": {
+        "type": "object",
+        "properties": {
+          "emotions": {
+            "type": "array",
+            "description": "How they want readers to feel"
+          },
+          "takeaways": {
+            "type": "array",
+            "description": "What they want readers to remember"
+          }
+        }
+      },
+      "future_hints": {
+        "type": "array",
+        "description": "Any hints or setups for possible future adventures"
+      }
+    }
+  }
+}

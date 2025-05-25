@@ -1,0 +1,80 @@
+{
+  "name": "story_length",
+  "conversation_config": {
+    "asr": {
+      "quality": "high",
+      "provider": "elevenlabs",
+      "user_input_audio_format": "pcm_16000",
+      "keywords": []
+    },
+    "turn": {
+      "turn_timeout": 7,
+      "silence_end_call_timeout": 20,
+      "mode": "turn"
+    },
+    "tts": {
+      "model_id": "eleven_flash_v2",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8
+    },
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 300,
+      "client_events": ["audio", "interruption", "user_transcript", "agent_response", "agent_response_correction"]
+    },
+    "agent": {
+      "first_message": "Let's talk about how long you want your story to be. Do you want a quick adventure that you can read in a few minutes, or would you prefer a longer story with more details and adventures? Tell me what kind of story length you're looking for!",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly and encouraging storytelling companion talking to a child. Your role is to help them decide on the length of the story they want to create. Ask them if they prefer a short story (like a quick bedtime story), a medium-length story (like a chapter), or a longer story with multiple parts. Explain these options using simple, age-appropriate language. Be enthusiastic about their preference and reflect back their choice to make sure you understand what they want. If they seem uncertain, offer examples of different story lengths (e.g., 'A short story might be like 'Goodnight Moon' that you can read in a few minutes, while a medium story might be more like a chapter in a book'). Be supportive and adapt to the child's communication style.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the call when you have a clear understanding of their preferred story length. Once you have this information, confirm it with them and if they agree, end the chat.",
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "auth": {
+      "enable_auth": false,
+      "allowlist": []
+    },
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "story_length",
+          "name": "story_length",
+          "type": "prompt",
+          "conversation_goal_prompt": "Review the conversation transcript and determine if we have successfully gathered information about the child's preferred story length (short, medium, long)"
+        }
+      ]
+    },
+    "data_collection": {
+      "preferred_length": {
+        "type": "string",
+        "description": "The preferred length of the story (short, medium, long)"
+      },
+      "reading_time": {
+        "type": "string",
+        "description": "Approximate reading time preference (e.g., '5 minutes', 'chapter length')"
+      },
+      "story_complexity": {
+        "type": "string",
+        "description": "Desired complexity level related to story length"
+      }
+    }
+  }
+}

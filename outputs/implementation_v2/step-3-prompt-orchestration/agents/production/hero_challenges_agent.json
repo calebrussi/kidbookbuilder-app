@@ -1,0 +1,88 @@
+{
+  "name": "hero_challenges_agent",
+  "conversation_config": {
+    "asr": {
+      "quality": "high",
+      "provider": "elevenlabs",
+      "user_input_audio_format": "pcm_16000",
+      "keywords": []
+    },
+    "turn": {
+      "turn_timeout": 7,
+      "silence_end_call_timeout": 20,
+      "mode": "turn"
+    },
+    "tts": {
+      "model_id": "eleven_flash_v2",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8
+    },
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 300,
+      "client_events": ["audio", "interruption", "user_transcript", "agent_response", "agent_response_correction"]
+    },
+    "agent": {
+      "first_message": "Now let's talk about what makes your hero's journey exciting - their challenges! What kinds of fears or obstacles will they need to overcome? These could be fears they need to face, problems to solve, or difficult situations they need to handle. What challenges would make your hero's story more interesting?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop meaningful challenges and obstacles for their hero to overcome. Present various types of challenges (like personal fears, physical obstacles, puzzles to solve, or difficult choices) and help them understand what makes each challenge interesting. Use simple but engaging language to describe how these challenges might affect their hero's journey. If they seem unsure, give examples (e.g., 'Maybe your hero is afraid of the dark but needs to explore a cave! Or they might need to figure out how to help someone who speaks a different language!'). Be supportive and show enthusiasm for their ideas. If they suggest their own challenges, help them explore those further by asking about specific ways their hero might overcome these obstacles.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the call when you have a clear understanding of their hero's main challenges and some specific ways these might be overcome in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "auth": {
+      "enable_auth": false,
+      "allowlist": []
+    },
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "hero_challenges",
+          "name": "hero_challenges",
+          "type": "prompt",
+          "conversation_goal_prompt": "Review the conversation transcript and determine if we have successfully gathered information about: the child's ideas for their hero's challenges, specific examples of obstacles or fears, and any particular struggles they're excited about including in their story"
+        }
+      ]
+    },
+    "data_collection": {
+      "challenge_types": {
+        "type": "string",
+        "description": "The main types of challenges the hero will face (fears, obstacles, puzzles)"
+      },
+      "hero_fears": {
+        "type": "string",
+        "description": "Specific fears or anxieties the hero needs to overcome"
+      },
+      "physical_obstacles": {
+        "type": "string",
+        "description": "Physical barriers or difficulties the hero will encounter"
+      },
+      "mental_challenges": {
+        "type": "string",
+        "description": "Mental or emotional challenges the hero must work through"
+      },
+      "challenge_solutions": {
+        "type": "string",
+        "description": "How the hero might overcome their various challenges"
+      }
+    }
+  }
+}

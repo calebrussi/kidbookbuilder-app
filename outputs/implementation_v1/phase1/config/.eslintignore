@@ -1,0 +1,15 @@
+# Dependencies
+node_modules
+
+# Build artifacts
+dist
+build
+coverage
+
+# Misc
+.git
+.DS_Store
+
+# Don't ignore these
+!phases/phase1/src/**/*.ts
+!phases/phase1/src/**/*.tsx 

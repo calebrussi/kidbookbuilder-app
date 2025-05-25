@@ -1,0 +1,46 @@
+{
+  "name": "supporting_characters_agent",
+  "agent": {
+    "first_message": "Now let's talk about the friends and family in your story! Who will be part of your hero's adventure? They could be loyal friends, wise mentors, caring family members, or even magical companions. Who would make your hero's journey more exciting?"
+  },
+  "prompt": {
+    "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop the supporting characters for their story. Present various types of characters (like best friends, family members, mentors, pets, magical companions) and help them understand what makes each type special. Use simple but engaging language to describe how these characters might help or interact with their hero. If they seem unsure, give examples (e.g., 'A wise mentor could teach your hero new skills! A loyal friend could help them through tough times!'). Be supportive and show enthusiasm for their ideas. If they suggest their own characters, help them explore those further by asking about specific ways these characters might help or relate to their hero.",
+    "tools": {
+      "description": "End the call when you have a clear understanding of their supporting characters and some specific ways these characters might interact with the hero. Once you have this information, confirm it with them and if they agree, end the chat."
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "supporting_characters",
+          "name": "supporting_characters",
+          "type": "prompt",
+          "conversation_goal_prompt": "Review the conversation transcript and determine if we have successfully gathered information about: the child's preferred supporting characters, specific examples of how these characters might interact with the hero, and any particular relationships or dynamics they're excited about creating"
+        }
+      ]
+    },
+    "data_collection": {
+      "character_types": {
+        "type": "string",
+        "description": "The types of supporting characters chosen (friends, family, mentors, magical companions)"
+      },
+      "character_traits": {
+        "type": "string",
+        "description": "The personality traits of the supporting characters"
+      },
+      "character_relationships": {
+        "type": "string",
+        "description": "How the supporting characters relate to the hero"
+      },
+      "character_roles": {
+        "type": "string",
+        "description": "How the supporting characters help the hero in their quest"
+      },
+      "character_dynamics": {
+        "type": "string",
+        "description": "Special interactions or relationships between characters"
+      }
+    }
+  }
+}

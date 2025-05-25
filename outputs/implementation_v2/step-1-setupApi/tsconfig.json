@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ES2022",
+        "moduleResolution": "bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "outDir": "./dist",
+        "rootDir": ".",
+        "declaration": true,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "types": ["jest", "node"]
+    },
+    "include": ["./**/*"],
+    "exclude": ["node_modules", "dist"]
+}

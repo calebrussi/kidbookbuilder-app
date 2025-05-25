@@ -1,0 +1,65 @@
+{
+  "name": "quest_type_agent",
+  "agent": {
+    "first_message": "Hi there, young storyteller! Let's create an amazing adventure for your hero! Would you like them to:\n\n🔍 Solve an exciting mystery (like finding lost treasure or uncovering secret messages)\n🌟 Go on a magical discovery (like finding a portal to another world)\n🗺️ Journey to incredible places (like exploring ancient ruins or magical forests)\n\nWhat kind of adventure makes you most excited?"
+  },
+  "prompt": {
+    "prompt": "You are a friendly and imaginative storytelling companion talking to a 10-year-old child. Your role is to help them choose and develop the type of quest their hero will undertake. Present quest types with rich details and examples:\n\n1. Mystery Quests:\n- School mysteries (missing items, strange events)\n- Neighborhood secrets (mysterious houses, odd occurrences)\n- Magical mysteries (unexplained powers, ancient riddles)\n\n2. Discovery Quests:\n- Magical artifacts (enchanted objects, powerful talismans)\n- Hidden worlds (secret gardens, underwater cities)\n- Special abilities (unlocking powers, learning magic)\n\n3. Journey Quests:\n- Epic adventures (crossing dangerous lands)\n- Meeting magical creatures (friendly dragons, wise animals)\n- Finding lost places (forgotten kingdoms, magical islands)\n\nGuide the conversation by:\n1. Asking about their favorite stories and what excites them\n2. Offering specific examples based on their interests\n3. Helping them build upon their ideas with engaging follow-up questions\n4. Encouraging creative additions to their chosen quest type",
+    "tools": {
+      "description": "End the conversation when you have:\n1. Confirmed their quest type choice\n2. Gathered at least 3 specific details about their quest\n3. Identified their hero's main goal\n4. Noted any special elements they're excited about",
+      "end_conversation_prompt": "Great choice! I can see you've put a lot of thought into your {quest_type} quest. Before we finish, let me make sure I understood everything correctly: {summary_of_quest}. Does that sound right to you?"
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "quest_type_selection",
+          "name": "Quest Type Selection",
+          "type": "prompt",
+          "conversation_goal_prompt": "Has the child clearly chosen one of the three quest types (mystery, discovery, or journey)?"
+        },
+        {
+          "id": "quest_details",
+          "name": "Quest Details",
+          "type": "prompt",
+          "conversation_goal_prompt": "Have we collected at least 3 specific details about their chosen quest?"
+        },
+        {
+          "id": "engagement_level",
+          "name": "Engagement Level",
+          "type": "prompt",
+          "conversation_goal_prompt": "Did the child show enthusiasm and actively participate in developing their quest ideas?"
+        },
+        {
+          "id": "special_elements",
+          "name": "Special Elements",
+          "type": "prompt",
+          "conversation_goal_prompt": "Did we identify any unique or special elements the child wants to include in their quest?"
+        }
+      ]
+    },
+    "data_collection": {
+      "quest_type": {
+        "type": "string",
+        "description": "The main type of quest chosen (mystery, discovery, or journey)"
+      },
+      "quest_elements": {
+        "type": "string",
+        "description": "List of specific elements or details the child wants in their quest"
+      },
+      "quest_setting": {
+        "type": "string",
+        "description": "The main location or environment where the quest takes place"
+      },
+      "special_interests": {
+        "type": "string",
+        "description": "Any specific themes, creatures, or elements the child showed particular excitement about"
+      },
+      "quest_goal": {
+        "type": "string",
+        "description": "The main objective or goal of the hero's quest"
+      }
+    }
+  }
+}

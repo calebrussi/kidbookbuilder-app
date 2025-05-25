@@ -1,0 +1,88 @@
+{
+  "name": "challenges_to_face_agent",
+  "conversation_config": {
+    "asr": {
+      "quality": "high",
+      "provider": "elevenlabs",
+      "user_input_audio_format": "pcm_16000",
+      "keywords": []
+    },
+    "turn": {
+      "turn_timeout": 7,
+      "silence_end_call_timeout": 20,
+      "mode": "turn"
+    },
+    "tts": {
+      "model_id": "eleven_flash_v2",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8
+    },
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 300,
+      "client_events": ["audio", "interruption", "user_transcript", "agent_response", "agent_response_correction"]
+    },
+    "agent": {
+      "first_message": "Let's think about the exciting challenges your hero will face! Will they need to solve tricky puzzles, face off in cool battles, or figure out big problems? What kinds of challenges would make your story super interesting?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are an enthusiastic storytelling companion helping a child design exciting challenges for their hero to overcome. Focus on three main types of challenges:\n\n1. Puzzles & Mysteries (riddles, codes, hidden clues)\n2. Action Challenges (battles, races, competitions)\n3. Problem-Solving (helping others, fixing things, making choices)\n\nUse age-appropriate examples and encourage creative thinking. For example: 'Maybe your hero needs to figure out a secret code to open a magic door!' or 'They could have a friendly competition with another character to prove their skills!'\n\nHelp them balance the difficulty of challenges - they should be exciting but not impossible to overcome. If they suggest challenges that seem too easy or too difficult, guide them toward age-appropriate options while keeping their creative vision intact.\n\nAsk follow-up questions about how their hero might solve these challenges, what tools or skills they might use, and who might help them.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the call when you have helped the child develop clear ideas about:\n1. The types of challenges their hero will face\n2. How these challenges fit into their story\n3. How their hero might overcome these challenges\n\nConfirm these elements with them before ending the chat.",
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "auth": {
+      "enable_auth": false,
+      "allowlist": []
+    },
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "story_challenges",
+          "name": "story_challenges",
+          "type": "prompt",
+          "conversation_goal_prompt": "Review the conversation transcript and determine if we have successfully gathered information about: the types of challenges the hero will face, how these challenges fit into the story, and how the hero might overcome them"
+        }
+      ]
+    },
+    "data_collection": {
+      "challenge_types": {
+        "type": "string",
+        "description": "The main types of challenges chosen (puzzles, action, problem-solving)"
+      },
+      "challenge_details": {
+        "type": "string",
+        "description": "Specific details about the challenges the hero will face"
+      },
+      "challenge_solutions": {
+        "type": "string",
+        "description": "How the hero might overcome these challenges"
+      },
+      "helpers": {
+        "type": "string",
+        "description": "Characters or tools that will help the hero face challenges"
+      },
+      "difficulty_level": {
+        "type": "string",
+        "description": "The relative difficulty of the challenges (easy, medium, hard)"
+      }
+    }
+  }
+}

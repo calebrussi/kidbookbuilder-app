@@ -1,0 +1,19 @@
+{
+  "name": "eleven-labs-api-setup",
+  "version": "1.0.0",
+  "description": "Setup for Eleven Labs Conversational AI API integration",
+  "main": "quiz.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/quiz.js",
+    "test": "node dist/test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "@types/ws": "^8.5.4",
+    "dotenv": "^16.0.3",
+    "typescript": "^5.0.4",
+    "ws": "^8.13.0"
+  }
+}
