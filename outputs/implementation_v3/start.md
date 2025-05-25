@@ -14,6 +14,8 @@ Specific steps to complete:
    - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/list
    - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/delete
 4. Basic Script that converts workflow nodes into ElevenLabs agents.
+   - https://openrouter.ai/docs/quickstart
+   - https://openrouter.ai/docs/features/structured-outputs
 
 General References:
 
