@@ -1,0 +1,1 @@
+The goal of this implementation is to get a working chatbot using ElevenLabs that walks a user through a series of questions that outputs a draft outline of all the components required to start writing episodes in their story.
