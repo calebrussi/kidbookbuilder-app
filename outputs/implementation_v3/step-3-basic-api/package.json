@@ -8,7 +8,8 @@
     "get": "node agentGet.js",
     "create": "node agentCreate.js",
     "update": "node agentUpdate.js",
-    "delete": "node agentDelete.js"
+    "delete": "node agentDelete.js",
+    "crud": "node agentCRUD.js"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",

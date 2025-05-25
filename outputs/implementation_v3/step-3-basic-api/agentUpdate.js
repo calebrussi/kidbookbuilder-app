@@ -8,6 +8,8 @@ const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
 
+const { getAgent } = require("./agentGet");
+
 // Get API key from environment variables
 const API_KEY = process.env.ELEVEN_LABS_API_KEY;
 
@@ -19,40 +21,6 @@ const outputsDir = path.join(__dirname, "outputs");
 if (!fs.existsSync(outputsDir)) {
   fs.mkdirSync(outputsDir, { recursive: true });
   console.log(`Created outputs directory: ${outputsDir}`);
-}
-
-/**
- * Function to get a specific agent by ID
- * @param {string} agentId - The ID of the agent to retrieve
- * @returns {Promise<Object>} - The agent details
- */
-async function getAgent(agentId) {
-  if (!agentId) {
-    throw new Error("Agent ID is required");
-  }
-
-  const url = `https://api.elevenlabs.io/v1/convai/agents/${agentId}`;
-
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "xi-api-key": API_KEY,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Failed to get agent: ${JSON.stringify(errorData)}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error getting agent:", error);
-    throw error;
-  }
 }
 
 /**
@@ -166,5 +134,12 @@ async function main() {
   }
 }
 
-// Run the script
-main();
+// Export functions for use in other modules
+module.exports = {
+  updateAgent,
+};
+
+// Run the script if it's called directly
+if (require.main === module) {
+  main();
+}

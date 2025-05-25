@@ -125,5 +125,12 @@ async function main() {
   }
 }
 
-// Run the script
-main();
+// Export functions for use in other modules
+module.exports = {
+  listAgents,
+};
+
+// Run the script if it's called directly
+if (require.main === module) {
+  main();
+}
