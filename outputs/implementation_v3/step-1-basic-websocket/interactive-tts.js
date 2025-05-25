@@ -88,24 +88,26 @@ async function textToSpeechWithUserInput() {
 
         ws.on("message", (message) => {
           try {
+            console.log("Received raw message from WebSocket");
             const data = JSON.parse(message);
 
             if (data.audio) {
+              console.log("Received audio data chunk");
               // Decode the base64 audio and write it to the file
               const audioBuffer = Buffer.from(data.audio, "base64");
               fileStream.write(audioBuffer, (err) => {
                 if (err) {
                   console.error("Error writing audio data to file:", err);
                 } else {
-                  console.log(
-                    `Audio generation complete. Saved to: ${outputFile}`
-                  );
-                  fileStream.end();
-
-                  // Continue with another prompt
-                  textToSpeechWithUserInput().then(resolve);
+                  console.log("Audio chunk written successfully");
                 }
               });
+            } else if (data.isFinal) {
+              console.log(`Audio generation complete. Saved to: ${outputFile}`);
+              fileStream.end();
+
+              // Continue with another prompt
+              textToSpeechWithUserInput().then(resolve);
             } else {
               console.log(
                 "Received WebSocket message:",
@@ -115,6 +117,7 @@ async function textToSpeechWithUserInput() {
             }
           } catch (error) {
             console.error("Error processing message:", error);
+            console.error("Raw message content:", message);
           }
         });
 
