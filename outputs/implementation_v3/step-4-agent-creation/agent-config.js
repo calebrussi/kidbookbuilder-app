@@ -23,7 +23,7 @@ const nodeDescription =
 // Read the prompt instructions from file
 const promptInstructionsPath = path.join(
   __dirname,
-  "prompts/convertNodesIntoConfig_simplified.md"
+  "prompts/convertNodesIntoConfig_openrouter.md"
 );
 const promptInstructions = fs.readFileSync(promptInstructionsPath, "utf-8");
 
