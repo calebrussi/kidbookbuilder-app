@@ -8,6 +8,14 @@ Specific steps to complete:
    - https://elevenlabs.io/docs/conversational-ai/guides/quickstarts/java-script
    - https://elevenlabs.io/docs/conversational-ai/guides/quickstarts/next-js
 3. Basic API Implementation to ElevenLabs to manage custom agents.
-   - https://elevenlabs.io/docs/conversational-ai/quickstart
-   - https://elevenlabs.io/docs/conversational-ai/guides/simulate-conversations
+   - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/create
+   - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/update
+   - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/get
+   - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/list
+   - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/delete
 4. Basic Script that converts workflow nodes into ElevenLabs agents.
+
+General References:
+
+- https://elevenlabs.io/docs/conversational-ai/quickstart
+- https://elevenlabs.io/docs/conversational-ai/guides/simulate-conversations
