@@ -4,8 +4,10 @@
   "description": "Simple OpenRouter integration for KidBookBuilder",
   "main": "openrouter-simple.js",
   "scripts": {
-    "simple": "node openrouter-simple.js",
-    "config": "node agent-config.js"
+    "openrouter": "node test-openrouter.js",
+    "config": "node agent-config.js",
+    "convert": "node agent-convert.js",
+    "create": "node agent-create.js"
   },
   "dependencies": {
     "dotenv": "^16.3.1",

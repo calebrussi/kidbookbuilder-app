@@ -16,21 +16,37 @@ if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir);
 }
 
-// Hard-coded conversation node description input
-const nodeDescription =
-  "What stories do you love? (favorite genres and themes)";
-
-// Read the prompt instructions from file
-const promptInstructionsPath = path.join(
-  __dirname,
-  "prompts/convertNodesIntoConfig_openrouter.md"
-);
-const promptInstructions = fs.readFileSync(promptInstructionsPath, "utf-8");
-
-async function main() {
+/**
+ * Converts a conversation node description into an agent configuration
+ * @param {string} nodeDescription - Description of conversation node/intent
+ * @param {Object} options - Additional options for conversion
+ * @param {string} options.model - Model to use for conversion (default: "openai/gpt-4o-mini")
+ * @param {string} options.promptFilePath - Path to prompt instructions file
+ * @param {string} options.outputDir - Directory to save output files
+ * @returns {Promise<Object>} - The generated agent configuration
+ */
+async function convertNodeToAgentConfig(
+  nodeDescription,
+  {
+    model = "openai/gpt-4o-mini",
+    promptFilePath = path.join(
+      __dirname,
+      "prompts/convertNodesIntoConfig_openrouter.md"
+    ),
+    outputDir = path.join(__dirname, "outputs"),
+  } = {}
+) {
   try {
     console.log("Converting node description to agent config...");
     console.log(`Input: "${nodeDescription}"`);
+
+    // Ensure output directory exists
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    // Read the prompt instructions from file
+    const promptInstructions = fs.readFileSync(promptFilePath, "utf-8");
 
     // Define messages array with system prompt from instructions and user input
     const messages = [
@@ -49,8 +65,8 @@ async function main() {
         "HTTP-Referer": "https://kidbookbuilder.app", // Optional: Site URL
         "X-Title": "Kid Book Builder", // Optional: Site title
       },
-      model: "openai/gpt-4o-mini", // Using GPT-4o for better JSON structuring
-      messages: messages,
+      model,
+      messages,
       response_format: { type: "json_object" }, // Ensure we get valid JSON back
     });
 
@@ -85,9 +101,32 @@ async function main() {
 
     console.log(`Full response saved to: ${promptConfigFile}`);
     console.log(`Clean agent config saved to: ${cleanConfigFile}`);
+
+    return parsedConfig;
   } catch (error) {
     console.error("Error in conversion process:", error);
+    throw error;
   }
 }
 
-main();
+async function main() {
+  try {
+    // Hard-coded conversation node description input for direct script execution
+    const nodeDescription =
+      "What stories do you love? (favorite genres and themes)";
+
+    await convertNodeToAgentConfig(nodeDescription);
+  } catch (error) {
+    console.error("Error in main function:", error);
+  }
+}
+
+// Run the script if it's called directly
+if (require.main === module) {
+  main();
+}
+
+// Export functions for use in other modules
+module.exports = {
+  convertNodeToAgentConfig,
+};
