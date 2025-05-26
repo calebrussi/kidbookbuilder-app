@@ -1,0 +1,69 @@
+{
+  "timestamp": "2025-05-26T15:35:35.820Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "timePeriod: When Does It Happen? (past, present, future)",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "time_period_selection_agent",
+    "agent": {
+      "first_message": "Let's decide when your story takes place! Would you like it to happen in the past, the present, or maybe even in the future? Think about what time makes your story the most exciting!"
+    },
+    "prompt": {
+      "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them choose a time period for their story. Present options (past, present, future), explain what makes each unique, and encourage them to share their thoughts and ideas.",
+      "tools": {
+        "description": "End the conversation once you know which time period they favor and why. Make sure to confirm their choice before wrapping up."
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "time_period_choice",
+            "name": "time_period_choice",
+            "type": "prompt",
+            "conversation_goal_prompt": "Ensure we have: preferred time period and reasons behind their choice."
+          }
+        ]
+      },
+      "data_collection": {
+        "time_period_preferences": {
+          "type": "string",
+          "description": "Collect: preferred time period and reasons for their choice."
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748273731-YZSQukQelVoUG15c3AHP",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748273731,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"time_period_selection_agent\",\n  \"agent\": {\n    \"first_message\": \"Let's decide when your story takes place! Would you like it to happen in the past, the present, or maybe even in the future? Think about what time makes your story the most exciting!\"\n  },\n  \"prompt\": {\n    \"prompt\": \"You are a friendly storytelling buddy talking to a 10-year-old child. Help them choose a time period for their story. Present options (past, present, future), explain what makes each unique, and encourage them to share their thoughts and ideas.\",\n    \"tools\": {\n      \"description\": \"End the conversation once you know which time period they favor and why. Make sure to confirm their choice before wrapping up.\"\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"time_period_choice\",\n          \"name\": \"time_period_choice\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Ensure we have: preferred time period and reasons behind their choice.\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"time_period_preferences\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: preferred time period and reasons for their choice.\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_34a54ae93c",
+    "usage": {
+      "prompt_tokens": 691,
+      "completion_tokens": 273,
+      "total_tokens": 964,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

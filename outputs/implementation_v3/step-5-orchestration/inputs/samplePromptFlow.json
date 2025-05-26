@@ -5,10 +5,7 @@
     "description": "A standalone node with no dependencies or group membership",
     "dependencies": [],
     "prompt_config": {},
-    "elevenlabs_config": {
-      "voice_id": "sample_voice_id",
-      "model_id": "eleven_monolingual_v1"
-    }
+    "elevenlabs_config": {}
   },
   {
     "id": "node_2",
@@ -42,10 +39,7 @@
     "group_id": "group_2",
     "dependencies": ["node_1", "group_1"],
     "prompt_config": {},
-    "elevenlabs_config": {
-      "voice_id": "another_voice_id",
-      "model_id": "eleven_multilingual_v2"
-    }
+    "elevenlabs_config": {}
   },
   {
     "id": "node_6",

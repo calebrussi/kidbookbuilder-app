@@ -1,5 +1,5 @@
 {
-  "name": "test_agent_1",
+  "name": "default_agent_name",
   "conversation_config": {
     "agent": {
       "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",

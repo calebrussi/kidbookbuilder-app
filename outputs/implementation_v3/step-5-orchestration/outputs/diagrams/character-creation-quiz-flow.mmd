@@ -1,0 +1,53 @@
+flowchart TD
+    %% Main groups
+    subgraph group_1[Tell Me Your Story Style]
+        node_1[favoriteStories\nWhat stories do you love?]
+        node_2[storyLength\nHow long should your story be?]
+        
+        node_1 --> node_2
+    end
+    
+    subgraph group_2[Design Your Story World]
+        node_3[worldType\nMagic or Real World?]
+        node_4[setting\nPick Your Setting]
+        node_5[timePeriod\nWhen Does It Happen?]
+        node_6[environment\nWeather & Places]
+        
+        node_3 --> node_4
+        node_4 --> node_5
+        node_5 --> node_6
+    end
+    
+    subgraph group_3[Create Your Characters]
+        node_7[heroPersonality\nYour Hero's Personality]
+        node_8[supportingCharacters\nFriends & Family]
+        node_9[specialPowers\nSpecial Powers]
+        node_10[heroChallenges\nHero's Challenges]
+        
+        node_7 --> node_8
+        node_8 --> node_9
+        node_9 --> node_10
+    end
+    
+    subgraph group_4[Choose Your Adventure]
+        node_11[questType\nType of Quest]
+        node_12[emotionalElements\nFriendship & Feelings]
+        node_13[challenges\nChallenges to Face]
+        node_14[storyOutcome\nHow It Ends]
+        
+        node_11 --> node_12
+        node_12 --> node_13
+        node_13 --> node_14
+    end
+    
+    %% Group dependencies
+    group_1 --> group_2
+    group_2 --> group_3
+    group_3 --> group_4
+    
+    %% Style
+    classDef group fill:#f9f9f9,stroke:#333,stroke-width:2px
+    classDef node fill:#e6f3ff,stroke:#333,stroke-width:1px
+    
+    class group_1,group_2,group_3,group_4 group
+    class node_1,node_2,node_3,node_4,node_5,node_6,node_7,node_8,node_9,node_10,node_11,node_12,node_13,node_14 node

@@ -26,6 +26,8 @@ Specific steps to complete:
 
 5. Agent Orchestration
 
+   - Prompt Flow JSON Structure for dependencies
+
 General References:
 
 - https://elevenlabs.io/docs/conversational-ai/quickstart
