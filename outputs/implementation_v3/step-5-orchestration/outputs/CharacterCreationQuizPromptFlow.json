@@ -1,42 +1,44 @@
 [
   {
     "id": "node_1",
-    "name": "favoriteStories",
-    "description": "What stories do you love? (favorite genres and themes)",
+    "name": "whatStoriesDoYouLove",
+    "description": "favorite genres and themes",
     "dependencies": [],
     "group_id": "group_1",
     "prompt_config": {
-      "name": "favorite_stories_selection_agent",
+      "name": "story_genre_selection_agent",
       "agent": {
-        "first_message": "I'm excited to hear about the stories you love! Do you enjoy magical adventures, thrilling mysteries, heartwarming tales, or maybe something else? What are some of your favorite stories or themes that really make you smile?"
+        "first_message": "I'd love to hear about the stories you enjoy! Do you have a favorite genre like adventure, mystery, or fantasy? Maybe you love stories about friendship, superheroes, or magical creatures? What themes make a story special for you?"
       },
       "prompt": {
-        "prompt": "You are a cheerful storytelling buddy chatting with a 10-year-old. Help them share their favorite stories and genres. Mention examples like magical adventures, superheroes, mysteries, or fairy tales. Use simple and fun language that encourages them to explore their favorite stories in detail!",
+        "prompt": "You are a delightful storytelling assistant chatting with a 10-year-old child. Help them describe their favorite story genres and themes. Encourage them to share their thoughts on adventure stories, mysteries, fantastical tales, and what themes excite them. Use simple language and show enthusiasm for their preferences.",
         "tools": {
-          "description": "End the conversation when you've learned about their favorite stories, genres, and the themes that resonate with them. Confirm their thoughts before concluding."
+          "description": "End the conversation when you have gathered their favorite genres and themes. Make sure to confirm their choices before finishing."
         }
       },
       "platform_settings": {
         "evaluation": {
           "criteria": [
             {
-              "id": "favorite_stories",
-              "name": "favorite_stories",
+              "id": "favorite_genre_and_theme",
+              "name": "favorite_genre_and_theme",
               "type": "prompt",
-              "conversation_goal_prompt": "Ensure we've gathered: their favorite stories, preferred genres, and themes that they love."
+              "conversation_goal_prompt": "Ensure we captured: their favorite genres, themes, and what stories resonate with them."
             }
           ]
         },
         "data_collection": {
-          "story_preferences": {
+          "favorite_genres_and_themes": {
             "type": "string",
-            "description": "Collect: their favorite stories, genres, and themes that excite them."
+            "description": "Collect: their favorite genres and themes in stories, including examples if possible."
           }
         }
       }
     },
     "elevenlabs_config": {
-      "name": "story_genre_selection_agent",
+      "agent_id": "agent_01jw71t99jerhbr85dr1xt3q24",
+      "created_at": "2025-05-26T19:41:21.827Z",
+      "name": "story_preference_agent",
       "conversation_config": {
         "agent": {
           "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
@@ -64,17 +66,17 @@
         "evaluation": {
           "criteria": [
             {
-              "id": "favorite_genres",
-              "name": "favorite_genres",
+              "id": "genre_theme_preference",
+              "name": "genre_theme_preference",
               "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: child's favorite genres, themes, and any specific stories they mention."
+              "conversation_goal_prompt": "Make sure we've collected: favorite genres, themes, and what makes them special to the child."
             }
           ]
         },
         "data_collection": {
           "story_preferences": {
             "type": "string",
-            "description": "Collect: child's favorite genres, themes, and any specific stories they mention.",
+            "description": "Collect: favorite genres, themes, and what makes them special to the child.",
             "dynamic_variable": "",
             "constant_value": ""
           }
@@ -84,168 +86,52 @@
   },
   {
     "id": "node_2",
-    "name": "storyLength",
-    "description": "How long should your story be? (short stories, chapter books)",
+    "name": "howLongShouldYourStoryBe",
+    "description": "short stories, chapter books",
     "dependencies": [
       "node_1"
     ],
     "group_id": "group_1",
-    "prompt_config": {
-      "name": "story_length_selection_agent",
-      "agent": {
-        "first_message": "Great choice! How long do you want your story to be? Would you like it to be a quick short story or a longer chapter book? Maybe something in between? Let's figure out how big your adventure will be!"
-      },
-      "prompt": {
-        "prompt": "You are a cheerful storytelling buddy chatting with a 10-year-old child. Help them decide on the length of their story. Present options (short stories, chapter books), describe what makes each option fun and exciting. Use simple language, show enthusiasm for their choices, and encourage them to share their ideas.",
-        "tools": {
-          "description": "End the conversation when you've determined their preferred story length. Confirm their choice before concluding."
-        }
-      },
-      "platform_settings": {
-        "evaluation": {
-          "criteria": [
-            {
-              "id": "story_length_choice",
-              "name": "story_length_choice",
-              "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: preferred story length and any specific preferences for their adventure."
-            }
-          ]
-        },
-        "data_collection": {
-          "story_length_preferences": {
-            "type": "string",
-            "description": "Collect: preferred story length and any specific preferences for their adventure."
-          }
-        }
-      }
-    },
+    "prompt_config": {},
     "elevenlabs_config": {}
   },
   {
     "id": "node_3",
-    "name": "worldType",
-    "description": "Magic or Real World? (choose your world type)",
+    "name": "magicOrRealWorld",
+    "description": "choose your world type",
     "dependencies": [
       "group_1"
     ],
     "group_id": "group_2",
-    "prompt_config": {
-      "name": "world_type_selection_agent",
-      "agent": {
-        "first_message": "Let's choose the type of world for your story! Would you like it to be a magical world full of wizards and dragons, or a real-world setting that's just like ours? What kind of adventures do you imagine in each type?"
-      },
-      "prompt": {
-        "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them choose between a magical world and a real-world setting. Describe what makes each option exciting and special. Use simple language, provide examples, and encourage them to share their thoughts and ideas.",
-        "tools": {
-          "description": "End the conversation when you understand their preferred world type and have captured any specific details or ideas they have in mind. Confirm with them before ending."
-        }
-      },
-      "platform_settings": {
-        "evaluation": {
-          "criteria": [
-            {
-              "id": "world_type_choice",
-              "name": "world_type_choice",
-              "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: preferred world type and any specific concepts or ideas they find exciting."
-            }
-          ]
-        },
-        "data_collection": {
-          "world_type_preferences": {
-            "type": "string",
-            "description": "Collect: preferred world type (magic or real) and any specific concepts they are excited about."
-          }
-        }
-      }
-    },
+    "prompt_config": {},
     "elevenlabs_config": {}
   },
   {
     "id": "node_4",
-    "name": "setting",
-    "description": "Pick Your Setting (kingdoms, space, underwater, etc.)",
+    "name": "pickYourSetting",
+    "description": "kingdoms, space, underwater, etc.",
     "dependencies": [
       "node_3"
     ],
     "group_id": "group_2",
-    "prompt_config": {
-      "name": "setting_selection_agent",
-      "agent": {
-        "first_message": "Let's pick an exciting setting for your story! Would you like it to happen in a magical kingdom, the vastness of space, deep underwater, or somewhere totally unique? What kind of place sparks your imagination?"
-      },
-      "prompt": {
-        "prompt": "You are a friendly storytelling partner chatting with a 10-year-old child. Help them choose a story setting. Present options like kingdoms, space, and underwater, and describe what makes each one special. Use playful language, share examples, show enthusiasm for their ideas, and ask them to share more about their favorites.",
-        "tools": {
-          "description": "End the conversation when you've identified their favorite setting and any special details they want to include. Make sure to confirm their choices before wrapping up."
-        }
-      },
-      "platform_settings": {
-        "evaluation": {
-          "criteria": [
-            {
-              "id": "setting_choice",
-              "name": "setting_choice",
-              "type": "prompt",
-              "conversation_goal_prompt": "Ensure we've gathered: the chosen setting, any specific details, and aspects they are most excited about."
-            }
-          ]
-        },
-        "data_collection": {
-          "setting_preferences": {
-            "type": "string",
-            "description": "Collect: the chosen setting, specific details about it, and elements that excite them."
-          }
-        }
-      }
-    },
+    "prompt_config": {},
     "elevenlabs_config": {}
   },
   {
     "id": "node_5",
-    "name": "timePeriod",
-    "description": "When Does It Happen? (past, present, future)",
+    "name": "whenDoesItHappen",
+    "description": "past, present, future",
     "dependencies": [
       "node_4"
     ],
     "group_id": "group_2",
-    "prompt_config": {
-      "name": "time_period_selection_agent",
-      "agent": {
-        "first_message": "Let's decide when your story takes place! Would you like it to happen in the past, the present, or maybe even in the future? Think about what time makes your story the most exciting!"
-      },
-      "prompt": {
-        "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them choose a time period for their story. Present options (past, present, future), explain what makes each unique, and encourage them to share their thoughts and ideas.",
-        "tools": {
-          "description": "End the conversation once you know which time period they favor and why. Make sure to confirm their choice before wrapping up."
-        }
-      },
-      "platform_settings": {
-        "evaluation": {
-          "criteria": [
-            {
-              "id": "time_period_choice",
-              "name": "time_period_choice",
-              "type": "prompt",
-              "conversation_goal_prompt": "Ensure we have: preferred time period and reasons behind their choice."
-            }
-          ]
-        },
-        "data_collection": {
-          "time_period_preferences": {
-            "type": "string",
-            "description": "Collect: preferred time period and reasons for their choice."
-          }
-        }
-      }
-    },
+    "prompt_config": {},
     "elevenlabs_config": {}
   },
   {
     "id": "node_6",
-    "name": "environment",
-    "description": "Weather & Places (environment details)",
+    "name": "weatherAndPlaces",
+    "description": "environment details",
     "dependencies": [
       "node_5"
     ],
@@ -255,8 +141,8 @@
   },
   {
     "id": "node_7",
-    "name": "heroPersonality",
-    "description": "Your Hero's Personality (traits and qualities)",
+    "name": "yourHerosPersonality",
+    "description": "traits and qualities",
     "dependencies": [
       "group_2"
     ],
@@ -266,8 +152,8 @@
   },
   {
     "id": "node_8",
-    "name": "supportingCharacters",
-    "description": "Friends & Family (supporting characters)",
+    "name": "friendsAndFamily",
+    "description": "supporting characters",
     "dependencies": [
       "node_7"
     ],
@@ -278,7 +164,7 @@
   {
     "id": "node_9",
     "name": "specialPowers",
-    "description": "Special Powers (abilities and skills)",
+    "description": "abilities and skills",
     "dependencies": [
       "node_8"
     ],
@@ -288,8 +174,8 @@
   },
   {
     "id": "node_10",
-    "name": "heroChallenges",
-    "description": "Hero's Challenges (fears and obstacles)",
+    "name": "herosChallenges",
+    "description": "fears and obstacles",
     "dependencies": [
       "node_9"
     ],
@@ -299,8 +185,8 @@
   },
   {
     "id": "node_11",
-    "name": "questType",
-    "description": "Type of Quest (mystery, discovery, journey)",
+    "name": "typeOfQuest",
+    "description": "mystery, discovery, journey",
     "dependencies": [
       "group_3"
     ],
@@ -310,8 +196,8 @@
   },
   {
     "id": "node_12",
-    "name": "emotionalElements",
-    "description": "Friendship & Feelings (emotional elements)",
+    "name": "friendshipAndFeelings",
+    "description": "emotional elements",
     "dependencies": [
       "node_11"
     ],
@@ -321,8 +207,8 @@
   },
   {
     "id": "node_13",
-    "name": "challenges",
-    "description": "Challenges to Face (puzzles, battles, problems)",
+    "name": "challengesToFace",
+    "description": "puzzles, battles, problems",
     "dependencies": [
       "node_12"
     ],
@@ -332,8 +218,8 @@
   },
   {
     "id": "node_14",
-    "name": "storyOutcome",
-    "description": "How It Ends (story outcome)",
+    "name": "howItEnds",
+    "description": "story outcome",
     "dependencies": [
       "node_13"
     ],
@@ -344,13 +230,13 @@
   {
     "id": "group_1",
     "name": "tellMeYourStoryStyle",
-    "description": "Tell Me Your Story Style group containing nodes for favorite stories and story length preferences",
+    "description": "Tell Me Your Story Style group containing nodes for story preferences and length",
     "dependencies": []
   },
   {
     "id": "group_2",
     "name": "designYourStoryWorld",
-    "description": "Design Your Story World group containing nodes for world type, setting, time period, and environment details",
+    "description": "Design Your Story World group containing nodes for world type, setting, time period, and environment",
     "dependencies": [
       "group_1"
     ]
@@ -358,7 +244,7 @@
   {
     "id": "group_3",
     "name": "createYourCharacters",
-    "description": "Create Your Characters group containing nodes for hero personality, supporting characters, special powers, and hero challenges",
+    "description": "Create Your Characters group containing nodes for hero personality, supporting characters, powers, and challenges",
     "dependencies": [
       "group_2"
     ]
@@ -366,7 +252,7 @@
   {
     "id": "group_4",
     "name": "chooseYourAdventure",
-    "description": "Choose Your Adventure group containing nodes for quest type, emotional elements, challenges, and story outcome",
+    "description": "Choose Your Adventure group containing nodes for quest type, emotions, challenges, and story outcome",
     "dependencies": [
       "group_3"
     ]
