@@ -3,19 +3,28 @@ The goal of this implementation is to get a working chatbot using ElevenLabs tha
 Specific steps to complete:
 
 1. Basic Websocket Implementation to ElevenLabs.
+
    - https://elevenlabs.io/docs/websockets#initiate-the-websocket-connection
+
 2. Basic React Implementation using WS to ElevenLabs.
+
    - https://elevenlabs.io/docs/conversational-ai/guides/quickstarts/java-script
    - https://elevenlabs.io/docs/conversational-ai/guides/quickstarts/next-js
+
 3. Basic API Implementation to ElevenLabs to manage custom agents.
+
    - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/create
    - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/update
    - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/get
    - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/list
    - https://elevenlabs.io/docs/conversational-ai/api-reference/agents/delete
+
 4. Basic Script that converts workflow nodes into ElevenLabs agents.
+
    - https://openrouter.ai/docs/quickstart
    - https://openrouter.ai/docs/features/structured-outputs
+
+5. Agent Orchestration
 
 General References:
 
