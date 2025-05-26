@@ -1,5 +1,5 @@
 {
-  "name": "story_genre_selection_agent",
+  "name": "story_preference_agent",
   "conversation_config": {
     "agent": {
       "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
@@ -27,17 +27,17 @@
     "evaluation": {
       "criteria": [
         {
-          "id": "favorite_genres",
-          "name": "favorite_genres",
+          "id": "genre_theme_preference",
+          "name": "genre_theme_preference",
           "type": "prompt",
-          "conversation_goal_prompt": "Check if we gathered: child's favorite genres, themes, and any specific stories they mention."
+          "conversation_goal_prompt": "Make sure we've collected: favorite genres, themes, and what makes them special to the child."
         }
       ]
     },
     "data_collection": {
       "story_preferences": {
         "type": "string",
-        "description": "Collect: child's favorite genres, themes, and any specific stories they mention.",
+        "description": "Collect: favorite genres, themes, and what makes them special to the child.",
         "dynamic_variable": "",
         "constant_value": ""
       }

@@ -21,7 +21,7 @@ const { deleteAgent } = require("../step-3-basic-api/agentDelete");
 const DEFAULT_CONFIG_PATH = path.join(
   __dirname,
   "outputs",
-  "agent-convert-result-story_genre_selection_agent.json"
+  "agent-convert-result-story_preference_agent.json"
 );
 
 // Ensure outputs directory exists

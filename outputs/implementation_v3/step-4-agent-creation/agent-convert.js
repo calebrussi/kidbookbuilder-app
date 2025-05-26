@@ -18,7 +18,7 @@ const path = require("path");
 const DEFAULT_INPUT_PATH = path.join(
   __dirname,
   "outputs",
-  "agent-config-result-story_genre_selection_agent.json"
+  "agent-config-result-story_preference_agent.json"
 );
 const DEFAULT_OUTPUT_PATH = path.join(
   __dirname,
