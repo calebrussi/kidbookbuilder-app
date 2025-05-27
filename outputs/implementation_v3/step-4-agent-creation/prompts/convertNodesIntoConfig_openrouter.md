@@ -12,13 +12,17 @@ JSON config with required fields:
 ```json
 {
   "name": "[topic]_selection_agent",
-  "agent": {
-    "first_message": "[Engaging question with examples]"
-  },
-  "prompt": {
-    "prompt": "[Agent instructions]",
-    "tools": {
-      "description": "[When to end conversation]"
+  "conversation_config": {
+    "agent": {
+      "first_message": "[Engaging question with examples]",
+      "prompt": {
+        "prompt": "[Agent instructions]",
+        "tools": [
+          {
+            "description": "[When to end conversation]"
+          }
+        ]
+      }
     }
   },
   "platform_settings": {
@@ -60,13 +64,17 @@ Output:
 ```json
 {
   "name": "setting_selection_agent",
-  "agent": {
-    "first_message": "Let's pick an amazing setting for your story! Would you like it to take place in a magical kingdom, outer space, under the ocean, or somewhere else entirely? What kind of world would make your story exciting?"
-  },
-  "prompt": {
-    "prompt": "You are a friendly storytelling companion talking to a 10-year-old child. Help them select a story setting. Present options (kingdoms, space, underwater, etc.), describe what makes each special. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.",
-    "tools": {
-      "description": "End the call when you understand their preferred setting and details. Confirm with them before ending."
+  "conversation_config": {
+    "agent": {
+      "first_message": "Let's pick an amazing setting for your story! Would you like it to take place in a magical kingdom, outer space, under the ocean, or somewhere else entirely? What kind of world would make your story exciting?",
+      "prompt": {
+        "prompt": "You are a friendly storytelling companion talking to a 10-year-old child. Help them select a story setting. Present options (kingdoms, space, underwater, etc.), describe what makes each special. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.",
+        "tools": [
+          {
+            "description": "End the call when you understand their preferred setting and details. Confirm with them before ending."
+          }
+        ]
+      }
     }
   },
   "platform_settings": {

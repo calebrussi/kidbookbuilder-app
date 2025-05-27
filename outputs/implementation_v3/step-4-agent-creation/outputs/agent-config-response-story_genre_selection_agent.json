@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-05-27T18:06:05.820Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "What stories do you love? (favorite genres and themes)",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "story_genre_selection_agent",
+    "conversation_config": {
+      "agent": {
+        "first_message": "I'm excited to hear about the stories you love! Do you like magical adventures, thrilling mysteries, heartwarming tales, or maybe something else? What kinds of themes make your heart race or fill you with joy?",
+        "prompt": {
+          "prompt": "You are a cheerful storytelling buddy talking to a 10-year-old child. Help them share their favorite genres and themes in stories. Encourage them to think about what makes them feel excited or happy. Use simple language, ask follow-up questions, and explore their preferences enthusiastically.",
+          "tools": [
+            {
+              "description": "End the conversation when you have a clear understanding of their favorite genres and themes. Make sure to confirm their choices before saying goodbye."
+            }
+          ]
+        }
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "genre_theme_selection",
+            "name": "genre_theme_selection",
+            "type": "prompt",
+            "conversation_goal_prompt": "Check if we gathered: favorite genres, themes, and what stories they feel strongly about."
+          }
+        ]
+      },
+      "data_collection": {
+        "favorite_story_genres": {
+          "type": "string",
+          "description": "Collect: favorite genres, themes, and what stories they are passionate about."
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748369161-i0x6EPKmqjWB1GgHjERg",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748369161,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"story_genre_selection_agent\",\n  \"conversation_config\": {\n    \"agent\": {\n      \"first_message\": \"I'm excited to hear about the stories you love! Do you like magical adventures, thrilling mysteries, heartwarming tales, or maybe something else? What kinds of themes make your heart race or fill you with joy?\",\n      \"prompt\": {\n        \"prompt\": \"You are a cheerful storytelling buddy talking to a 10-year-old child. Help them share their favorite genres and themes in stories. Encourage them to think about what makes them feel excited or happy. Use simple language, ask follow-up questions, and explore their preferences enthusiastically.\",\n        \"tools\": [\n          {\n            \"description\": \"End the conversation when you have a clear understanding of their favorite genres and themes. Make sure to confirm their choices before saying goodbye.\"\n          }\n        ]\n      }\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"genre_theme_selection\",\n          \"name\": \"genre_theme_selection\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Check if we gathered: favorite genres, themes, and what stories they feel strongly about.\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"favorite_story_genres\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: favorite genres, themes, and what stories they are passionate about.\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_54eb4bd693",
+    "usage": {
+      "prompt_tokens": 711,
+      "completion_tokens": 306,
+      "total_tokens": 1017,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

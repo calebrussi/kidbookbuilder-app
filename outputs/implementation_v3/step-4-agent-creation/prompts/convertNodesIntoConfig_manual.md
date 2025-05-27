@@ -22,13 +22,15 @@ The output should be a JSON configuration file with the following structure:
 ```json
 {
   "name": "[agent_name]_selection_agent",
-  "agent": {
-    "first_message": "[An engaging first message that introduces the topic and asks the main question]"
-  },
-  "prompt": {
-    "prompt": "[Detailed instructions for the agent's personality, approach, and engagement style when talking to a child]",
-    "tools": {
-      "description": "[Instructions for when to end the conversation and how to confirm collected information]"
+  "conversation_config": {
+    "agent": {
+      "first_message": "[An engaging first message that introduces the topic and asks the main question]",
+      "prompt": {
+        "prompt": "[Detailed instructions for the agent's personality, approach, and engagement style when talking to a child]",
+        "tools": {
+          "description": "[Instructions for when to end the conversation and how to confirm collected information]"
+        }
+      }
     }
   },
   "platform_settings": {
@@ -98,13 +100,16 @@ Output:
 ```json
 {
   "name": "setting_selection_agent",
-  "agent": {
-    "first_message": "Let's pick an amazing setting for your story! Would you like it to take place in a magical kingdom, outer space, under the ocean, or somewhere else entirely? What kind of world would make your story exciting?"
-  },
-  "prompt": {
-    "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them select an exciting setting for their story. Present various setting options (like kingdoms, outer space, underwater worlds, jungles, etc.) and help them understand what makes each setting special. Use simple but engaging language to describe how these settings might create different adventures. If they seem unsure, give examples (e.g., 'In a magical kingdom, your hero might meet wizards or dragons! In outer space, they could discover new planets!'). Be supportive and show enthusiasm for their ideas. If they suggest their own setting, help them explore it further by asking about specific details of this world.",
-    "tools": {
-      "description": "End the call when you have a clear understanding of their preferred story setting and some specific details about it. Once you have this information, confirm it with them and if they agree, end the chat."
+  "conversation_config": {
+    "agent": {
+      "first_message": "Let's pick an amazing setting for your story! Would you like it to take place in a magical kingdom, outer space, under the ocean, or somewhere else entirely? What kind of world would make your story exciting?",
+
+      "prompt": {
+        "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them select an exciting setting for their story. Present various setting options (like kingdoms, outer space, underwater worlds, jungles, etc.) and help them understand what makes each setting special. Use simple but engaging language to describe how these settings might create different adventures. If they seem unsure, give examples (e.g., 'In a magical kingdom, your hero might meet wizards or dragons! In outer space, they could discover new planets!'). Be supportive and show enthusiasm for their ideas. If they suggest their own setting, help them explore it further by asking about specific details of this world.",
+        "tools": {
+          "description": "End the call when you have a clear understanding of their preferred story setting and some specific details about it. Once you have this information, confirm it with them and if they agree, end the chat."
+        }
+      }
     }
   },
   "platform_settings": {
