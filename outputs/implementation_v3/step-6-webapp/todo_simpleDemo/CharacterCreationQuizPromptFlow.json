@@ -1,0 +1,919 @@
+[
+  {
+    "id": "node_1",
+    "name": "favoriteStories",
+    "description": "What stories do you love? (favorite genres and themes)",
+    "dependencies": [],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "favorite_stories_selection_agent",
+      "agent": {
+        "first_message": "I'm excited to hear about the stories you love! Do you enjoy magical adventures, thrilling mysteries, heartwarming tales, or maybe something else? What are some of your favorite stories or themes that really make you smile?"
+      },
+      "prompt": {
+        "prompt": "You are a cheerful storytelling buddy chatting with a 10-year-old. Help them share their favorite stories and genres. Mention examples like magical adventures, superheroes, mysteries, or fairy tales. Use simple and fun language that encourages them to explore their favorite stories in detail!",
+        "tools": {
+          "description": "End the conversation when you've learned about their favorite stories, genres, and the themes that resonate with them. Confirm their thoughts before concluding."
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "favorite_stories",
+              "name": "favorite_stories",
+              "type": "prompt",
+              "conversation_goal_prompt": "Ensure we've gathered: their favorite stories, preferred genres, and themes that they love."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: their favorite stories, genres, and themes that excite them."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7a67zjffp9xcm3c4ed1g5g",
+      "created_at": "2025-05-26T22:07:42.053Z",
+      "name": "story_genre_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "favorite_genres",
+              "name": "favorite_genres",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: child's favorite genres, themes, and any specific stories they mention."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: child's favorite genres, themes, and any specific stories they mention.",
+            "dynamic_variable": "",
+            "constant_value": ""
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_2",
+    "name": "storyLength",
+    "description": "How long should your story be? (short stories, chapter books)",
+    "dependencies": ["node_1"],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "story_length_selection_agent",
+      "agent": {
+        "first_message": "Great choice! How long do you want your story to be? Would you like it to be a quick short story or a longer chapter book? Maybe something in between? Let's figure out how big your adventure will be!"
+      },
+      "prompt": {
+        "prompt": "You are a cheerful storytelling buddy chatting with a 10-year-old child. Help them decide on the length of their story. Present options (short stories, chapter books), describe what makes each option fun and exciting. Use simple language, show enthusiasm for their choices, and encourage them to share their ideas.",
+        "tools": {
+          "description": "End the conversation when you've determined their preferred story length. Confirm their choice before concluding."
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_length_choice",
+              "name": "story_length_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred story length and any specific preferences for their adventure."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_length_preferences": {
+            "type": "string",
+            "description": "Collect: preferred story length and any specific preferences for their adventure."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7a8p00emfvdd22yyg0sv9f",
+      "created_at": "2025-05-26T22:09:01.897Z",
+      "name": "story_preference_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "genre_theme_preference",
+              "name": "genre_theme_preference",
+              "type": "prompt",
+              "conversation_goal_prompt": "Make sure we've collected: favorite genres, themes, and what makes them special to the child."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: favorite genres, themes, and what makes them special to the child.",
+            "dynamic_variable": "",
+            "constant_value": ""
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_3",
+    "name": "worldType",
+    "description": "Magic or Real World? (choose your world type)",
+    "dependencies": ["group_1"],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "world_type_selection_agent",
+      "agent": {
+        "first_message": "Let's choose the type of world for your story! Would you like it to be a magical world full of wizards and dragons, or a real-world setting that's just like ours? What kind of adventures do you imagine in each type?"
+      },
+      "prompt": {
+        "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them choose between a magical world and a real-world setting. Describe what makes each option exciting and special. Use simple language, provide examples, and encourage them to share their thoughts and ideas.",
+        "tools": {
+          "description": "End the conversation when you understand their preferred world type and have captured any specific details or ideas they have in mind. Confirm with them before ending."
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "world_type_choice",
+              "name": "world_type_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred world type and any specific concepts or ideas they find exciting."
+            }
+          ]
+        },
+        "data_collection": {
+          "world_type_preferences": {
+            "type": "string",
+            "description": "Collect: preferred world type (magic or real) and any specific concepts they are excited about."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7a8rkgfvt9dk02j5vb004x",
+      "created_at": "2025-05-26T22:09:04.612Z",
+      "name": "story_preference_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "genre_theme_preference",
+              "name": "genre_theme_preference",
+              "type": "prompt",
+              "conversation_goal_prompt": "Make sure we've collected: favorite genres, themes, and what makes them special to the child."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: favorite genres, themes, and what makes them special to the child.",
+            "dynamic_variable": "",
+            "constant_value": ""
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_4",
+    "name": "setting",
+    "description": "Pick Your Setting (kingdoms, space, underwater, etc.)",
+    "dependencies": ["node_3"],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "setting_selection_agent",
+      "agent": {
+        "first_message": "Let's pick an exciting setting for your story! Would you like it to happen in a magical kingdom, the vastness of space, deep underwater, or somewhere totally unique? What kind of place sparks your imagination?"
+      },
+      "prompt": {
+        "prompt": "You are a friendly storytelling partner chatting with a 10-year-old child. Help them choose a story setting. Present options like kingdoms, space, and underwater, and describe what makes each one special. Use playful language, share examples, show enthusiasm for their ideas, and ask them to share more about their favorites.",
+        "tools": {
+          "description": "End the conversation when you've identified their favorite setting and any special details they want to include. Make sure to confirm their choices before wrapping up."
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "setting_choice",
+              "name": "setting_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Ensure we've gathered: the chosen setting, any specific details, and aspects they are most excited about."
+            }
+          ]
+        },
+        "data_collection": {
+          "setting_preferences": {
+            "type": "string",
+            "description": "Collect: the chosen setting, specific details about it, and elements that excite them."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7a8v01exs85mjgb1ak3q34",
+      "created_at": "2025-05-26T22:09:07.110Z",
+      "name": "story_preference_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "genre_theme_preference",
+              "name": "genre_theme_preference",
+              "type": "prompt",
+              "conversation_goal_prompt": "Make sure we've collected: favorite genres, themes, and what makes them special to the child."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: favorite genres, themes, and what makes them special to the child.",
+            "dynamic_variable": "",
+            "constant_value": ""
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_5",
+    "name": "timePeriod",
+    "description": "When Does It Happen? (past, present, future)",
+    "dependencies": ["node_4"],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "time_period_selection_agent",
+      "agent": {
+        "first_message": "Let's decide when your story takes place! Would you like it to happen in the past, the present, or maybe even in the future? Think about what time makes your story the most exciting!"
+      },
+      "prompt": {
+        "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them choose a time period for their story. Present options (past, present, future), explain what makes each unique, and encourage them to share their thoughts and ideas.",
+        "tools": {
+          "description": "End the conversation once you know which time period they favor and why. Make sure to confirm their choice before wrapping up."
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "time_period_choice",
+              "name": "time_period_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Ensure we have: preferred time period and reasons behind their choice."
+            }
+          ]
+        },
+        "data_collection": {
+          "time_period_preferences": {
+            "type": "string",
+            "description": "Collect: preferred time period and reasons for their choice."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7a8xtcefntjkedmdt8m3fk",
+      "created_at": "2025-05-26T22:09:09.864Z",
+      "name": "story_preference_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "genre_theme_preference",
+              "name": "genre_theme_preference",
+              "type": "prompt",
+              "conversation_goal_prompt": "Make sure we've collected: favorite genres, themes, and what makes them special to the child."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: favorite genres, themes, and what makes them special to the child.",
+            "dynamic_variable": "",
+            "constant_value": ""
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_6",
+    "name": "environment",
+    "description": "Weather & Places (environment details)",
+    "dependencies": ["node_5"],
+    "group_id": "group_2",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7a91gqf2wbksct5rrhnaca",
+      "created_at": "2025-05-26T22:09:13.665Z",
+      "name": "environment_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "node_7",
+    "name": "heroPersonality",
+    "description": "Your Hero's Personality (traits and qualities)",
+    "dependencies": ["group_2"],
+    "group_id": "group_3",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7a9xz0fg3ssp454zd4rh1y",
+      "created_at": "2025-05-26T22:09:42.823Z",
+      "name": "heroPersonality_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "node_8",
+    "name": "supportingCharacters",
+    "description": "Friends & Family (supporting characters)",
+    "dependencies": ["node_7"],
+    "group_id": "group_3",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7aa07ceyct7kk8xxr6y9sp",
+      "created_at": "2025-05-26T22:09:45.011Z",
+      "name": "supportingCharacters_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "node_9",
+    "name": "specialPowers",
+    "description": "Special Powers (abilities and skills)",
+    "dependencies": ["node_8"],
+    "group_id": "group_3",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7aa27ne5kacg1h304qr6nh",
+      "created_at": "2025-05-26T22:09:47.229Z",
+      "name": "specialPowers_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "node_10",
+    "name": "heroChallenges",
+    "description": "Hero's Challenges (fears and obstacles)",
+    "dependencies": ["node_9"],
+    "group_id": "group_3",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7aa4ete3vb5rhf98rcgfhn",
+      "created_at": "2025-05-26T22:09:49.451Z",
+      "name": "heroChallenges_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "node_11",
+    "name": "questType",
+    "description": "Type of Quest (mystery, discovery, journey)",
+    "dependencies": ["group_3"],
+    "group_id": "group_4",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7aa6zwf3k8b8rsafv7qary",
+      "created_at": "2025-05-26T22:09:52.165Z",
+      "name": "questType_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "node_12",
+    "name": "emotionalElements",
+    "description": "Friendship & Feelings (emotional elements)",
+    "dependencies": ["node_11"],
+    "group_id": "group_4",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7aaa0zevrtnc5cmayqrr2y",
+      "created_at": "2025-05-26T22:09:55.181Z",
+      "name": "emotionalElements_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "node_13",
+    "name": "challenges",
+    "description": "Challenges to Face (puzzles, battles, problems)",
+    "dependencies": ["node_12"],
+    "group_id": "group_4",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7aad4afxrstpst288ydrcs",
+      "created_at": "2025-05-26T22:09:58.412Z",
+      "name": "challenges_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "node_14",
+    "name": "storyOutcome",
+    "description": "How It Ends (story outcome)",
+    "dependencies": ["node_13"],
+    "group_id": "group_4",
+    "prompt_config": {},
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw7aafqwf5qa2rbepxgnw4tx",
+      "created_at": "2025-05-26T22:10:00.948Z",
+      "name": "storyOutcome_elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "model_id": "eleven_flash_v2",
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "conversation_config": {
+        "asr": {
+          "quality": "high",
+          "provider": "elevenlabs",
+          "user_input_audio_format": "pcm_16000",
+          "keywords": []
+        },
+        "turn": {
+          "turn_timeout": 7,
+          "silence_end_call_timeout": 20,
+          "mode": "turn"
+        },
+        "tts": {
+          "model_id": "eleven_flash_v2",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "agent_output_audio_format": "pcm_16000",
+          "optimize_streaming_latency": 3,
+          "stability": 0.5,
+          "speed": 1,
+          "similarity_boost": 0.8
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "type": "api_key",
+          "required": true
+        },
+        "evaluation": {
+          "criteria": []
+        },
+        "data_collection": {}
+      }
+    }
+  },
+  {
+    "id": "group_1",
+    "name": "tellMeYourStoryStyle",
+    "description": "Tell Me Your Story Style group containing nodes for favorite stories and story length preferences",
+    "dependencies": []
+  },
+  {
+    "id": "group_2",
+    "name": "designYourStoryWorld",
+    "description": "Design Your Story World group containing nodes for world type, setting, time period, and environment details",
+    "dependencies": ["group_1"]
+  },
+  {
+    "id": "group_3",
+    "name": "createYourCharacters",
+    "description": "Create Your Characters group containing nodes for hero personality, supporting characters, special powers, and hero challenges",
+    "dependencies": ["group_2"]
+  },
+  {
+    "id": "group_4",
+    "name": "chooseYourAdventure",
+    "description": "Choose Your Adventure group containing nodes for quest type, emotional elements, challenges, and story outcome",
+    "dependencies": ["group_3"]
+  }
+]
