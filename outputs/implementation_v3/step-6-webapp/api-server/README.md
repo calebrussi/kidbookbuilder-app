@@ -19,7 +19,7 @@ cp .env.example .env
 3. Add your ElevenLabs API key to the `.env` file:
 
 ```bash
-ELEVENLABS_API_KEY=your_actual_elevenlabs_api_key_here
+ELEVEN_LABS_API_KEY=your_actual_ELEVEN_LABS_API_KEY_here
 ```
 
 4. Start the development server:
@@ -132,7 +132,7 @@ All API responses follow this format:
 
 - `PORT`: Server port (default: 3001)
 - `NODE_ENV`: Environment mode (development/production)
-- `ELEVENLABS_API_KEY`: Your ElevenLabs API key (required for conversation endpoint)
+- `ELEVEN_LABS_API_KEY`: Your ElevenLabs API key (required for conversation endpoint)
 
 ## TODO
 

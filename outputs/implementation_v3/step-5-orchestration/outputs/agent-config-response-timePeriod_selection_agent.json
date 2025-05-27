@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-05-27T20:35:33.928Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "timePeriod: When Does It Happen? (past, present, future)",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "timePeriod_selection_agent",
+    "conversation_config": {
+      "agent": {
+        "first_message": "Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?",
+        "prompt": {
+          "prompt": "You are a friendly storytelling companion talking to a 10-year-old child. Help them decide on the time period for their story. Present options (past, present, future) and describe exciting aspects of each. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.",
+          "tools": [
+            {
+              "description": "End the call when you understand their preferred time period and why they like it. Confirm with them before ending."
+            }
+          ]
+        }
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "time_period_choice",
+            "name": "time_period_choice",
+            "type": "prompt",
+            "conversation_goal_prompt": "Check if we gathered: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+          }
+        ]
+      },
+      "data_collection": {
+        "time_period_preferences": {
+          "type": "string",
+          "description": "Collect: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748378129-i0HuCw3ve5MOY7VnAy4J",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748378129,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"timePeriod_selection_agent\",\n  \"conversation_config\": {\n    \"agent\": {\n      \"first_message\": \"Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?\",\n      \"prompt\": {\n        \"prompt\": \"You are a friendly storytelling companion talking to a 10-year-old child. Help them decide on the time period for their story. Present options (past, present, future) and describe exciting aspects of each. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.\",\n        \"tools\": [\n          {\n            \"description\": \"End the call when you understand their preferred time period and why they like it. Confirm with them before ending.\"\n          }\n        ]\n      }\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"time_period_choice\",\n          \"name\": \"time_period_choice\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Check if we gathered: preferred time period, specific reasons for their choice, and any interesting details they mentioned\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"time_period_preferences\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: preferred time period, specific reasons for their choice, and any interesting details they mentioned\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_54eb4bd693",
+    "usage": {
+      "prompt_tokens": 715,
+      "completion_tokens": 319,
+      "total_tokens": 1034,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

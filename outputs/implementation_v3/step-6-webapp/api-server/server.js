@@ -95,10 +95,12 @@ app.get("/api/conversation/:conversationId?", async (req, res) => {
 
   try {
     // Make API call to ElevenLabs
-    const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
+    const elevenLabsApiKey = process.env.ELEVEN_LABS_API_KEY;
 
     if (!elevenLabsApiKey) {
-      console.error("❌ ELEVENLABS_API_KEY not found in environment variables");
+      console.error(
+        "❌ ELEVEN_LABS_API_KEY not found in environment variables"
+      );
       return res.status(500).json({
         success: false,
         error: "Configuration Error",

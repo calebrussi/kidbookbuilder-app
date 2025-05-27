@@ -1,0 +1,44 @@
+{
+  "name": "weather_places_selection_agent",
+  "conversation_config": {
+    "agent": {
+      "first_message": "Let's explore the weather and places for your adventure! Would you like it to be sunny at a beach, snowy in the mountains, or rainy in a cozy town? What kind of weather and location would make your story exciting?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly storytelling partner engaging with a 10-year-old child. Help them choose weather and a location for their adventure. Encourage them to think of different options like sunny beaches, snowy mountains, or rainy towns. Use simple language, provide fun examples, and get them excited about their ideas.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the conversation when you have a clear idea of their preferred weather and place. Make sure to confirm their choices before wrapping up.",
+            "response_timeout_secs": 20,
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "weather_place_choice",
+          "name": "weather_place_choice",
+          "type": "prompt",
+          "conversation_goal_prompt": "Make sure we gathered: preferred weather, location details, and the elements they are excited about"
+        }
+      ]
+    },
+    "data_collection": {
+      "weather_and_place_preferences": {
+        "type": "string",
+        "description": "Collect: preferred weather, location details, and elements they're excited about"
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-05-27T20:35:39.658Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "environment: Weather & Places (environment details)",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "weather_places_selection_agent",
+    "conversation_config": {
+      "agent": {
+        "first_message": "Let's explore the weather and places for your adventure! Would you like it to be sunny at a beach, snowy in the mountains, or rainy in a cozy town? What kind of weather and location would make your story exciting?",
+        "prompt": {
+          "prompt": "You are a friendly storytelling partner engaging with a 10-year-old child. Help them choose weather and a location for their adventure. Encourage them to think of different options like sunny beaches, snowy mountains, or rainy towns. Use simple language, provide fun examples, and get them excited about their ideas.",
+          "tools": [
+            {
+              "description": "End the conversation when you have a clear idea of their preferred weather and place. Make sure to confirm their choices before wrapping up."
+            }
+          ]
+        }
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "weather_place_choice",
+            "name": "weather_place_choice",
+            "type": "prompt",
+            "conversation_goal_prompt": "Make sure we gathered: preferred weather, location details, and the elements they are excited about"
+          }
+        ]
+      },
+      "data_collection": {
+        "weather_and_place_preferences": {
+          "type": "string",
+          "description": "Collect: preferred weather, location details, and elements they're excited about"
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748378135-hZr8XdMroIktLkftqTYd",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748378135,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"weather_places_selection_agent\",\n  \"conversation_config\": {\n    \"agent\": {\n      \"first_message\": \"Let's explore the weather and places for your adventure! Would you like it to be sunny at a beach, snowy in the mountains, or rainy in a cozy town? What kind of weather and location would make your story exciting?\",\n      \"prompt\": {\n        \"prompt\": \"You are a friendly storytelling partner engaging with a 10-year-old child. Help them choose weather and a location for their adventure. Encourage them to think of different options like sunny beaches, snowy mountains, or rainy towns. Use simple language, provide fun examples, and get them excited about their ideas.\",\n        \"tools\": [\n          {\n            \"description\": \"End the conversation when you have a clear idea of their preferred weather and place. Make sure to confirm their choices before wrapping up.\"\n          }\n        ]\n      }\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"weather_place_choice\",\n          \"name\": \"weather_place_choice\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Make sure we gathered: preferred weather, location details, and the elements they are excited about\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"weather_and_place_preferences\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: preferred weather, location details, and elements they're excited about\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_54eb4bd693",
+    "usage": {
+      "prompt_tokens": 708,
+      "completion_tokens": 313,
+      "total_tokens": 1021,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

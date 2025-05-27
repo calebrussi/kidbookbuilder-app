@@ -54,6 +54,103 @@ Create a workflow component that displays an ordered list of steps. Each step ha
 - No actual chat functionality needed
 - Visual indication that interaction happens via voice
 
+## Data Requirements
+
+### Workflow Data Structure
+
+The workflow data must persist the complete structure of the quiz workflow, including sections and steps. This data should be stored in a format that can be easily loaded and modified.
+
+```typescript
+interface WorkflowStep {
+  id: string;
+  title: string;
+  order: number;
+  sectionId: string;
+  agentId: string;
+}
+
+interface WorkflowSection {
+  id: string;
+  title: string;
+  order: number;
+  steps: WorkflowStep[];
+}
+
+interface Workflow {
+  id: string;
+  title: string;
+  description?: string;
+  sections: WorkflowSection[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+### User Progress Data Structure
+
+The user progress data must track the current state of each step and overall session progress. This data should persist across browser sessions.
+
+```typescript
+type StepStatus =
+  | "not_started"
+  | "in_progress"
+  | "started"
+  | "complete"
+  | "error";
+
+interface StepProgress {
+  stepId: string;
+  status: StepStatus;
+  conversationId: string;
+  startedAt?: Date;
+  completedAt?: Date;
+  lastModified: Date;
+  attemptCount: number;
+  userInputs?: Record<string, any>; // Store any user responses/inputs
+}
+
+interface UserProgress {
+  userId?: string; // Optional for anonymous users
+  workflowId: string;
+  sessionId: string;
+  currentStepId: string;
+  stepProgress: Record<string, StepProgress>; // stepId -> progress
+  overallProgress: {
+    totalSteps: number;
+    completedSteps: number;
+    percentComplete: number;
+  };
+  sessionData: {
+    startedAt: Date;
+    lastActivityAt: Date;
+    timeSpentMinutes: number;
+  };
+}
+```
+
+### Storage Requirements
+
+#### Local Storage Schema
+
+For browser-based persistence without backend:
+
+```typescript
+interface LocalStorageSchema {
+  userProgress: Record<string, UserProgress>; // sessionId -> progress
+  currentSession: {
+    sessionId: string;
+    workflowId: string;
+  };
+}
+```
+
+#### Data Persistence Strategy
+
+- **Workflow Data**: Loaded from a static JSON file at application startup
+- **User Progress**: Stored in localStorage with automatic backup/restore
+- **Session Management**: Generate unique session IDs for tracking progress
+- **Data Validation**: Validate data integrity on load and save operations
+
 ## Sample Data Structure
 
 ### Workflow: "Character Creation Quiz"
@@ -69,20 +166,6 @@ Create a workflow component that displays an ordered list of steps. Each step ha
 - "Pick Your Setting" (kingdoms, space, underwater, etc.)
 - "When Does It Happen?" (past, present, future)
 - "Weather & Places" (environment details)
-
-#### Section 3: "Create Your Characters"
-
-- "Your Hero's Personality" (traits and qualities)
-- "Friends & Family" (supporting characters)
-- "Special Powers" (abilities and skills)
-- "Hero's Challenges" (fears and obstacles)
-
-#### Section 4: "Choose Your Adventure"
-
-- "Type of Quest" (mystery, discovery, journey)
-- "Friendship & Feelings" (emotional elements)
-- "Challenges to Face" (puzzles, battles, problems)
-- "How It Ends" (story outcome)
 
 ## Design Requirements
 
@@ -118,8 +201,19 @@ src/
     ChatInterface.tsx
   types/
     workflow.ts
+    userProgress.ts
+    storage.ts
   data/
-    sampleWorkflow.ts
+    workflow.json
+    sampleProgress.ts
+  services/
+    storageService.ts
+    progressService.ts
+    workflowService.ts
+  hooks/
+    useWorkflow.ts
+    useProgress.ts
+    useLocalStorage.ts
   App.tsx
 ```
 
@@ -131,3 +225,22 @@ src/
 - Include proper TypeScript typing
 - Add hover states and smooth transitions
 - Ensure keyboard accessibility even though primary interaction is via voice
+
+### Data Management Requirements
+
+- **Workflow Loading**: Load workflow from JSON file on application startup
+- **State Persistence**: Implement localStorage for user progress and session data
+- **Data Validation**: Add schema validation for all data structures
+- **Error Handling**: Handle cases where localStorage is unavailable or corrupted
+
+### Custom Hooks for Data Management
+
+- `useWorkflow`: Manages workflow data loading from JSON file and caching
+- `useProgress`: Manages user progress state and persistence
+- `useLocalStorage`: Generic hook for localStorage operations with error handling
+
+### Service Layer Requirements
+
+- `storageService`: Abstract localStorage operations with fallback strategies
+- `progressService`: Handle progress calculations and state transitions
+- `workflowService`: Load and validate workflow data from JSON file

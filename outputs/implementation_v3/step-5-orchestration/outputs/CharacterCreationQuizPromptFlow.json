@@ -361,8 +361,86 @@
       "node_4"
     ],
     "group_id": "group_2",
-    "prompt_config": {},
-    "elevenlabs_config": {}
+    "prompt_config": {
+      "name": "timePeriod_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?",
+          "prompt": {
+            "prompt": "You are a friendly storytelling companion talking to a 10-year-old child. Help them decide on the time period for their story. Present options (past, present, future) and describe exciting aspects of each. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.",
+            "tools": [
+              {
+                "description": "End the call when you understand their preferred time period and why they like it. Confirm with them before ending."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "time_period_choice",
+              "name": "time_period_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+            }
+          ]
+        },
+        "data_collection": {
+          "time_period_preferences": {
+            "type": "string",
+            "description": "Collect: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw9qaz0cfj5b1bx8j0xenn5q",
+      "created_at": "2025-05-27T20:35:57.178Z",
+      "name": "timePeriod_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly storytelling companion talking to a 10-year-old child. Help them decide on the time period for their story. Present options (past, present, future) and describe exciting aspects of each. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you understand their preferred time period and why they like it. Confirm with them before ending.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "time_period_choice",
+              "name": "time_period_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+            }
+          ]
+        },
+        "data_collection": {
+          "time_period_preferences": {
+            "type": "string",
+            "description": "Collect: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+          }
+        }
+      }
+    }
   },
   {
     "id": "node_6",
@@ -372,8 +450,86 @@
       "node_5"
     ],
     "group_id": "group_2",
-    "prompt_config": {},
-    "elevenlabs_config": {}
+    "prompt_config": {
+      "name": "weather_places_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's explore the weather and places for your adventure! Would you like it to be sunny at a beach, snowy in the mountains, or rainy in a cozy town? What kind of weather and location would make your story exciting?",
+          "prompt": {
+            "prompt": "You are a friendly storytelling partner engaging with a 10-year-old child. Help them choose weather and a location for their adventure. Encourage them to think of different options like sunny beaches, snowy mountains, or rainy towns. Use simple language, provide fun examples, and get them excited about their ideas.",
+            "tools": [
+              {
+                "description": "End the conversation when you have a clear idea of their preferred weather and place. Make sure to confirm their choices before wrapping up."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "weather_place_choice",
+              "name": "weather_place_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Make sure we gathered: preferred weather, location details, and the elements they are excited about"
+            }
+          ]
+        },
+        "data_collection": {
+          "weather_and_place_preferences": {
+            "type": "string",
+            "description": "Collect: preferred weather, location details, and elements they're excited about"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jw9qb1x4fvk8225fq9s3k3j4",
+      "created_at": "2025-05-27T20:36:00.040Z",
+      "name": "weather_places_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's explore the weather and places for your adventure! Would you like it to be sunny at a beach, snowy in the mountains, or rainy in a cozy town? What kind of weather and location would make your story exciting?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly storytelling partner engaging with a 10-year-old child. Help them choose weather and a location for their adventure. Encourage them to think of different options like sunny beaches, snowy mountains, or rainy towns. Use simple language, provide fun examples, and get them excited about their ideas.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation when you have a clear idea of their preferred weather and place. Make sure to confirm their choices before wrapping up.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "weather_place_choice",
+              "name": "weather_place_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Make sure we gathered: preferred weather, location details, and the elements they are excited about"
+            }
+          ]
+        },
+        "data_collection": {
+          "weather_and_place_preferences": {
+            "type": "string",
+            "description": "Collect: preferred weather, location details, and elements they're excited about"
+          }
+        }
+      }
+    }
   },
   {
     "id": "node_7",
