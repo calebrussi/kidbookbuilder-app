@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-05-27T20:15:58.177Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "worldType: Magic or Real World? (choose your world type)",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "world_type_selection_agent",
+    "conversation_config": {
+      "agent": {
+        "first_message": "Let's decide on the type of world for your adventure! Would you prefer a magical world filled with wizards and enchantments, or a real world that mirrors our own with its own exciting stories? Which one sparks your imagination the most?",
+        "prompt": {
+          "prompt": "You are a cheerful storytelling companion chatting with a 10-year-old child. Assist them in choosing between a magical world and a real-world setting. Explain what makes each type unique. Use simple language, give examples, and encourage them to share their ideas.",
+          "tools": [
+            {
+              "description": "End the conversation when you have their choice of world type and any thoughts they have on it. Confirm their preference before concluding."
+            }
+          ]
+        }
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "world_type_choice",
+            "name": "world_type_choice",
+            "type": "prompt",
+            "conversation_goal_prompt": "Ensure we gathered: preferred world type and any details they find interesting."
+          }
+        ]
+      },
+      "data_collection": {
+        "world_type_selection": {
+          "type": "string",
+          "description": "Collect: preferred world type (Magic or Real World) and any interesting details about their choice."
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748376952-XP0GiQ95Ja1K7d4eAHLi",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748376952,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"world_type_selection_agent\",\n  \"conversation_config\": {\n    \"agent\": {\n      \"first_message\": \"Let's decide on the type of world for your adventure! Would you prefer a magical world filled with wizards and enchantments, or a real world that mirrors our own with its own exciting stories? Which one sparks your imagination the most?\",\n      \"prompt\": {\n        \"prompt\": \"You are a cheerful storytelling companion chatting with a 10-year-old child. Assist them in choosing between a magical world and a real-world setting. Explain what makes each type unique. Use simple language, give examples, and encourage them to share their ideas.\",\n        \"tools\": [\n          {\n            \"description\": \"End the conversation when you have their choice of world type and any thoughts they have on it. Confirm their preference before concluding.\"\n          }\n        ]\n      }\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"world_type_choice\",\n          \"name\": \"world_type_choice\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Ensure we gathered: preferred world type and any details they find interesting.\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"world_type_selection\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: preferred world type (Magic or Real World) and any interesting details about their choice.\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_54eb4bd693",
+    "usage": {
+      "prompt_tokens": 713,
+      "completion_tokens": 304,
+      "total_tokens": 1017,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

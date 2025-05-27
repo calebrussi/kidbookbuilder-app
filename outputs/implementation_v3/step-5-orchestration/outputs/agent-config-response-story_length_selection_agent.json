@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-05-27T19:58:44.635Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "storyLength: How long should your story be? (short stories, chapter books)",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "story_length_selection_agent",
+    "conversation_config": {
+      "agent": {
+        "first_message": "Great choice! Now, let's think about how long your story will be. Would you prefer a short story that's quick to read, or a chapter book that has more adventures and characters? What do you find more exciting?",
+        "prompt": {
+          "prompt": "You are a friendly storytelling assistant talking to a 10-year-old child. Help them choose the length of their story. Explain the difference between short stories and chapter books in a fun way. Encourage them to think about their preferences and what they enjoy most.",
+          "tools": [
+            {
+              "description": "End the conversation when you've understood their preferred story length and confirmed their choice."
+            }
+          ]
+        }
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "story_length_choice",
+            "name": "story_length_choice",
+            "type": "prompt",
+            "conversation_goal_prompt": "Check if we gathered: preferred story length and their reasons for that choice."
+          }
+        ]
+      },
+      "data_collection": {
+        "story_length_preferences": {
+          "type": "string",
+          "description": "Collect: preferred story length and their reasons for that choice."
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748375919-lyy5V7VJH8Z8hSajJ0Io",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748375919,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"story_length_selection_agent\",\n  \"conversation_config\": {\n    \"agent\": {\n      \"first_message\": \"Great choice! Now, let's think about how long your story will be. Would you prefer a short story that's quick to read, or a chapter book that has more adventures and characters? What do you find more exciting?\",\n      \"prompt\": {\n        \"prompt\": \"You are a friendly storytelling assistant talking to a 10-year-old child. Help them choose the length of their story. Explain the difference between short stories and chapter books in a fun way. Encourage them to think about their preferences and what they enjoy most.\",\n        \"tools\": [\n          {\n            \"description\": \"End the conversation when you've understood their preferred story length and confirmed their choice.\"\n          }\n        ]\n      }\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"story_length_choice\",\n          \"name\": \"story_length_choice\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Check if we gathered: preferred story length and their reasons for that choice.\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"story_length_preferences\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: preferred story length and their reasons for that choice.\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_54eb4bd693",
+    "usage": {
+      "prompt_tokens": 716,
+      "completion_tokens": 285,
+      "total_tokens": 1001,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

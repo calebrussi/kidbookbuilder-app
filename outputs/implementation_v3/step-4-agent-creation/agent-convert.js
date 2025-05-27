@@ -2,13 +2,13 @@
  * convertConfigToAgent.js
  *
  * This script converts a configuration file like personality_config.json
- * to the format required by the agent creation API, using sample_agent_create.json as a template.
+ * to the format required by the agent creation API, using agent_template_default.json as a template.
  *
  * Usage:
- *   Command line: node convertConfigToAgent.js <inputConfigPath> <outputPath> [templatePath]
- *   Programmatic with file path: convertConfig({ input: 'path/to/config.json', outputPath: 'output.json' })
- *   Programmatic with object: convertConfig({ input: configObject, outputPath: 'output.json' })
- *   Programmatic without file output: convertConfig({ input: configObject }) // returns config only
+ *   Command line: node convertConfigToAgent.js
+ *   Programmatic with file path: convertConfig({ inputPath: 'path/to/config.json', outputPath: 'output.json' })
+ *   Programmatic with object: convertConfig({ inputObj: configObject, outputPath: 'output.json' })
+ *   Programmatic without file output: convertConfig({ inputObj: configObject }) // returns config only
  */
 
 const fs = require("fs");
@@ -103,46 +103,34 @@ function transformConfig(inputConfig, templateConfig) {
 /**
  * Converts configuration to agent format with flexible input options
  * @param {Object} options - Configuration options
- * @param {string|Object} options.input - Either a file path (string) or input config object
+ * @param {Object} [options.inputObj] - Input configuration as an object
+ * @param {string} [options.inputPath] - Path to input configuration file
  * @param {string} [options.outputPath] - Output file path (optional)
  * @param {string} [options.templatePath] - Template file path
  * @returns {Promise<Object>} - Result object with success status and output config
  */
-async function convertConfig(options = {}) {
+async function convertConfig({
+  inputObj = null,
+  inputPath = DEFAULT_INPUT_PATH,
+  outputPath = DEFAULT_OUTPUT_PATH,
+  templatePath = DEFAULT_TEMPLATE_PATH,
+} = {}) {
   try {
-    // Handle different calling patterns for backward compatibility
-    let input, outputPath, templatePath;
-
-    if (typeof options === "string" || !options.input) {
-      // Legacy mode: called without options object or from command line
-      input = options.input || process.argv[2] || DEFAULT_INPUT_PATH;
-      outputPath = options.outputPath || process.argv[3] || DEFAULT_OUTPUT_PATH;
-      templatePath =
-        options.templatePath || process.argv[4] || DEFAULT_TEMPLATE_PATH;
-    } else {
-      // New mode: called with options object
-      input = options.input;
-      outputPath = options.outputPath;
-      templatePath = options.templatePath || DEFAULT_TEMPLATE_PATH;
-    }
-
     let inputConfig;
     let configName;
 
-    // Handle input - either file path or object
-    if (typeof input === "string") {
-      console.log(`Reading input configuration from: ${input}`);
-      inputConfig = JSON.parse(fs.readFileSync(input, "utf8"));
-      configName =
-        inputConfig.name || path.basename(input, path.extname(input));
-    } else if (typeof input === "object" && input !== null) {
+    // Handle input - either use inputObj or read from inputPath
+    if (inputObj) {
       console.log(`Using provided input configuration object`);
-      inputConfig = input;
+      inputConfig = inputObj;
       configName = inputConfig.name || "unnamed-config";
+    } else if (inputPath) {
+      console.log(`Reading input configuration from: ${inputPath}`);
+      inputConfig = JSON.parse(fs.readFileSync(inputPath, "utf8"));
+      configName =
+        inputConfig.name || path.basename(inputPath, path.extname(inputPath));
     } else {
-      throw new Error(
-        "Input must be either a file path string or a configuration object"
-      );
+      throw new Error("Either inputObj or inputPath must be provided");
     }
 
     console.log(`Using template from: ${templatePath}`);
@@ -162,11 +150,11 @@ async function convertConfig(options = {}) {
     }
 
     // Modify the output path to include the config name if using default path
-    let finalOutputPath = outputPath;
-    if (outputPath === DEFAULT_OUTPUT_PATH) {
-      const outputDir = path.dirname(outputPath);
-      const outputExt = path.extname(outputPath);
-      const outputBase = path.basename(outputPath, outputExt);
+    let finalOutputPath = outputPath || DEFAULT_OUTPUT_PATH;
+    if (finalOutputPath === DEFAULT_OUTPUT_PATH) {
+      const outputDir = path.dirname(finalOutputPath);
+      const outputExt = path.extname(finalOutputPath);
+      const outputBase = path.basename(finalOutputPath, outputExt);
       finalOutputPath = path.join(
         outputDir,
         `${outputBase}-${configName}${outputExt}`
@@ -191,18 +179,6 @@ async function convertConfig(options = {}) {
   }
 }
 
-/**
- * Legacy function to maintain backward compatibility
- * Main function to convert the config using file paths
- */
-async function convertConfigFromPath(inputPath, outputPath, templatePath) {
-  return convertConfig({
-    input: inputPath || DEFAULT_INPUT_PATH,
-    outputPath: outputPath || DEFAULT_OUTPUT_PATH,
-    templatePath: templatePath || DEFAULT_TEMPLATE_PATH,
-  });
-}
-
 // Run the script if it's called directly
 if (require.main === module) {
   convertConfig();
@@ -211,6 +187,5 @@ if (require.main === module) {
 // Export functions for use in other modules
 module.exports = {
   convertConfig,
-  convertConfigFromPath,
   transformConfig,
 };

@@ -1,0 +1,44 @@
+{
+  "name": "world_type_selection_agent",
+  "conversation_config": {
+    "agent": {
+      "first_message": "Let's decide on the type of world for your adventure! Would you prefer a magical world filled with wizards and enchantments, or a real world that mirrors our own with its own exciting stories? Which one sparks your imagination the most?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a cheerful storytelling companion chatting with a 10-year-old child. Assist them in choosing between a magical world and a real-world setting. Explain what makes each type unique. Use simple language, give examples, and encourage them to share their ideas.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the conversation when you have their choice of world type and any thoughts they have on it. Confirm their preference before concluding.",
+            "response_timeout_secs": 20,
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "world_type_choice",
+          "name": "world_type_choice",
+          "type": "prompt",
+          "conversation_goal_prompt": "Ensure we gathered: preferred world type and any details they find interesting."
+        }
+      ]
+    },
+    "data_collection": {
+      "world_type_selection": {
+        "type": "string",
+        "description": "Collect: preferred world type (Magic or Real World) and any interesting details about their choice."
+      }
+    }
+  }
+}

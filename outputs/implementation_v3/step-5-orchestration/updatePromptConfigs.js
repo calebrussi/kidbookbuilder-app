@@ -27,11 +27,12 @@ const rl = readline.createInterface({
  * @param {string} message - Message to display to user
  * @returns {Promise<boolean>} - User's response (true for yes, false for no)
  */
-function askUserToContinue(message = "Do you want to continue? (y/n): ") {
+function askUserToContinue(message = "Do you want to continue? (Y/n): ") {
   return new Promise((resolve) => {
     rl.question(message, (answer) => {
       const response = answer.toLowerCase().trim();
-      resolve(response === "y" || response === "yes");
+      // Default to yes if the user just presses Enter without typing anything
+      resolve(response === "" || response === "y" || response === "yes");
     });
   });
 }
@@ -104,7 +105,7 @@ async function updatePromptConfigs(filePath = promptFlowFilePath) {
 
       // Ask user if they want to create a prompt config for this node
       const shouldCreate = await askUserToContinue(
-        `Create prompt config for "${node.name}"? (y/n): `
+        `Create prompt config for "${node.name}"? (Y/n): `
       );
 
       if (!shouldCreate) {
@@ -142,22 +143,10 @@ async function updatePromptConfigs(filePath = promptFlowFilePath) {
         );
 
         const shouldContinueOnError = await askUserToContinue(
-          "An error occurred. Do you want to continue with the next node? (y/n): "
+          "An error occurred. Do you want to continue with the next node? (Y/n): "
         );
 
         if (!shouldContinueOnError) {
-          console.log("Stopping execution due to user request.");
-          break;
-        }
-      }
-
-      // Ask if user wants to continue to the next node (unless it's the last one)
-      if (i < nodesToProcess.length - 1) {
-        const shouldContinue = await askUserToContinue(
-          `\nContinue to next node (${i + 2}/${nodesToProcess.length})? (y/n): `
-        );
-
-        if (!shouldContinue) {
           console.log("Stopping execution due to user request.");
           break;
         }

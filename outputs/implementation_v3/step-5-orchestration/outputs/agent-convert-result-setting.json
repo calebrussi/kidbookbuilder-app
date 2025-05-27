@@ -1,0 +1,44 @@
+{
+  "name": "setting_selection_agent",
+  "conversation_config": {
+    "agent": {
+      "first_message": "Let's pick a fantastic setting for your story! Would you prefer a magical kingdom, an adventurous journey in outer space, an exciting underwater world, or something totally different? What kind of place do you imagine?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them select a story setting. Present options (kingdoms, space, underwater, etc.), share what makes each choice special. Use simple words, give examples, show excitement for their ideas, and invite them to explore their favorite settings further.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the call when you've figured out their favorite setting and any specific details. Make sure to confirm their choice before finishing.",
+            "response_timeout_secs": 20,
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "setting_choice",
+          "name": "setting_choice",
+          "type": "prompt",
+          "conversation_goal_prompt": "Check if we found out: their favorite setting, specific details, and what they love about it."
+        }
+      ]
+    },
+    "data_collection": {
+      "setting_preferences": {
+        "type": "string",
+        "description": "Collect: their favorite setting, specific details, and what elements excite them."
+      }
+    }
+  }
+}
