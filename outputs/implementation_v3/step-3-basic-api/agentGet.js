@@ -12,7 +12,7 @@ require("dotenv").config();
 const API_KEY = process.env.ELEVEN_LABS_API_KEY;
 
 // Default agent ID to use if none is provided via command line
-const DEFAULT_AGENT_ID = "agent_01jw1zncr9eymvnfny2jd1c127"; // Replace with your default agent ID
+const DEFAULT_AGENT_ID = "agent_01jw9nbs4ye9hb450d9gdn16gx"; // Replace with your default agent ID
 
 // Ensure outputs directory exists
 const outputsDir = path.join(__dirname, "outputs");
