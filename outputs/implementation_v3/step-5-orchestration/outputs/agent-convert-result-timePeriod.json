@@ -1,6 +1,18 @@
 {
   "name": "timePeriod_selection_agent",
   "conversation_config": {
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 600,
+      "client_events": [
+        "audio",
+        "interruption",
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction",
+        "vad_score"
+      ]
+    },
     "agent": {
       "first_message": "Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?",
       "language": "en",

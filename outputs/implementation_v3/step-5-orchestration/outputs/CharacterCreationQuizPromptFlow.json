@@ -1,5 +1,104 @@
 [
   {
+    "id": "node_0",
+    "name": "introduction",
+    "description": "What is your name? (introduce yourself)",
+    "dependencies": [],
+    "group_id": "",
+    "prompt_config": {
+      "name": "introduction_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Hi there! I'm so excited to build a book with you! What's your name?",
+          "prompt": {
+            "prompt": "You are a friendly and curious companion. Ask only for their name. Use simple language and be enthusiastic about getting to know them.  End the conversation promptly when the question has been answered. Do not ask any other questions. Your closing statement should be that your excited to start building a book together.",
+            "tools": [
+              {
+                "description": "End the conversation when you have their name."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "introduction_info",
+              "name": "introduction_info",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the person's name."
+            }
+          ]
+        },
+        "data_collection": {
+          "user_identity": {
+            "type": "string",
+            "description": "Collect: person's name."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwefmysxe4bb9xmgdvxrjxzz",
+      "created_at": "2025-05-29T16:57:48.120Z",
+      "name": "introduction_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Hi there! I'm so excited to build a book with you! What's your name?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and curious companion. Ask only for their name. Use simple language and be enthusiastic about getting to know them.  End the conversation promptly when the question has been answered. Do not ask any other questions. Your closing statement should be that your excited to start building a book together.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation when you have their name.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "introduction_info",
+              "name": "introduction_info",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the person's name."
+            }
+          ]
+        },
+        "data_collection": {
+          "user_identity": {
+            "type": "string",
+            "description": "Collect: person's name."
+          }
+        }
+      }
+    }
+  },
+  {
     "id": "node_1",
     "name": "favoriteStories",
     "description": "What stories do you love? (favorite genres and themes)",
@@ -40,10 +139,22 @@
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jw9nbs4ye9hb450d9gdn16gx",
-      "created_at": "2025-05-27T20:01:26.743Z",
+      "agent_id": "agent_01jwefn1xpfj8rkz2qga8ak021",
+      "created_at": "2025-05-29T16:57:51.594Z",
       "name": "favorite_stories_selection_agent",
       "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
         "agent": {
           "first_message": "Let's talk about your favorite stories! Do you love adventure tales, magical journeys, or maybe stories about friendship and bravery? What genres or themes excite you the most?",
           "language": "en",
@@ -129,10 +240,22 @@
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jw9ncb1mfzraeyqv480qac24",
-      "created_at": "2025-05-27T20:01:45.111Z",
+      "agent_id": "agent_01jwejc6azejc9xnq5n9a22qp3",
+      "created_at": "2025-05-29T17:45:26.477Z",
       "name": "story_length_selection_agent",
       "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
         "agent": {
           "first_message": "Great choice! Now, let's think about how long your story will be. Would you prefer a short story that's quick to read, or a chapter book that has more adventures and characters? What do you find more exciting?",
           "language": "en",
@@ -218,10 +341,22 @@
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jw9pbc55fb4twdec9j9e0hjz",
-      "created_at": "2025-05-27T20:18:42.522Z",
+      "agent_id": "agent_01jwejc9a2fgy980awe2c4xkkf",
+      "created_at": "2025-05-29T17:45:29.754Z",
       "name": "world_type_selection_agent",
       "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
         "agent": {
           "first_message": "Let's decide on the type of world for your adventure! Would you prefer a magical world filled with wizards and enchantments, or a real world that mirrors our own with its own exciting stories? Which one sparks your imagination the most?",
           "language": "en",
@@ -307,10 +442,22 @@
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jw9pbgdke2ht4ay4ra35r7t0",
-      "created_at": "2025-05-27T20:18:46.253Z",
+      "agent_id": "agent_01jwejcbnjehk87612zrhhmxw6",
+      "created_at": "2025-05-29T17:45:32.208Z",
       "name": "setting_selection_agent",
       "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
         "agent": {
           "first_message": "Let's pick a fantastic setting for your story! Would you prefer a magical kingdom, an adventurous journey in outer space, an exciting underwater world, or something totally different? What kind of place do you imagine?",
           "language": "en",
@@ -396,10 +543,22 @@
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jw9qaz0cfj5b1bx8j0xenn5q",
-      "created_at": "2025-05-27T20:35:57.178Z",
+      "agent_id": "agent_01jwejcdsxenc8s8yr9j336rbp",
+      "created_at": "2025-05-29T17:45:34.103Z",
       "name": "timePeriod_selection_agent",
       "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
         "agent": {
           "first_message": "Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?",
           "language": "en",
@@ -485,10 +644,22 @@
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jw9qb1x4fvk8225fq9s3k3j4",
-      "created_at": "2025-05-27T20:36:00.040Z",
+      "agent_id": "agent_01jwejcfxqfd4ayw49rfrk4rd8",
+      "created_at": "2025-05-29T17:45:36.331Z",
       "name": "weather_places_selection_agent",
       "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
         "agent": {
           "first_message": "Let's explore the weather and places for your adventure! Would you like it to be sunny at a beach, snowy in the mountains, or rainy in a cozy town? What kind of weather and location would make your story exciting?",
           "language": "en",
@@ -623,7 +794,9 @@
     "id": "group_1",
     "name": "tellMeYourStoryStyle",
     "description": "Tell Me Your Story Style group containing nodes for favorite stories and story length preferences",
-    "dependencies": []
+    "dependencies": [
+      "node_0"
+    ]
   },
   {
     "id": "group_2",

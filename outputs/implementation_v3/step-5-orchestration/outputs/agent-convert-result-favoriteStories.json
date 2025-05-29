@@ -1,0 +1,56 @@
+{
+  "name": "favorite_stories_selection_agent",
+  "conversation_config": {
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 600,
+      "client_events": [
+        "audio",
+        "interruption",
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction",
+        "vad_score"
+      ]
+    },
+    "agent": {
+      "first_message": "Let's talk about your favorite stories! Do you love adventure tales, magical journeys, or maybe stories about friendship and bravery? What genres or themes excite you the most?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly story buddy chatting with a child. Help them share their favorite stories, genres, and themes. Use simple language, offer examples like adventures, mysteries, or fairy tales, and encourage them to express their thoughts and feelings about these stories.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the conversation when you've gathered their favorite genres and themes. Confirm back to them what you've understood before wrapping up.",
+            "response_timeout_secs": 20,
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "favorite_stories",
+          "name": "favorite_stories",
+          "type": "prompt",
+          "conversation_goal_prompt": "Confirm that we've gathered: favorite genres, themes, and any specific stories they love."
+        }
+      ]
+    },
+    "data_collection": {
+      "story_preferences": {
+        "type": "string",
+        "description": "Collect: favorite genres, themes, and specific stories they love."
+      }
+    }
+  }
+}

@@ -1,6 +1,18 @@
 {
   "name": "world_type_selection_agent",
   "conversation_config": {
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 600,
+      "client_events": [
+        "audio",
+        "interruption",
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction",
+        "vad_score"
+      ]
+    },
     "agent": {
       "first_message": "Let's decide on the type of world for your adventure! Would you prefer a magical world filled with wizards and enchantments, or a real world that mirrors our own with its own exciting stories? Which one sparks your imagination the most?",
       "language": "en",

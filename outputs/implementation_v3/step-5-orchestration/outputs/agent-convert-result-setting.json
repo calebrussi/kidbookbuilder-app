@@ -1,6 +1,18 @@
 {
   "name": "setting_selection_agent",
   "conversation_config": {
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 600,
+      "client_events": [
+        "audio",
+        "interruption",
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction",
+        "vad_score"
+      ]
+    },
     "agent": {
       "first_message": "Let's pick a fantastic setting for your story! Would you prefer a magical kingdom, an adventurous journey in outer space, an exciting underwater world, or something totally different? What kind of place do you imagine?",
       "language": "en",
