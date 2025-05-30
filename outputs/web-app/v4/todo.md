@@ -13,12 +13,12 @@
 - ✅ Add speaking animation for voice feedback
 - ✅ Add conversation progress tracking
 - ✅ Handle when a conversation ends, but 11L hasn't finished processing it yet
+- ✅ Display the results of individual chats
 
 ## Pending Tasks
 
-- Display the results of a chat
-- Get a secure 11L agent URL via local API
 - Get the chat workflow remotely via local API
 - Add basic password protection on chat workflow
-- Review the agent prompts to make them smoother
+- Get a secure 11L agent URL via local API
 - Persist user workflow progress to server
+- Review the agent prompts to make them smoother
