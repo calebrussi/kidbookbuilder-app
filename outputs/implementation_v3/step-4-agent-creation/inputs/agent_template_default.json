@@ -36,6 +36,9 @@
     }
   },
   "platform_settings": {
+    "auth": {
+      "enable_auth": true
+    },
     "evaluation": {},
     "data_collection": {}
   }
