@@ -14,10 +14,10 @@
 - ✅ Add conversation progress tracking
 - ✅ Handle when a conversation ends, but 11L hasn't finished processing it yet
 - ✅ Display the results of individual chats
+- ✅ Get the chat workflow remotely via local API
 
 ## Pending Tasks
 
-- Get the chat workflow remotely via local API
 - Add basic password protection on chat workflow
 - Get a secure 11L agent URL via local API
 - Persist user workflow progress to server

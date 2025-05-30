@@ -27,53 +27,35 @@ app.get("/health", (req, res) => {
 });
 
 // Get workflow endpoint
-app.get("/api/workflow", (req, res) => {
-  console.log("📋 GET /api/workflow - Fetching workflow data");
+app.get("/api/workflow.json", (req, res) => {
+  const fs = require("fs");
+  const path = require("path");
+  const workflowPath = path.join(__dirname, "data/workflow.json");
 
-  // TODO: Implement workflow retrieval logic
-  // This should return the current workflow state, steps, and progress
-
-  // Stubbed response for now
-  res.json({
-    success: true,
-    data: {
-      workflowId: "todo-workflow-001",
-      title: "Todo Management Workflow",
-      description: "A sample workflow for managing todo items",
-      steps: [
-        {
-          id: "step-1",
-          title: "Create Todo Item",
-          description: "Add a new todo item to the list",
-          status: "completed",
-          agentId: "agent-todo-creator",
-        },
-        {
-          id: "step-2",
-          title: "Review Todo Item",
-          description: "Review and validate the todo item",
-          status: "in_progress",
-          agentId: "agent-todo-reviewer",
-        },
-        {
-          id: "step-3",
-          title: "Complete Todo Item",
-          description: "Mark the todo item as completed",
-          status: "pending",
-          agentId: "agent-todo-completer",
-        },
-      ],
-      currentStep: "step-2",
-      progress: {
-        completed: 1,
-        total: 3,
-        percentage: 33,
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    message: "Workflow retrieved successfully",
-  });
+  // Add an 8-second delay
+  setTimeout(() => {
+    fs.readFile(workflowPath, "utf8", (err, data) => {
+      if (err) {
+        console.error("❌ Failed to read workflow.json:", err);
+        return res.status(500).json({
+          success: false,
+          error: "Internal server error",
+          message: "Unable to load workflow.json file",
+        });
+      }
+      try {
+        const workflow = JSON.parse(data);
+        res.json(workflow);
+      } catch (parseErr) {
+        console.error("❌ Failed to parse workflow.json:", parseErr);
+        res.status(500).json({
+          success: false,
+          error: "Internal server error",
+          message: "workflow.json is not valid JSON",
+        });
+      }
+    });
+  }, 3000); // 1000 milliseconds = 1 seconds
 });
 
 // Get conversation endpoint
@@ -226,6 +208,9 @@ app.listen(PORT, () => {
   console.log(`🚀 Todo API Server running on port ${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/health`);
   console.log(`📋 Workflow endpoint: http://localhost:${PORT}/api/workflow`);
+  console.log(
+    `📋 Workflow JSON endpoint: http://localhost:${PORT}/api/workflow.json`
+  );
   console.log(
     `💬 Conversation endpoint: http://localhost:${PORT}/api/conversation`
   );
