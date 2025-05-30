@@ -12,10 +12,10 @@
 - ✅ Implement connection status indicators
 - ✅ Add speaking animation for voice feedback
 - ✅ Add conversation progress tracking
+- ✅ Handle when a conversation ends, but 11L hasn't finished processing it yet
 
 ## Pending Tasks
 
-- Handle when a conversation ends, but 11L hasn't finished processing it yet
 - Display the results of a chat
 - Get a secure 11L agent URL via local API
 - Get the chat workflow remotely via local API

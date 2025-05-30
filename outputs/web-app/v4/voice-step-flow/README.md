@@ -60,6 +60,45 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Development Tools and Debugging
+
+This project includes several tools to help with development and debugging:
+
+### Development Helper Script
+
+A `dev-tools.sh` script is included for common development tasks:
+
+```sh
+# Make the script executable (if not already)
+chmod +x dev-tools.sh
+
+# Available commands
+./dev-tools.sh start         # Start the development server
+./dev-tools.sh build         # Build the application
+./dev-tools.sh lint          # Run linter
+./dev-tools.sh clear-storage # Get script to clear localStorage
+./dev-tools.sh fix-progress  # Fix progress data issues in localStorage
+./dev-tools.sh help          # Show help
+```
+
+### Debug Panel
+
+When running in development mode, the application includes a debug panel accessible from the header. This provides:
+
+- View of current progress state
+- Ability to clear storage data
+- Step progress information in collapsible sections
+
+### Progress Data Structure
+
+The application properly initializes step progress data with the following fields:
+
+- `status`: Current step status ('not_started', 'in_progress', 'started', 'complete', or 'error')
+- `success`: Whether the step was completed successfully (boolean)
+- `conversationStatus`: Status of the conversation ('not_started', 'processing', 'success', etc.)
+
+These fields ensure proper rendering and state management throughout the application.
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/455e0a6f-ee5a-40db-8ecd-33a3db235133) and click on Share -> Publish.
