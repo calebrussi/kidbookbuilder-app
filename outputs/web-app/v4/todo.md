@@ -31,8 +31,11 @@
 
 - ✅ Get a secure 11L agent URL via local API
 
+### Snapshot 6
+
+- ✅ Add basic password protection on chat workflow
+
 ## Pending Tasks
 
-- Add basic password protection on chat workflow
 - Persist user workflow progress to server
 - Review the agent prompts to make them smoother

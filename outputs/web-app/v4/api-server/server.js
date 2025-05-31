@@ -27,13 +27,41 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Get workflow endpoint
-app.get("/api/workflow.json", (req, res) => {
+// Get workflow endpoint with authentication
+app.post("/api/workflow", (req, res) => {
+  const { name, passcode } = req.body;
+
+  console.log(`📋 POST /api/workflow - Request from: ${name || "unknown"}`);
+
+  // Validate input
+  if (!name || !passcode) {
+    return res.status(400).json({
+      success: false,
+      error: "Bad Request",
+      message: "Name and passcode are required",
+    });
+  }
+
+  // Check passcode (you can modify this logic as needed)
+  const validPasscode = process.env.QUIZ_PASSCODE || "demo123";
+
+  if (passcode !== validPasscode) {
+    console.log(`❌ Authentication failed for ${name} - Invalid passcode`);
+    return res.status(401).json({
+      success: false,
+      error: "Unauthorized",
+      message: "Invalid passcode",
+    });
+  }
+
+  console.log(`✅ Authentication successful for: ${name}`);
+  console.log(`📋 Loading workflow for: ${name}`);
+
   const fs = require("fs");
   const path = require("path");
   const workflowPath = path.join(__dirname, "data/workflow.json");
 
-  // Add an 8-second delay
+  // Add an 3-second delay
   setTimeout(() => {
     fs.readFile(workflowPath, "utf8", (err, data) => {
       if (err) {
@@ -46,6 +74,7 @@ app.get("/api/workflow.json", (req, res) => {
       }
       try {
         const workflow = JSON.parse(data);
+        console.log(`✅ Workflow loaded successfully for: ${name}`);
         res.json(workflow);
       } catch (parseErr) {
         console.error("❌ Failed to parse workflow.json:", parseErr);
@@ -56,7 +85,20 @@ app.get("/api/workflow.json", (req, res) => {
         });
       }
     });
-  }, 3000); // 1000 milliseconds = 1 seconds
+  }, 3000); // 3000 milliseconds = 3 seconds
+});
+
+// Legacy workflow endpoint (for backward compatibility, but now deprecated)
+app.get("/api/workflow.json", (req, res) => {
+  console.log(
+    "⚠️  DEPRECATED: /api/workflow.json endpoint accessed. Please use POST /api/workflow with authentication."
+  );
+  res.status(401).json({
+    success: false,
+    error: "Unauthorized",
+    message:
+      "This endpoint requires authentication. Please use POST /api/workflow with name and passcode.",
+  });
 });
 
 // Get conversation endpoint
