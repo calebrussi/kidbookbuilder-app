@@ -32,11 +32,58 @@ const getWorkflowHandler = (req, res) => {
   console.log(`✅ Authentication successful for: ${name}`);
   console.log(`📋 Loading workflow for: ${name}`);
 
-  // Use relative path that works in both local and Netlify environments
-  const workflowPath = path.resolve(
-    process.cwd(),
-    "../voice-step-flow/api-server/src/data/workflow.json"
-  );
+  // Debug: List directory contents to see what's available
+  console.log(`📂 Current working directory: ${process.cwd()}`);
+  console.log(`🌍 Environment: ${process.env.NETLIFY ? "Netlify" : "Local"}`);
+
+  try {
+    const cwdContents = fs.readdirSync(process.cwd());
+    console.log(`📁 Contents of ${process.cwd()}:`, cwdContents);
+
+    // Check if api-server directory exists
+    if (cwdContents.includes("api-server")) {
+      const apiServerContents = fs.readdirSync(
+        path.join(process.cwd(), "api-server")
+      );
+      console.log(`📁 Contents of api-server/:`, apiServerContents);
+
+      if (apiServerContents.includes("src")) {
+        const srcContents = fs.readdirSync(
+          path.join(process.cwd(), "api-server", "src")
+        );
+        console.log(`📁 Contents of api-server/src/:`, srcContents);
+
+        if (srcContents.includes("data")) {
+          const dataContents = fs.readdirSync(
+            path.join(process.cwd(), "api-server", "src", "data")
+          );
+          console.log(`📁 Contents of api-server/src/data/:`, dataContents);
+        }
+      }
+    }
+  } catch (listErr) {
+    console.error(`❌ Error listing directories:`, listErr);
+  }
+
+  // Use different paths for local vs Netlify environments
+  let workflowPath;
+  if (process.env.NETLIFY) {
+    // Netlify environment - files are bundled relative to the function
+    workflowPath = path.resolve(
+      process.cwd(),
+      "api-server/src/data/workflow.json"
+    );
+  } else {
+    // Local development environment
+    workflowPath = path.resolve(
+      process.cwd(),
+      "api-server/src/data/workflow.json"
+    );
+  }
+
+  console.log(`📁 Trying to load workflow from: ${workflowPath}`);
+  console.log(`📂 Current working directory: ${process.cwd()}`);
+  console.log(`🌍 Environment: ${process.env.NETLIFY ? "Netlify" : "Local"}`);
 
   // Add an 3-second delay
   setTimeout(() => {
