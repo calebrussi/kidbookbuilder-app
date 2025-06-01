@@ -205,4 +205,14 @@ const getWorkflowHandler = (req, res) => {
   }, 1000); // 3000 milliseconds = 3 seconds
 };
 
-export { getWorkflowHandler };
+const getWorkflowSimpleHandler = (req, res) => {
+  const { name, passcode } = req.body;
+
+  // Add an 3-second delay
+  setTimeout(() => {
+    console.log(`✅ Workflow loaded successfully for: ${name}`);
+    res.json(workflowJson);
+  }, 1000); // 3000 milliseconds = 3 seconds
+};
+
+export { getWorkflowHandler, getWorkflowSimpleHandler };

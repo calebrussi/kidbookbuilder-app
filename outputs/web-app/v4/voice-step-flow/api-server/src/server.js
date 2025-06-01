@@ -8,6 +8,7 @@ dotenv.config();
 import {
   healthHandler,
   getWorkflowHandler,
+  getWorkflowSimpleHandler,
   getConversationHandler,
   getSignedUrlHandler,
 } from "./handlers/index.js";
@@ -31,6 +32,8 @@ app.get("/health", healthHandler);
 
 // Get workflow endpoint with authentication
 app.post("/api/workflow", getWorkflowHandler);
+
+app.post("/api/workflow.json", getWorkflowSimpleHandler);
 
 // Get conversation endpoint
 app.get("/api/conversation/:conversationId", getConversationHandler);
