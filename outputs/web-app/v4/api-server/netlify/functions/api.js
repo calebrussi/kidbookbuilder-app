@@ -2,13 +2,20 @@ import express, { Router } from "express";
 import serverless from "serverless-http";
 
 // Import handlers
+// import {
+//   healthHandler,
+//   getWorkflowHandler,
+//   getWorkflowJsonHandler,
+//   getConversationHandler,
+//   getSignedUrlHandler,
+// } from "../handlers-esm.js";
+
 import {
   healthHandler,
   getWorkflowHandler,
-  getWorkflowJsonHandler,
   getConversationHandler,
   getSignedUrlHandler,
-} from "../handlers-esm.js";
+} from "../src/handlers/index.js";
 
 const api = express();
 
