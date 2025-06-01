@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import serverless from "serverless-http";
+import cors from "cors";
 
 import {
   healthHandler,
@@ -11,6 +12,7 @@ import {
 const api = express();
 
 // Middleware
+api.use(cors());
 api.use(express.json());
 api.use(express.urlencoded({ extended: true }));
 

@@ -6,6 +6,7 @@ const getWorkflowHandler = (req, res) => {
   const { name, passcode } = req.body;
 
   console.log(`📋 POST /api/workflow - Request from: ${name || "unknown"}`);
+  console.log(`📝 Request body:`, JSON.stringify(req.body, null, 2));
 
   // Validate input
   if (!name || !passcode) {
@@ -32,7 +33,10 @@ const getWorkflowHandler = (req, res) => {
   console.log(`📋 Loading workflow for: ${name}`);
 
   // Use relative path that works in both local and Netlify environments
-  const workflowPath = path.resolve(process.cwd(), "api-server/src/data/workflow.json");
+  const workflowPath = path.resolve(
+    process.cwd(),
+    "api-server/src/data/workflow.json"
+  );
 
   // Add an 3-second delay
   setTimeout(() => {
