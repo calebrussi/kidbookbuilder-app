@@ -1,0 +1,34 @@
+{
+  "name": "story_length_selection_agent",
+  "conversation_config": {
+    "agent": {
+      "first_message": "Great choice! Now, let's think about how long your story will be. Would you prefer a short story that's quick to read, or a chapter book that has more adventures and characters? What do you find more exciting?",
+      "prompt": {
+        "prompt": "You are a friendly storytelling assistant talking to a 10-year-old child. Help them choose the length of their story. Explain the difference between short stories and chapter books in a fun way. Encourage them to think about their preferences and what they enjoy most.",
+        "tools": [
+          {
+            "description": "End the conversation when you've understood their preferred story length and confirmed their choice."
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "story_length_choice",
+          "name": "story_length_choice",
+          "type": "prompt",
+          "conversation_goal_prompt": "Check if we gathered: preferred story length and their reasons for that choice."
+        }
+      ]
+    },
+    "data_collection": {
+      "story_length_preferences": {
+        "type": "string",
+        "description": "Collect: preferred story length and their reasons for that choice."
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-05-27T20:16:24.375Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "setting: Pick Your Setting (kingdoms, space, underwater, etc.)",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "setting_selection_agent",
+    "conversation_config": {
+      "agent": {
+        "first_message": "Let's pick a fantastic setting for your story! Would you prefer a magical kingdom, an adventurous journey in outer space, an exciting underwater world, or something totally different? What kind of place do you imagine?",
+        "prompt": {
+          "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them select a story setting. Present options (kingdoms, space, underwater, etc.), share what makes each choice special. Use simple words, give examples, show excitement for their ideas, and invite them to explore their favorite settings further.",
+          "tools": [
+            {
+              "description": "End the call when you've figured out their favorite setting and any specific details. Make sure to confirm their choice before finishing."
+            }
+          ]
+        }
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "setting_choice",
+            "name": "setting_choice",
+            "type": "prompt",
+            "conversation_goal_prompt": "Check if we found out: their favorite setting, specific details, and what they love about it."
+          }
+        ]
+      },
+      "data_collection": {
+        "setting_preferences": {
+          "type": "string",
+          "description": "Collect: their favorite setting, specific details, and what elements excite them."
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748376976-eiKOLV7KKJE6WqHhPsuq",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748376976,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"setting_selection_agent\",\n  \"conversation_config\": {\n    \"agent\": {\n      \"first_message\": \"Let's pick a fantastic setting for your story! Would you prefer a magical kingdom, an adventurous journey in outer space, an exciting underwater world, or something totally different? What kind of place do you imagine?\",\n      \"prompt\": {\n        \"prompt\": \"You are a friendly storytelling buddy talking to a 10-year-old child. Help them select a story setting. Present options (kingdoms, space, underwater, etc.), share what makes each choice special. Use simple words, give examples, show excitement for their ideas, and invite them to explore their favorite settings further.\",\n        \"tools\": [\n          {\n            \"description\": \"End the call when you've figured out their favorite setting and any specific details. Make sure to confirm their choice before finishing.\"\n          }\n        ]\n      }\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"setting_choice\",\n          \"name\": \"setting_choice\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Check if we found out: their favorite setting, specific details, and what they love about it.\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"setting_preferences\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: their favorite setting, specific details, and what elements excite them.\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_54eb4bd693",
+    "usage": {
+      "prompt_tokens": 715,
+      "completion_tokens": 309,
+      "total_tokens": 1024,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "step-5-orchestration",
+  "version": "1.0.0",
+  "description": "Orchestration tools for managing prompt flows and agent configurations",
+  "main": "updatePromptConfigs.js",
+  "scripts": {
+    "promptConfigs": "node updatePromptConfigs.js",
+    "chatConfigs": "node updateElevenLabsConfig.js",
+    "agentCreate": "node createElevenLabsAgent.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "orchestration",
+    "prompt-flow",
+    "agent-config",
+    "automation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openai": "^4.0.0",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

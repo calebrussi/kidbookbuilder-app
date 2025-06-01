@@ -1,0 +1,56 @@
+{
+  "name": "timePeriod_selection_agent",
+  "conversation_config": {
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 600,
+      "client_events": [
+        "audio",
+        "interruption",
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction",
+        "vad_score"
+      ]
+    },
+    "agent": {
+      "first_message": "Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly storytelling companion talking to a 10-year-old child. Help them decide on the time period for their story. Present options (past, present, future) and describe exciting aspects of each. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the call when you understand their preferred time period and why they like it. Confirm with them before ending.",
+            "response_timeout_secs": 20,
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "time_period_choice",
+          "name": "time_period_choice",
+          "type": "prompt",
+          "conversation_goal_prompt": "Check if we gathered: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+        }
+      ]
+    },
+    "data_collection": {
+      "time_period_preferences": {
+        "type": "string",
+        "description": "Collect: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "id": "character-creation-quiz",
+  "title": "Character Creation Quiz",
+  "description": "Create your perfect story character through this interactive quiz",
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z",
+  "sections": [
+    {
+      "id": "story-style",
+      "title": "Tell Me Your Story Style",
+      "order": 1,
+      "steps": [
+        {
+          "id": "favorite-stories",
+          "title": "What stories do you love?",
+          "order": 1,
+          "sectionId": "story-style",
+          "agentId": "agent_01jw9nbs4ye9hb450d9gdn16gx"
+        },
+        {
+          "id": "story-length",
+          "title": "How long should your story be?",
+          "order": 2,
+          "sectionId": "story-style",
+          "agentId": "agent_01jw9ncb1mfzraeyqv480qac24"
+        }
+      ]
+    },
+    {
+      "id": "story-world",
+      "title": "Design Your Story World",
+      "order": 2,
+      "steps": [
+        {
+          "id": "world-type",
+          "title": "Magic or Real World?",
+          "order": 3,
+          "sectionId": "story-world",
+          "agentId": "agent_01jw9pbc55fb4twdec9j9e0hjz"
+        },
+        {
+          "id": "setting",
+          "title": "Pick Your Setting",
+          "order": 4,
+          "sectionId": "story-world",
+          "agentId": "agent_01jw9pbgdke2ht4ay4ra35r7t0"
+        },
+        {
+          "id": "time-period",
+          "title": "When Does It Happen?",
+          "order": 5,
+          "sectionId": "story-world",
+          "agentId": "agent_01jw9qaz0cfj5b1bx8j0xenn5q"
+        },
+        {
+          "id": "environment",
+          "title": "Weather & Places",
+          "order": 6,
+          "sectionId": "story-world",
+          "agentId": "agent_01jw9qb1x4fvk8225fq9s3k3j4"
+        }
+      ]
+    }
+  ]
+}

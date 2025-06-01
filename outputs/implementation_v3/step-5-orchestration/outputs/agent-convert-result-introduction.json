@@ -1,0 +1,56 @@
+{
+  "name": "introduction_agent",
+  "conversation_config": {
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 600,
+      "client_events": [
+        "audio",
+        "interruption",
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction",
+        "vad_score"
+      ]
+    },
+    "agent": {
+      "first_message": "Hi there! I'm so excited to build a book with you! What's your name?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a friendly and curious companion. Ask only for their name. Use simple language and be enthusiastic about getting to know them.  End the conversation promptly when the question has been answered. Do not ask any other questions. Your closing statement should be that your excited to start building a book together.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the conversation when you have their name.",
+            "response_timeout_secs": 20,
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "introduction_info",
+          "name": "introduction_info",
+          "type": "prompt",
+          "conversation_goal_prompt": "Check if we gathered: the person's name."
+        }
+      ]
+    },
+    "data_collection": {
+      "user_identity": {
+        "type": "string",
+        "description": "Collect: person's name."
+      }
+    }
+  }
+}

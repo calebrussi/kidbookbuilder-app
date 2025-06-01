@@ -1,0 +1,825 @@
+[
+  {
+    "id": "node_0",
+    "name": "introduction",
+    "description": "What is your name? (introduce yourself)",
+    "dependencies": [],
+    "group_id": "",
+    "prompt_config": {
+      "name": "introduction_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Hi there! I'm so excited to build a book with you! What's your name?",
+          "prompt": {
+            "prompt": "You are a friendly and curious companion. Ask only for their name. Use simple language and be enthusiastic about getting to know them.  End the conversation promptly when the question has been answered. Do not ask any other questions. Your closing statement should be that your excited to start building a book together.",
+            "tools": [
+              {
+                "description": "End the conversation when you have their name."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "introduction_info",
+              "name": "introduction_info",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the person's name."
+            }
+          ]
+        },
+        "data_collection": {
+          "user_identity": {
+            "type": "string",
+            "description": "Collect: person's name."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwefmysxe4bb9xmgdvxrjxzz",
+      "created_at": "2025-05-29T16:57:48.120Z",
+      "name": "introduction_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Hi there! I'm so excited to build a book with you! What's your name?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and curious companion. Ask only for their name. Use simple language and be enthusiastic about getting to know them.  End the conversation promptly when the question has been answered. Do not ask any other questions. Your closing statement should be that your excited to start building a book together.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation when you have their name.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "introduction_info",
+              "name": "introduction_info",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the person's name."
+            }
+          ]
+        },
+        "data_collection": {
+          "user_identity": {
+            "type": "string",
+            "description": "Collect: person's name."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_1",
+    "name": "favoriteStories",
+    "description": "What stories do you love? (favorite genres and themes)",
+    "dependencies": [],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "favorite_stories_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's talk about your favorite stories! Do you love adventure tales, magical journeys, or maybe stories about friendship and bravery? What genres or themes excite you the most?",
+          "prompt": {
+            "prompt": "You are a friendly story buddy chatting with a child. Help them share their favorite stories, genres, and themes. Use simple language, offer examples like adventures, mysteries, or fairy tales, and encourage them to express their thoughts and feelings about these stories.",
+            "tools": [
+              {
+                "description": "End the conversation when you've gathered their favorite genres and themes. Confirm back to them what you've understood before wrapping up."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "favorite_stories",
+              "name": "favorite_stories",
+              "type": "prompt",
+              "conversation_goal_prompt": "Confirm that we've gathered: favorite genres, themes, and any specific stories they love."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: favorite genres, themes, and specific stories they love."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwefn1xpfj8rkz2qga8ak021",
+      "created_at": "2025-05-29T16:57:51.594Z",
+      "name": "favorite_stories_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Let's talk about your favorite stories! Do you love adventure tales, magical journeys, or maybe stories about friendship and bravery? What genres or themes excite you the most?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly story buddy chatting with a child. Help them share their favorite stories, genres, and themes. Use simple language, offer examples like adventures, mysteries, or fairy tales, and encourage them to express their thoughts and feelings about these stories.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation when you've gathered their favorite genres and themes. Confirm back to them what you've understood before wrapping up.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "favorite_stories",
+              "name": "favorite_stories",
+              "type": "prompt",
+              "conversation_goal_prompt": "Confirm that we've gathered: favorite genres, themes, and any specific stories they love."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: favorite genres, themes, and specific stories they love."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_2",
+    "name": "storyLength",
+    "description": "How long should your story be? (short stories, chapter books)",
+    "dependencies": [
+      "node_1"
+    ],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "story_length_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Great choice! Now, let's think about how long your story will be. Would you prefer a short story that's quick to read, or a chapter book that has more adventures and characters? What do you find more exciting?",
+          "prompt": {
+            "prompt": "You are a friendly storytelling assistant talking to a 10-year-old child. Help them choose the length of their story. Explain the difference between short stories and chapter books in a fun way. Encourage them to think about their preferences and what they enjoy most.",
+            "tools": [
+              {
+                "description": "End the conversation when you've understood their preferred story length and confirmed their choice."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_length_choice",
+              "name": "story_length_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred story length and their reasons for that choice."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_length_preferences": {
+            "type": "string",
+            "description": "Collect: preferred story length and their reasons for that choice."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwejc6azejc9xnq5n9a22qp3",
+      "created_at": "2025-05-29T17:45:26.477Z",
+      "name": "story_length_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Great choice! Now, let's think about how long your story will be. Would you prefer a short story that's quick to read, or a chapter book that has more adventures and characters? What do you find more exciting?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly storytelling assistant talking to a 10-year-old child. Help them choose the length of their story. Explain the difference between short stories and chapter books in a fun way. Encourage them to think about their preferences and what they enjoy most.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation when you've understood their preferred story length and confirmed their choice.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_length_choice",
+              "name": "story_length_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred story length and their reasons for that choice."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_length_preferences": {
+            "type": "string",
+            "description": "Collect: preferred story length and their reasons for that choice."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_3",
+    "name": "worldType",
+    "description": "Magic or Real World? (choose your world type)",
+    "dependencies": [
+      "group_1"
+    ],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "world_type_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's decide on the type of world for your adventure! Would you prefer a magical world filled with wizards and enchantments, or a real world that mirrors our own with its own exciting stories? Which one sparks your imagination the most?",
+          "prompt": {
+            "prompt": "You are a cheerful storytelling companion chatting with a 10-year-old child. Assist them in choosing between a magical world and a real-world setting. Explain what makes each type unique. Use simple language, give examples, and encourage them to share their ideas.",
+            "tools": [
+              {
+                "description": "End the conversation when you have their choice of world type and any thoughts they have on it. Confirm their preference before concluding."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "world_type_choice",
+              "name": "world_type_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Ensure we gathered: preferred world type and any details they find interesting."
+            }
+          ]
+        },
+        "data_collection": {
+          "world_type_selection": {
+            "type": "string",
+            "description": "Collect: preferred world type (Magic or Real World) and any interesting details about their choice."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwejc9a2fgy980awe2c4xkkf",
+      "created_at": "2025-05-29T17:45:29.754Z",
+      "name": "world_type_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Let's decide on the type of world for your adventure! Would you prefer a magical world filled with wizards and enchantments, or a real world that mirrors our own with its own exciting stories? Which one sparks your imagination the most?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a cheerful storytelling companion chatting with a 10-year-old child. Assist them in choosing between a magical world and a real-world setting. Explain what makes each type unique. Use simple language, give examples, and encourage them to share their ideas.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation when you have their choice of world type and any thoughts they have on it. Confirm their preference before concluding.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "world_type_choice",
+              "name": "world_type_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Ensure we gathered: preferred world type and any details they find interesting."
+            }
+          ]
+        },
+        "data_collection": {
+          "world_type_selection": {
+            "type": "string",
+            "description": "Collect: preferred world type (Magic or Real World) and any interesting details about their choice."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_4",
+    "name": "setting",
+    "description": "Pick Your Setting (kingdoms, space, underwater, etc.)",
+    "dependencies": [
+      "node_3"
+    ],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "setting_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's pick a fantastic setting for your story! Would you prefer a magical kingdom, an adventurous journey in outer space, an exciting underwater world, or something totally different? What kind of place do you imagine?",
+          "prompt": {
+            "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them select a story setting. Present options (kingdoms, space, underwater, etc.), share what makes each choice special. Use simple words, give examples, show excitement for their ideas, and invite them to explore their favorite settings further.",
+            "tools": [
+              {
+                "description": "End the call when you've figured out their favorite setting and any specific details. Make sure to confirm their choice before finishing."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "setting_choice",
+              "name": "setting_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we found out: their favorite setting, specific details, and what they love about it."
+            }
+          ]
+        },
+        "data_collection": {
+          "setting_preferences": {
+            "type": "string",
+            "description": "Collect: their favorite setting, specific details, and what elements excite them."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwejcbnjehk87612zrhhmxw6",
+      "created_at": "2025-05-29T17:45:32.208Z",
+      "name": "setting_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Let's pick a fantastic setting for your story! Would you prefer a magical kingdom, an adventurous journey in outer space, an exciting underwater world, or something totally different? What kind of place do you imagine?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly storytelling buddy talking to a 10-year-old child. Help them select a story setting. Present options (kingdoms, space, underwater, etc.), share what makes each choice special. Use simple words, give examples, show excitement for their ideas, and invite them to explore their favorite settings further.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you've figured out their favorite setting and any specific details. Make sure to confirm their choice before finishing.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "setting_choice",
+              "name": "setting_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we found out: their favorite setting, specific details, and what they love about it."
+            }
+          ]
+        },
+        "data_collection": {
+          "setting_preferences": {
+            "type": "string",
+            "description": "Collect: their favorite setting, specific details, and what elements excite them."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_5",
+    "name": "timePeriod",
+    "description": "When Does It Happen? (past, present, future)",
+    "dependencies": [
+      "node_4"
+    ],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "timePeriod_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?",
+          "prompt": {
+            "prompt": "You are a friendly storytelling companion talking to a 10-year-old child. Help them decide on the time period for their story. Present options (past, present, future) and describe exciting aspects of each. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.",
+            "tools": [
+              {
+                "description": "End the call when you understand their preferred time period and why they like it. Confirm with them before ending."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "time_period_choice",
+              "name": "time_period_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+            }
+          ]
+        },
+        "data_collection": {
+          "time_period_preferences": {
+            "type": "string",
+            "description": "Collect: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwejcdsxenc8s8yr9j336rbp",
+      "created_at": "2025-05-29T17:45:34.103Z",
+      "name": "timePeriod_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Let's figure out when your story takes place! Do you want it to be in the past, like in ancient times, in the present, or maybe even in the future with flying cars and robots? What time period sparks your imagination?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly storytelling companion talking to a 10-year-old child. Help them decide on the time period for their story. Present options (past, present, future) and describe exciting aspects of each. Use simple language, provide examples, show enthusiasm for their ideas, and explore their suggestions further.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you understand their preferred time period and why they like it. Confirm with them before ending.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "time_period_choice",
+              "name": "time_period_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+            }
+          ]
+        },
+        "data_collection": {
+          "time_period_preferences": {
+            "type": "string",
+            "description": "Collect: preferred time period, specific reasons for their choice, and any interesting details they mentioned"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_6",
+    "name": "environment",
+    "description": "Weather & Places (environment details)",
+    "dependencies": [
+      "node_5"
+    ],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "weather_places_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Let's explore the weather and places for your adventure! Would you like it to be sunny at a beach, snowy in the mountains, or rainy in a cozy town? What kind of weather and location would make your story exciting?",
+          "prompt": {
+            "prompt": "You are a friendly storytelling partner engaging with a 10-year-old child. Help them choose weather and a location for their adventure. Encourage them to think of different options like sunny beaches, snowy mountains, or rainy towns. Use simple language, provide fun examples, and get them excited about their ideas.",
+            "tools": [
+              {
+                "description": "End the conversation when you have a clear idea of their preferred weather and place. Make sure to confirm their choices before wrapping up."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "weather_place_choice",
+              "name": "weather_place_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Make sure we gathered: preferred weather, location details, and the elements they are excited about"
+            }
+          ]
+        },
+        "data_collection": {
+          "weather_and_place_preferences": {
+            "type": "string",
+            "description": "Collect: preferred weather, location details, and elements they're excited about"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwejcfxqfd4ayw49rfrk4rd8",
+      "created_at": "2025-05-29T17:45:36.331Z",
+      "name": "weather_places_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Let's explore the weather and places for your adventure! Would you like it to be sunny at a beach, snowy in the mountains, or rainy in a cozy town? What kind of weather and location would make your story exciting?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly storytelling partner engaging with a 10-year-old child. Help them choose weather and a location for their adventure. Encourage them to think of different options like sunny beaches, snowy mountains, or rainy towns. Use simple language, provide fun examples, and get them excited about their ideas.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.7,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation when you have a clear idea of their preferred weather and place. Make sure to confirm their choices before wrapping up.",
+                "response_timeout_secs": 20,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "weather_place_choice",
+              "name": "weather_place_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Make sure we gathered: preferred weather, location details, and the elements they are excited about"
+            }
+          ]
+        },
+        "data_collection": {
+          "weather_and_place_preferences": {
+            "type": "string",
+            "description": "Collect: preferred weather, location details, and elements they're excited about"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_7",
+    "name": "heroPersonality",
+    "description": "Your Hero's Personality (traits and qualities)",
+    "dependencies": [
+      "group_2"
+    ],
+    "group_id": "group_3",
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_8",
+    "name": "supportingCharacters",
+    "description": "Friends & Family (supporting characters)",
+    "dependencies": [
+      "node_7"
+    ],
+    "group_id": "group_3",
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_9",
+    "name": "specialPowers",
+    "description": "Special Powers (abilities and skills)",
+    "dependencies": [
+      "node_8"
+    ],
+    "group_id": "group_3",
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_10",
+    "name": "heroChallenges",
+    "description": "Hero's Challenges (fears and obstacles)",
+    "dependencies": [
+      "node_9"
+    ],
+    "group_id": "group_3",
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_11",
+    "name": "questType",
+    "description": "Type of Quest (mystery, discovery, journey)",
+    "dependencies": [
+      "group_3"
+    ],
+    "group_id": "group_4",
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_12",
+    "name": "emotionalElements",
+    "description": "Friendship & Feelings (emotional elements)",
+    "dependencies": [
+      "node_11"
+    ],
+    "group_id": "group_4",
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_13",
+    "name": "challenges",
+    "description": "Challenges to Face (puzzles, battles, problems)",
+    "dependencies": [
+      "node_12"
+    ],
+    "group_id": "group_4",
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_14",
+    "name": "storyOutcome",
+    "description": "How It Ends (story outcome)",
+    "dependencies": [
+      "node_13"
+    ],
+    "group_id": "group_4",
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "group_1",
+    "name": "tellMeYourStoryStyle",
+    "description": "Tell Me Your Story Style group containing nodes for favorite stories and story length preferences",
+    "dependencies": [
+      "node_0"
+    ]
+  },
+  {
+    "id": "group_2",
+    "name": "designYourStoryWorld",
+    "description": "Design Your Story World group containing nodes for world type, setting, time period, and environment details",
+    "dependencies": [
+      "group_1"
+    ]
+  },
+  {
+    "id": "group_3",
+    "name": "createYourCharacters",
+    "description": "Create Your Characters group containing nodes for hero personality, supporting characters, special powers, and hero challenges",
+    "dependencies": [
+      "group_2"
+    ]
+  },
+  {
+    "id": "group_4",
+    "name": "chooseYourAdventure",
+    "description": "Choose Your Adventure group containing nodes for quest type, emotional elements, challenges, and story outcome",
+    "dependencies": [
+      "group_3"
+    ]
+  }
+]

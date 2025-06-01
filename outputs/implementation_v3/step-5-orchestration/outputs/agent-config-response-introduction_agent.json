@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-05-29T10:39:36.962Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "introduction: What is your name and age? (introduce yourself)",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "introduction_agent",
+    "conversation_config": {
+      "agent": {
+        "first_message": "Hi there! I'm so excited to meet you! What's your name, and how old are you? I can't wait to learn more about you!",
+        "prompt": {
+          "prompt": "You are a friendly and curious companion talking to a child. Ask for their name and age, and encourage them to share a bit about themselves. Use simple language and be enthusiastic about getting to know them.",
+          "tools": [
+            {
+              "description": "End the conversation when you have their name and age, and confirm these details with them."
+            }
+          ]
+        }
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "introduction_info",
+            "name": "introduction_info",
+            "type": "prompt",
+            "conversation_goal_prompt": "Check if we gathered: the child's name and age."
+          }
+        ]
+      },
+      "data_collection": {
+        "user_identity": {
+          "type": "string",
+          "description": "Collect: child's name and age."
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748515173-t7OzMYNh9GIXKSri5JEo",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748515173,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"introduction_agent\",\n  \"conversation_config\": {\n    \"agent\": {\n      \"first_message\": \"Hi there! I'm so excited to meet you! What's your name, and how old are you? I can't wait to learn more about you!\",\n      \"prompt\": {\n        \"prompt\": \"You are a friendly and curious companion talking to a child. Ask for their name and age, and encourage them to share a bit about themselves. Use simple language and be enthusiastic about getting to know them.\",\n        \"tools\": [\n          {\n            \"description\": \"End the conversation when you have their name and age, and confirm these details with them.\"\n          }\n        ]\n      }\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"introduction_info\",\n          \"name\": \"introduction_info\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Check if we gathered: the child's name and age.\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"user_identity\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: child's name and age.\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_34a54ae93c",
+    "usage": {
+      "prompt_tokens": 714,
+      "completion_tokens": 252,
+      "total_tokens": 966,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "node_1",
+    "name": "sampleNodeWithNoDependencies",
+    "description": "A standalone node with no dependencies or group membership",
+    "dependencies": [],
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_2",
+    "name": "nodeWithNodeDependency",
+    "description": "A node that depends on another node",
+    "dependencies": ["node_1"],
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_3",
+    "name": "nodeInGroup",
+    "description": "A node that belongs to a group",
+    "group_id": "group_1",
+    "dependencies": [],
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_4",
+    "name": "nodeWithGroupDependency",
+    "description": "A node that depends on a group",
+    "dependencies": ["group_1"],
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_5",
+    "name": "nodeWithMultipleDependencies",
+    "description": "A node with dependencies on both nodes and groups",
+    "group_id": "group_2",
+    "dependencies": ["node_1", "group_1"],
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_6",
+    "name": "nodeInGroup3",
+    "description": "A node that belongs to group_3 and depends on group_1",
+    "group_id": "group_3",
+    "dependencies": ["group_1"],
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "node_7",
+    "name": "nodeInGroup4",
+    "description": "A node that belongs to group_4 and depends on node_1, group_1, and group_2",
+    "group_id": "group_4",
+    "dependencies": ["node_1", "group_1", "group_2"],
+    "prompt_config": {},
+    "elevenlabs_config": {}
+  },
+  {
+    "id": "group_1",
+    "name": "sampleGroupWithNoDependencies",
+    "description": "A group with no dependencies, containing node_3",
+    "dependencies": []
+  },
+  {
+    "id": "group_2",
+    "name": "groupWithNodeDependency",
+    "description": "A group that depends on node_1, node_2, and group_1, containing node_5",
+    "dependencies": ["node_1", "node_2", "group_1"]
+  },
+  {
+    "id": "group_3",
+    "name": "groupWithGroupDependency",
+    "description": "A group that depends on another group (group_1), containing node_6",
+    "dependencies": ["group_1"]
+  },
+  {
+    "id": "group_4",
+    "name": "groupWithMultipleDependencies",
+    "description": "A group with dependencies on node_1, group_1, and group_2, containing node_7",
+    "dependencies": ["node_1", "group_1", "group_2"]
+  }
+]

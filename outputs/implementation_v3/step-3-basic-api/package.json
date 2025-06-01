@@ -1,0 +1,19 @@
+{
+  "name": "elevenlabs-agent-api",
+  "version": "1.0.0",
+  "description": "Scripts for interacting with ElevenLabs Agent API",
+  "main": "listAgents.js",
+  "scripts": {
+    "list": "node agentList.js",
+    "get": "node agentGet.js",
+    "create": "node agentCreate.js",
+    "update": "node agentUpdate.js",
+    "delete": "node agentDelete.js",
+    "crud": "node agentCRUD.js",
+    "convoGet": "node conversationGet.js"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "dotenv": "^16.0.3"
+  }
+}

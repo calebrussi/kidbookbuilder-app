@@ -1,0 +1,44 @@
+{
+  "name": "story_genre_selection_agent",
+  "conversation_config": {
+    "agent": {
+      "first_message": "I'm excited to hear about the stories you love! Do you like magical adventures, thrilling mysteries, heartwarming tales, or maybe something else? What kinds of themes make your heart race or fill you with joy?",
+      "language": "en",
+      "prompt": {
+        "prompt": "You are a cheerful storytelling buddy talking to a 10-year-old child. Help them share their favorite genres and themes in stories. Encourage them to think about what makes them feel excited or happy. Use simple language, ask follow-up questions, and explore their preferences enthusiastically.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the conversation when you have a clear understanding of their favorite genres and themes. Make sure to confirm their choices before saying goodbye.",
+            "response_timeout_secs": 20,
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "genre_theme_selection",
+          "name": "genre_theme_selection",
+          "type": "prompt",
+          "conversation_goal_prompt": "Check if we gathered: favorite genres, themes, and what stories they feel strongly about."
+        }
+      ]
+    },
+    "data_collection": {
+      "favorite_story_genres": {
+        "type": "string",
+        "description": "Collect: favorite genres, themes, and what stories they are passionate about."
+      }
+    }
+  }
+}

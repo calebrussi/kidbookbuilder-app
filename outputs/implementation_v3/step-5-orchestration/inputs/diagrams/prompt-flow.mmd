@@ -1,0 +1,46 @@
+flowchart TD
+    %% Define nodes
+    node_1["Node 1: sampleNodeWithNoDependencies"]
+    node_2["Node 2: nodeWithNodeDependency"]
+    node_3["Node 3: nodeInGroup"]
+    node_4["Node 4: nodeWithGroupDependency"]
+    node_5["Node 5: nodeWithMultipleDependencies"]
+    node_6["Node 6: nodeInGroup3"]
+    node_7["Node 7: nodeInGroup4"]
+    
+    %% Define groups with subgraphs
+    subgraph group_1["Group 1: sampleGroupWithNoDependencies"]
+        node_3
+    end
+    
+    subgraph group_2["Group 2: groupWithNodeDependency"]
+        node_5
+    end
+    
+    subgraph group_3["Group 3: groupWithGroupDependency"]
+        node_6
+    end
+    
+    subgraph group_4["Group 4: groupWithMultipleDependencies"]
+        node_7
+    end
+    
+    %% Define dependencies between nodes and groups
+    node_1 --> node_2
+    node_1 --> group_2
+    
+    group_1 --> node_4
+    group_1 --> group_2
+    group_1 --> group_3
+    group_1 --> group_4
+    
+    node_2 --> group_2
+    
+    group_2 --> group_4
+    
+    %% Add styles
+    classDef node fill:#d4f1f9,stroke:#05b2dc,stroke-width:2px
+    classDef group fill:#ffecb3,stroke:#ffa000,stroke-width:2px
+    
+    class node_1,node_2,node_3,node_4,node_5 node
+    class group_1,group_2,group_3,group_4 group

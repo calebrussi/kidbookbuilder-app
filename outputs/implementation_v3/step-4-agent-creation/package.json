@@ -1,0 +1,17 @@
+{
+  "name": "openrouter-integration",
+  "version": "1.0.0",
+  "description": "Simple OpenRouter integration for KidBookBuilder",
+  "main": "openrouter-simple.js",
+  "scripts": {
+    "openrouter": "node test-openrouter.js",
+    "config": "node agent-config.js",
+    "convert": "node agent-convert.js",
+    "create": "node agent-create.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "lodash": "^4.17.21",
+    "openai": "^4.0.0"
+  }
+}

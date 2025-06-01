@@ -1,0 +1,16 @@
+{
+  "name": "elevenlabs-websocket-example",
+  "version": "1.0.0",
+  "description": "Basic WebSocket implementation for ElevenLabs Text-to-Speech API",
+  "main": "text-to-speech-websocket.js",
+  "scripts": {
+    "start": "node text-to-speech-websocket.js",
+    "interactive": "node interactive-tts.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "ws": "^8.16.0",
+    "fs": "0.0.1-security"
+  },
+  "type": "module"
+}
