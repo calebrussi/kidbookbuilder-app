@@ -87,7 +87,7 @@ api.use((req, res) => {
 //   console.log(`🚀 KidBookBuilder API Server running`);
 // });
 
-exports.handler = serverless(api, {
+export const handler = serverless(api, {
   binary: false,
   request: (request, event, context) => {
     // Ensure body parsing for serverless
