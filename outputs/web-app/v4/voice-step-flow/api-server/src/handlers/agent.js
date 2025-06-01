@@ -1,4 +1,6 @@
-import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+// Use default import for CommonJS compatibility
+import ElevenLabsClientModule from "@elevenlabs/elevenlabs-js";
+const { ElevenLabsClient } = ElevenLabsClientModule;
 
 /**
  * Get signed URL for workflow step endpoint

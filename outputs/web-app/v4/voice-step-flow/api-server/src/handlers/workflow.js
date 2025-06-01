@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
+// Use default import instead of named import for CommonJS compatibility
+import url from "url";
+const { fileURLToPath } = url;
 
 // const workflowJson = require("../data/workflow.json");
 
