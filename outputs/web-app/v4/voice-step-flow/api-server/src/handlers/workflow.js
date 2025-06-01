@@ -39,6 +39,7 @@ const getWorkflowHandler = (req, res) => {
 
   // Get the current file's directory using import.meta.url
   const __filename = fileURLToPath(import.meta.url);
+  console.log(`📂 Current __filename: ${__filename}`);
   const __dirname = path.dirname(__filename);
   console.log(`📂 Current __dirname: ${__dirname}`);
 
