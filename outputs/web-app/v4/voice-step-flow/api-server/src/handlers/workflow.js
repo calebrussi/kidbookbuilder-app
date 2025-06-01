@@ -33,10 +33,7 @@ const getWorkflowHandler = (req, res) => {
   console.log(`📋 Loading workflow for: ${name}`);
 
   // Use relative path that works in both local and Netlify environments
-  const workflowPath = path.resolve(
-    process.cwd(),
-    "api-server/src/data/workflow.json"
-  );
+  const workflowPath = path.resolve(process.cwd(), "../data/workflow.json");
 
   // Add an 3-second delay
   setTimeout(() => {
