@@ -15,7 +15,7 @@ import {
   getWorkflowHandler,
   getConversationHandler,
   getSignedUrlHandler,
-} from "../src/handlers/index.js";
+} from "../../src/handlers/index.js";
 
 const api = express();
 
