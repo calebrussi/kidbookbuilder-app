@@ -2,6 +2,8 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+const workflowJson = require("../data/workflow.json");
+
 // Get workflow endpoint with authentication - using relative path from project root
 const getWorkflowHandler = (req, res) => {
   const { name, passcode } = req.body;
@@ -36,6 +38,8 @@ const getWorkflowHandler = (req, res) => {
   // Debug: List directory contents to see what's available
   console.log(`📂 Current working directory: ${process.cwd()}`);
   console.log(`🌍 Environment: ${process.env.NETLIFY ? "Netlify" : "Local"}`);
+
+  console.log("workflowJson:", workflowJson);
 
   try {
     const cwdContents = fs.readdirSync(process.cwd());
