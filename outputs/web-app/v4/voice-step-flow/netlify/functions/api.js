@@ -11,10 +11,43 @@ import {
 
 const api = express();
 
-// Middleware
+// Middleware - with explicit body parsing configuration
 api.use(cors());
-api.use(express.json());
-api.use(express.urlencoded({ extended: true }));
+api.use(
+  express.json({
+    limit: "10mb",
+    type: ["application/json", "text/plain"],
+  })
+);
+api.use(
+  express.urlencoded({
+    extended: true,
+    limit: "10mb",
+  })
+);
+
+// Add body parsing debugging middleware
+api.use((req, res, next) => {
+  // Handle Buffer body in serverless environment
+  if (req.body && req.body.type === "Buffer" && req.body.data) {
+    try {
+      const bodyString = Buffer.from(req.body.data).toString("utf8");
+      req.body = JSON.parse(bodyString);
+      console.log("✅ Successfully parsed Buffer body:", req.body);
+    } catch (e) {
+      console.error("❌ Failed to parse Buffer body:", e);
+    }
+  }
+
+  console.log("📡 Request received:", {
+    method: req.method,
+    path: req.path,
+    contentType: req.headers["content-type"],
+    bodyType: typeof req.body,
+    body: req.body,
+  });
+  next();
+});
 
 const router = Router();
 
@@ -54,4 +87,16 @@ api.use((req, res) => {
 //   console.log(`🚀 KidBookBuilder API Server running`);
 // });
 
-export const handler = serverless(api);
+export const handler = serverless(api, {
+  binary: false,
+  request: (request, event, context) => {
+    // Ensure body parsing for serverless
+    if (event.body && typeof event.body === "string") {
+      try {
+        request.body = JSON.parse(event.body);
+      } catch (e) {
+        console.warn("Failed to parse JSON body:", e);
+      }
+    }
+  },
+});
