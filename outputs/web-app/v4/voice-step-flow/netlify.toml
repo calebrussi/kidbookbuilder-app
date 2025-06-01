@@ -11,15 +11,15 @@
 [functions]
   external_node_modules = ["express", "serverless-http", "cors", "@elevenlabs/elevenlabs-js", "dotenv"]
   node_bundler = "esbuild"
-  included_files = ["**/*", "api-server/src/data/workflow.json", "workflow.json"]
+  included_files = ["api-server/src/data/workflow.json", "workflow.json"]
   
 [functions.api]
   node_bundler = "esbuild"
-  included_files = ["**/*", "api-server/src/data/workflow.json", "workflow.json"]
+  included_files = ["api-server/src/data/workflow.json", "workflow.json"]
 
 [functions."*"]
   node_bundler = "esbuild"
-  included_files = ["**/*", "api-server/src/data/workflow.json", "workflow.json"]
+  included_files = ["api-server/src/data/workflow.json", "workflow.json"]
 
 [[redirects]]
   force = true
