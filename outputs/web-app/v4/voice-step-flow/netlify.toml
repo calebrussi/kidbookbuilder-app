@@ -1,7 +1,10 @@
 
 [functions]
-  external_node_modules = ["express"]
+  external_node_modules = ["express", "serverless-http", "cors"]
   node_bundler = "esbuild"
+  
+[functions."*"]
+  included_files = ["api-server/src/data/**/*"]
   
 [[redirects]]
   force = true

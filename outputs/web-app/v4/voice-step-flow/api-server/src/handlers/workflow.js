@@ -66,24 +66,17 @@ const getWorkflowHandler = (req, res) => {
   }
 
   // Use different paths for local vs Netlify environments
-  let workflowPath;
-  if (process.env.NETLIFY) {
-    // Netlify environment - files are bundled relative to the function
-    workflowPath = path.resolve(
-      process.cwd(),
-      "api-server/src/data/workflow.json"
-    );
-  } else {
-    // Local development environment
-    workflowPath = path.resolve(
-      process.cwd(),
-      "api-server/src/data/workflow.json"
-    );
-  }
+  let workflowPath = path.resolve(
+    process.cwd(),
+    "api-server/src/data/workflow.json"
+  );
 
-  console.log(`📁 Trying to load workflow from: ${workflowPath}`);
-  console.log(`📂 Current working directory: ${process.cwd()}`);
-  console.log(`🌍 Environment: ${process.env.NETLIFY ? "Netlify" : "Local"}`);
+  if (!fs.existsSync(workflowPath)) {
+    console.warn(
+      `⚠️ workflow.json not found at ${workflowPath}, trying Netlify path`
+    );
+    workflowPath = path.resolve(process.cwd(), "workflow.json");
+  }
 
   // Add an 3-second delay
   setTimeout(() => {
