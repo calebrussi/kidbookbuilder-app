@@ -58,7 +58,7 @@ api.use((req, res) => {
 
 // Start server
 api.listen(PORT, () => {
-  console.log(`🚀 KidBookBuilder API Server running on port ${PORT}`);
+  console.log(`🚀 KidBookBuilder API Server running`);
 });
 
 export const handler = serverless(api);
