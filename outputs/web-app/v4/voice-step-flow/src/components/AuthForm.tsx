@@ -26,7 +26,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuth, loading, error }) =>
           </div>
           <h1 className="text-2xl font-bold text-gray-800">Welcome to Your Quiz</h1>
           <p className="text-gray-600 mt-2">Please enter your details to get started</p>
-          <p className="text-sm text-purple-600 mt-1">Demo passcode: <code className="bg-purple-100 px-2 py-1 rounded">demo123</code></p>
+          {/* <p className="text-sm text-purple-600 mt-1">Demo passcode: <code className="bg-purple-100 px-2 py-1 rounded">demo123</code></p> */}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
