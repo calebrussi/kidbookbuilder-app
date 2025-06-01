@@ -1,10 +1,7 @@
 
 [functions]
-  external_node_modules = ["express", "serverless-http", "cors", "@elevenlabs/elevenlabs-js", "node-fetch", "dotenv"]
+  external_node_modules = ["express"]
   node_bundler = "esbuild"
-
-[functions."*"]
-  included_files = ["api-server/**/*"]
   
 [[redirects]]
   force = true
