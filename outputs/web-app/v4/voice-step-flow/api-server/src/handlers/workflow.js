@@ -33,7 +33,10 @@ const getWorkflowHandler = (req, res) => {
   console.log(`📋 Loading workflow for: ${name}`);
 
   // Use relative path that works in both local and Netlify environments
-  const workflowPath = path.resolve(process.cwd(), "../data/workflow.json");
+  const workflowPath = path.resolve(
+    process.cwd(),
+    "../voice-step-flow/api-server/src/data/workflow.json"
+  );
 
   // Add an 3-second delay
   setTimeout(() => {
@@ -59,7 +62,7 @@ const getWorkflowHandler = (req, res) => {
         });
       }
     });
-  }, 3000); // 3000 milliseconds = 3 seconds
+  }, 1000); // 3000 milliseconds = 3 seconds
 };
 
 export { getWorkflowHandler };
