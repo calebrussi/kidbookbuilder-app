@@ -38,6 +38,8 @@ const getWorkflowHandler = (req, res) => {
   console.log(`🌍 Environment: ${process.env.NETLIFY ? "Netlify" : "Local"}`);
 
   // Get the current file's directory using import.meta.url
+  console.log("import.meta.url:", import.meta.url);
+
   const __filename = fileURLToPath(import.meta.url);
   console.log(`📂 Current __filename: ${__filename}`);
   const __dirname = path.dirname(__filename);
