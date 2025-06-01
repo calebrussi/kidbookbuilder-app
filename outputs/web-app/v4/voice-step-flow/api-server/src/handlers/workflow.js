@@ -2,10 +2,6 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Get the current file's directory using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Get workflow endpoint with authentication - using relative path from project root
 const getWorkflowHandler = (req, res) => {
   const { name, passcode } = req.body;
@@ -40,6 +36,11 @@ const getWorkflowHandler = (req, res) => {
   // Debug: List directory contents to see what's available
   console.log(`📂 Current working directory: ${process.cwd()}`);
   console.log(`🌍 Environment: ${process.env.NETLIFY ? "Netlify" : "Local"}`);
+
+  // Get the current file's directory using import.meta.url
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  console.log(`📂 Current __dirname: ${__dirname}`);
 
   try {
     const cwdContents = fs.readdirSync(process.cwd());
