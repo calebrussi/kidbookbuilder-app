@@ -1,4 +1,4 @@
-const { ElevenLabsClient } = require("@elevenlabs/elevenlabs-js");
+import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 
 /**
  * Get signed URL for workflow step endpoint
@@ -114,4 +114,4 @@ const getSignedUrlHandler = async (req, res) => {
   }
 };
 
-module.exports = { getSignedUrlHandler };
+export { getSignedUrlHandler };

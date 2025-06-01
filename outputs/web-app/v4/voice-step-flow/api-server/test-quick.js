@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
 // Get agentId from command line argument or use default
 const agentId = process.argv[2] || "agent_01jwefmysxe4bb9xmgdvxrjxzz"; // name step from workflow.json

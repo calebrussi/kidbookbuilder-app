@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
 /**
  * Get conversation endpoint
@@ -128,4 +128,4 @@ const getConversationHandler = async (req, res) => {
   }
 };
 
-module.exports = { getConversationHandler };
+export { getConversationHandler };

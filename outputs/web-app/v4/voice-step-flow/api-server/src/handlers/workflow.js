@@ -1,5 +1,9 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Get workflow endpoint with authentication
@@ -62,4 +66,4 @@ const getWorkflowHandler = (req, res) => {
   }, 3000); // 3000 milliseconds = 3 seconds
 };
 
-module.exports = { getWorkflowHandler };
+export { getWorkflowHandler };

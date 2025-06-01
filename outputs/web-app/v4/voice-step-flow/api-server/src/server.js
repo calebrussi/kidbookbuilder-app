@@ -1,14 +1,16 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Import handlers
-const {
+import {
   healthHandler,
   getWorkflowHandler,
   getConversationHandler,
   getSignedUrlHandler,
-} = require("./handlers");
+} from "./handlers/index.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -31,7 +33,7 @@ app.get("/health", healthHandler);
 app.post("/api/workflow", getWorkflowHandler);
 
 // Get conversation endpoint
-app.get("/api/conversation/:conversationId?", getConversationHandler);
+app.get("/api/conversation/:conversationId", getConversationHandler);
 
 // Get signed URL for workflow step endpoint
 app.post("/api/workflow/agent", getSignedUrlHandler);
@@ -71,4 +73,4 @@ app.listen(PORT, () => {
   );
 });
 
-module.exports = app;
+export default app;

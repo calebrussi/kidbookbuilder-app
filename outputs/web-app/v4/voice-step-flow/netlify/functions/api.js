@@ -1,21 +1,12 @@
 import express, { Router } from "express";
 import serverless from "serverless-http";
 
-// Import handlers
-// import {
-//   healthHandler,
-//   getWorkflowHandler,
-//   getWorkflowJsonHandler,
-//   getConversationHandler,
-//   getSignedUrlHandler,
-// } from "../handlers-esm.js";
-
 import {
   healthHandler,
   getWorkflowHandler,
   getConversationHandler,
   getSignedUrlHandler,
-} from "../../../api-server/src/handlers/index.js";
+} from "../../api-server/src/handlers/index.js";
 
 const api = express();
 
@@ -30,7 +21,7 @@ router.get("/hello", (req, res) => res.send("Hello World!"));
 
 router.get("/health", healthHandler);
 
-router.get("/conversation/:conversationId?", getConversationHandler);
+router.get("/conversation/:conversationId", getConversationHandler);
 
 router.post("/workflow", getWorkflowHandler);
 router.post("/workflow/agent", getSignedUrlHandler);

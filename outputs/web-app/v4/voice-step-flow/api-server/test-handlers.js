@@ -1,11 +1,10 @@
 // Test script to verify handlers work correctly
-const {
+import {
   healthHandler,
   getWorkflowHandler,
-  getWorkflowJsonHandler,
   getConversationHandler,
   getSignedUrlHandler,
-} = require("./src/handlers");
+} from "./src/handlers/index.js";
 
 // Mock request and response objects
 const createMockRes = () => {
@@ -31,13 +30,6 @@ const healthReq = {};
 const healthRes = createMockRes();
 healthHandler(healthReq, healthRes);
 console.log("✅ Health handler response:", healthRes.data);
-
-// Test workflow JSON handler (deprecated endpoint)
-console.log("\n🧪 Testing workflow JSON handler (deprecated)...");
-const workflowJsonReq = {};
-const workflowJsonRes = createMockRes();
-getWorkflowJsonHandler(workflowJsonReq, workflowJsonRes);
-console.log("✅ Workflow JSON handler response:", workflowJsonRes.data);
 
 console.log("\n🎉 Handler tests completed successfully!");
 console.log("All handlers are properly exported and functional.");
