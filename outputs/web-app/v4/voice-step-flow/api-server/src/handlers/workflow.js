@@ -1,13 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-/**
- * Get workflow endpoint with authentication
- */
+// Get workflow endpoint with authentication - using relative path from project root
 const getWorkflowHandler = (req, res) => {
   const { name, passcode } = req.body;
 
@@ -37,7 +31,8 @@ const getWorkflowHandler = (req, res) => {
   console.log(`✅ Authentication successful for: ${name}`);
   console.log(`📋 Loading workflow for: ${name}`);
 
-  const workflowPath = path.join(__dirname, "../data/workflow.json");
+  // Use relative path that works in both local and Netlify environments
+  const workflowPath = path.resolve(process.cwd(), "api-server/src/data/workflow.json");
 
   // Add an 3-second delay
   setTimeout(() => {
