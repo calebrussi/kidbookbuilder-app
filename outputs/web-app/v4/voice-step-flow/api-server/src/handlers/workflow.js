@@ -1,5 +1,10 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+
+// Get the current file's directory using import.meta.url
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Get workflow endpoint with authentication - using relative path from project root
 const getWorkflowHandler = (req, res) => {
@@ -66,16 +71,22 @@ const getWorkflowHandler = (req, res) => {
   }
 
   // Use different paths for local vs Netlify environments
-  let workflowPath = path.resolve(
-    process.cwd(),
-    "api-server/src/data/workflow.json"
-  );
+  // Using import.meta.url to get reliable path relative to this module
+  let workflowPath = path.resolve(__dirname, "../data/workflow.json");
 
   if (!fs.existsSync(workflowPath)) {
     console.warn(
-      `⚠️ workflow.json not found at ${workflowPath}, trying Netlify path`
+      `⚠️ workflow.json not found at ${workflowPath}, trying alternative paths`
     );
-    workflowPath = path.resolve(process.cwd(), "workflow.json");
+    // Try process.cwd() as fallback
+    workflowPath = path.resolve(
+      process.cwd(),
+      "api-server/src/data/workflow.json"
+    );
+
+    if (!fs.existsSync(workflowPath)) {
+      workflowPath = path.resolve(process.cwd(), "workflow.json");
+    }
   }
 
   // Add an 3-second delay
