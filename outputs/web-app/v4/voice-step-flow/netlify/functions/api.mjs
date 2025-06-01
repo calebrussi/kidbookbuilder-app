@@ -5,6 +5,7 @@ import cors from "cors";
 import {
   healthHandler,
   getWorkflowHandler,
+  getWorkflowSimpleHandler,
   getConversationHandler,
   getSignedUrlHandler,
 } from "../../api-server/src/handlers/index.js";
@@ -59,6 +60,8 @@ router.get("/health", healthHandler);
 router.get("/conversation/:conversationId", getConversationHandler);
 
 router.post("/workflow", getWorkflowHandler);
+router.post("/workflow.json", getWorkflowSimpleHandler);
+
 router.post("/workflow/agent", getSignedUrlHandler);
 
 api.use("/api/", router);
