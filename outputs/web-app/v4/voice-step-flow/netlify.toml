@@ -9,16 +9,18 @@
   ESBUILD_FLAGS = "--format=esm --target=node18"
 
 [functions]
-  external_node_modules = ["express", "serverless-http", "cors", "@elevenlabs/elevenlabs-js", "node-fetch", "dotenv"]
+  external_node_modules = ["express", "serverless-http", "cors", "@elevenlabs/elevenlabs-js", "dotenv"]
   node_bundler = "esbuild"
-  included_files = ["api-server/src/data/workflow.json", "workflow.json"]
+  included_files = ["**/*", "api-server/src/data/workflow.json", "workflow.json"]
   
 [functions.api]
   node_bundler = "esbuild"
+  included_files = ["**/*", "api-server/src/data/workflow.json", "workflow.json"]
 
 [functions."*"]
-  included_files = ["api-server/src/data/*"]
-  
+  node_bundler = "esbuild"
+  included_files = ["**/*", "api-server/src/data/workflow.json", "workflow.json"]
+
 [[redirects]]
   force = true
   from = "/api/*"

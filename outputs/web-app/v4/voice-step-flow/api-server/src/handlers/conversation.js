@@ -1,4 +1,5 @@
-import fetch from "node-fetch";
+// Use built-in fetch (Node.js 18+) instead of node-fetch for better compatibility
+// import fetch from "node-fetch";
 
 /**
  * Get conversation endpoint
