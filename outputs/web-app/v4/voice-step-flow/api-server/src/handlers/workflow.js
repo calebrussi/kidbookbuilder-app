@@ -37,14 +37,6 @@ const getWorkflowHandler = (req, res) => {
   console.log(`📂 Current working directory: ${process.cwd()}`);
   console.log(`🌍 Environment: ${process.env.NETLIFY ? "Netlify" : "Local"}`);
 
-  // Get the current file's directory using import.meta.url
-  console.log("import.meta.url:", import.meta.url);
-
-  const __filename = fileURLToPath(import.meta.url);
-  console.log(`📂 Current __filename: ${__filename}`);
-  const __dirname = path.dirname(__filename);
-  console.log(`📂 Current __dirname: ${__dirname}`);
-
   try {
     const cwdContents = fs.readdirSync(process.cwd());
     console.log(`📁 Contents of ${process.cwd()}:`, cwdContents);
@@ -73,6 +65,14 @@ const getWorkflowHandler = (req, res) => {
   } catch (listErr) {
     console.error(`❌ Error listing directories:`, listErr);
   }
+
+  // Get the current file's directory using import.meta.url
+  console.log("import.meta.url:", import.meta.url);
+
+  const __filename = fileURLToPath(import.meta.url);
+  console.log(`📂 Current __filename: ${__filename}`);
+  const __dirname = path.dirname(__filename);
+  console.log(`📂 Current __dirname: ${__dirname}`);
 
   // Use different paths for local vs Netlify environments
   // Using import.meta.url to get reliable path relative to this module
