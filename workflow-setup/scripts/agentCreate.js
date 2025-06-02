@@ -154,102 +154,135 @@ async function createElevenLabsAgents(filePath, options = {}) {
       );
     }
 
-    // Ask for confirmation
-    const confirmMessage = `\nThis will create ${analysis.totalNodesToProcess} new agents in ElevenLabs. Do you want to continue? (Y/n): `;
-    const shouldContinue = await askUserToContinue(confirmMessage);
-    if (!shouldContinue) {
-      console.log("Operation cancelled by user.");
-      return;
-    }
-
-    // Create agents one by one with progress updates
-    console.log(`\n🤖 Creating ${analysis.totalNodesToProcess} agents...`);
-
+    // Create agents one by one with individual confirmation
+    console.log(`\n🤖 Processing agent creation...`);
     const agentResponses = [];
+    let createdCount = 0;
 
     for (let i = 0; i < analysis.nodesToProcess.length; i++) {
       const node = analysis.nodesToProcess[i];
-      try {
+
+      console.log(`\n--- Node ${i + 1} of ${analysis.totalNodesToProcess} ---`);
+      console.log(`Name: ${node.name}`);
+      console.log(`ID: ${node.id}`);
+      console.log(`Config name: ${node.elevenlabs_config.name}`);
+
+      // Show a preview of the agent config
+      if (
+        node.elevenlabs_config.agent &&
+        node.elevenlabs_config.agent.first_message
+      ) {
         console.log(
-          `\n[${i + 1}/${analysis.totalNodesToProcess}] Creating agent for ${
-            node.name
-          }...`
+          `First message: "${node.elevenlabs_config.agent.first_message}"`
         );
-        const agentResponse = await createElevenLabsAgent(node);
+      }
 
-        agentResponses.push({
-          nodeId: node.id,
-          nodeName: node.name,
-          agentData: agentResponse,
-          success: true,
-        });
+      const shouldCreateAgentForThisNode = await askUserToContinue(
+        `Create ElevenLabs agent for "${node.name}"? (Y/n): `
+      );
 
-        console.log(`  ✅ Agent created with ID: ${agentResponse.agent_id}`);
+      if (shouldCreateAgentForThisNode) {
+        try {
+          console.log(`  🤖 Creating agent for ${node.name}...`);
+          const agentResponse = await createElevenLabsAgent(node);
 
-        // Add a small delay to avoid rate limiting
-        if (i < analysis.nodesToProcess.length - 1) {
-          console.log("  ⏳ Waiting 1 second to avoid rate limiting...");
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          agentResponses.push({
+            nodeId: node.id,
+            nodeName: node.name,
+            agentData: agentResponse,
+            success: true,
+          });
+          createdCount++;
+
+          console.log(`  ✅ Agent created with ID: ${agentResponse.agent_id}`);
+
+          // Add a small delay to avoid rate limiting
+          if (i < analysis.nodesToProcess.length - 1) {
+            console.log("  ⏳ Waiting 1 second to avoid rate limiting...");
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        } catch (error) {
+          console.error(
+            `  ❌ Failed to create agent for ${node.name}: ${error.message}`
+          );
+          agentResponses.push({
+            nodeId: node.id,
+            nodeName: node.name,
+            error: error.message,
+            success: false,
+          });
+          // Continue with other agents
         }
-      } catch (error) {
-        console.error(
-          `  ❌ Failed to create agent for ${node.name}: ${error.message}`
-        );
-        agentResponses.push({
-          nodeId: node.id,
-          nodeName: node.name,
-          error: error.message,
-          success: false,
-        });
-        // Continue with other agents
+      } else {
+        console.log(`  ⏭️  Skipped "${node.name}"`);
       }
     }
 
     // Update nodes with agent data using lib function
     console.log(`\n📝 Updating nodes with agent data...`);
     const successfulResponses = agentResponses.filter((r) => r.success);
-    const updateResults = updateAllNodesWithAgentData(
-      promptFlowData,
-      successfulResponses
-    );
+    let updateResults = { updatedData: promptFlowData, updatedCount: 0 };
+
+    if (successfulResponses.length > 0) {
+      updateResults = updateAllNodesWithAgentData(
+        promptFlowData,
+        successfulResponses
+      );
+    }
 
     // Create output directory if it doesn't exist
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    // Save updated data
+    // Save updated data only if changes were made
     const outputFilePath = path.join(outputDir, path.basename(filePath));
-    fs.writeFileSync(
-      outputFilePath,
-      JSON.stringify(updateResults.updatedData, null, 2)
-    );
+    if (successfulResponses.length > 0) {
+      fs.writeFileSync(
+        outputFilePath,
+        JSON.stringify(updateResults.updatedData, null, 2)
+      );
+    }
 
     // Summary
     const successCount = agentResponses.filter((r) => r.success).length;
     const failureCount = agentResponses.filter((r) => !r.success).length;
+    const skippedCount = analysis.totalNodesToProcess - agentResponses.length;
 
     console.log(`\n🎉 Agent creation process completed!`);
-    console.log(`✅ Successfully created: ${successCount} agents`);
+    if (successCount > 0) {
+      console.log(`✅ Successfully created: ${successCount} agents`);
+      console.log(
+        `📝 Updated: ${updateResults.updatedCount} nodes with agent data`
+      );
+      console.log(`💾 Updated file saved to: ${outputFilePath}`);
+    } else {
+      console.log(
+        `ℹ️  No agents were created (all nodes were skipped or failed)`
+      );
+      console.log(`💾 No changes made to the file`);
+    }
+
     if (failureCount > 0) {
       console.log(`❌ Failed to create: ${failureCount} agents`);
     }
-    console.log(
-      `📝 Updated: ${updateResults.updatedCount} nodes with agent data`
-    );
-    console.log(`💾 Updated file saved to: ${outputFilePath}`);
+    if (skippedCount > 0) {
+      console.log(`⏭️  Skipped: ${skippedCount} nodes`);
+    }
 
     // Display summary of created agents
-    console.log("\n📋 Agent Creation Summary:");
-    agentResponses.forEach((response) => {
-      if (response.success) {
-        console.log(
-          `  ✅ ${response.nodeName}: ${response.agentData.agent_id}`
-        );
-      } else {
-        console.log(`  ❌ ${response.nodeName}: ${response.error}`);
-      }
-    });
+    if (agentResponses.length > 0) {
+      console.log("\n📋 Agent Creation Summary:");
+      agentResponses.forEach((response) => {
+        if (response.success) {
+          console.log(
+            `  ✅ ${response.nodeName}: ${response.agentData.agent_id}`
+          );
+        } else {
+          console.log(`  ❌ ${response.nodeName}: ${response.error}`);
+        }
+      });
+    }
   } catch (error) {
     console.error("❌ Error in main process:", error);
   }

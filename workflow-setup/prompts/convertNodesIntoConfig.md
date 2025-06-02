@@ -11,14 +11,18 @@ JSON config with required fields:
 
 ```json
 {
-  "name": "[topic]_selection_agent",
-  "agent": {
-    "first_message": "[Engaging question with examples]"
-  },
-  "prompt": {
-    "prompt": "[Agent instructions]",
-    "tools": {
-      "description": "[When to end conversation]"
+  "name": "[topic]_agent",
+  "conversation_config": {
+    "agent": {
+      "first_message": "[Engaging question with examples]",
+      "prompt": {
+        "prompt": "[Agent instructions]",
+        "tools": [
+          {
+            "description": "[When to end conversation]"
+          }
+        ]
+      }
     }
   },
   "platform_settings": {
@@ -60,13 +64,17 @@ Output:
 ```json
 {
   "name": "setting_selection_agent",
-  "agent": {
-    "first_message": "What setting would you like for your story? We have magical kingdoms, outer space, or underwater worlds."
-  },
-  "prompt": {
-    "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their story setting preference. Present options (kingdoms, space, underwater, etc.) efficiently. Be friendly but direct. Get their choice and any important details as quickly as possible. Do not be chatty or use excessive enthusiasm. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
-    "tools": {
-      "description": "End the call immediately when you have their preferred setting and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+  "conversation_config": {
+    "agent": {
+      "first_message": "What setting would you like for your story? We have magical kingdoms, outer space, or underwater worlds.",
+      "prompt": {
+        "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their story setting preference. Present options (kingdoms, space, underwater, etc.) efficiently. Be friendly but direct. Get their choice and any important details as quickly as possible. Do not be chatty or use excessive enthusiasm. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+        "tools": [
+          {
+            "description": "End the call immediately when you have their preferred setting and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+          }
+        ]
+      }
     }
   },
   "platform_settings": {

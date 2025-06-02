@@ -3,7 +3,7 @@ Prompt Flow Name: Simple Character Creation Quiz
 1. **Personal Intro**
 
    - What is your name?
-   - How old are you?
+   - What kind of hobbies do you enjoy?
 
 2. **Tell Me Your Story Style**
 

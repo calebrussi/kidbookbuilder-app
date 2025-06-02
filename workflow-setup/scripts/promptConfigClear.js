@@ -1,21 +1,16 @@
-// Node.js script to update prompt configs in a promptFlow.json file
+// Node.js script to clear prompt configs from a promptFlow.json file
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 
-// Import the agent config converter from local lib folder
-const { convertNodeToAgentConfig } = require("../lib/agent/agent-config.js");
-
-// Import the prompt config functions from local lib folder
+// Import the config clearing functions from local lib folder
 const {
-  needsPromptConfig,
-  isGroupNode,
-  analyzeNodesForPromptConfig,
-  createBasicPromptConfig,
-  updateNodeWithPromptConfig,
-  updateAllPromptConfigs,
-} = require("../lib/prompt/promptConfigCreate.js");
+  hasPromptConfig,
+  clearPromptConfig,
+  analyzeNodesForClearing,
+  clearAllPromptConfigs,
+} = require("../lib/prompt/promptConfigClear.js");
 
 // Create readline interface for user interaction
 const rl = readline.createInterface({
@@ -52,18 +47,14 @@ function askUserToContinue(message = "Do you want to continue? (Y/n): ") {
 }
 
 /**
- * Main function to process the prompt flow
+ * Main function to process the prompt flow and clear configs
  * @param {string} filePath - Path to the promptFlow.json file
  * @param {Object} options - Additional options for processing
  * @param {string} options.outputDir - Directory to save output files
- * @param {boolean} options.useAdvancedConfig - Whether to use the advanced agent config converter
  * @returns {Promise<void>}
  */
-async function updatePromptConfigs(filePath, options = {}) {
-  const {
-    outputDir = path.join(__dirname, "..", "outputs"),
-    useAdvancedConfig = false,
-  } = options;
+async function clearPromptConfigs(filePath, options = {}) {
+  const { outputDir = path.join(__dirname, "..", "outputs") } = options;
 
   try {
     console.log(`Reading prompt flow from: ${filePath}`);
@@ -83,58 +74,27 @@ async function updatePromptConfigs(filePath, options = {}) {
     console.log(`Found ${promptFlowData.length} items in the prompt flow`);
 
     // Analyze nodes using lib function
-    const analysis = analyzeNodesForPromptConfig(promptFlowData);
+    const analysis = analyzeNodesForClearing(promptFlowData);
 
     console.log(`\n📊 Analysis Results:`);
     console.log(`  Total nodes: ${analysis.totalNodes}`);
-    console.log(`  Group nodes: ${analysis.totalGroups}`);
-    console.log(`  Step nodes: ${analysis.totalSteps}`);
-    console.log(
-      `  Nodes needing prompt configs: ${analysis.totalNodesToProcess}`
-    );
-    console.log(`  Nodes with existing configs: ${analysis.totalWithConfigs}`);
+    console.log(`  Nodes with prompt configs: ${analysis.totalNodesToProcess}`);
 
     if (analysis.totalNodesToProcess === 0) {
-      console.log("✅ All step nodes already have prompt configs.");
+      console.log("✅ No prompt configs found to clear.");
       return;
     }
 
     // Show summary of nodes to process
-    console.log("\n📋 Nodes needing prompt configs:");
+    console.log("\n📋 Nodes with prompt configs:");
     analysis.nodesToProcess.forEach((node, index) => {
-      console.log(
-        `  ${index + 1}. ${node.name} (${node.id}) - ${
-          node.description || "No description"
-        }`
-      );
+      console.log(`  ${index + 1}. ${node.name} (${node.id})`);
     });
 
-    // Choose configuration method
-    let configGenerator = null;
-    if (useAdvancedConfig) {
-      console.log("🤖 Using advanced agent config converter...");
-      configGenerator = async (node) => {
-        try {
-          // Create a proper description string from the node
-          const nodeDescription = `${node.name}: ${
-            node.description || "No description provided"
-          }`;
-          return await convertNodeToAgentConfig(nodeDescription);
-        } catch (error) {
-          console.warn(
-            `⚠️  Advanced config failed for ${node.name}, using basic config: ${error.message}`
-          );
-          return createBasicPromptConfig(node);
-        }
-      };
-    } else {
-      console.log("🔧 Using basic prompt config generator...");
-    }
-
     // Process nodes one by one with individual confirmation
-    console.log(`\n🔄 Processing prompt configs...`);
-    const updatedNodes = [];
-    let updatedCount = 0;
+    console.log(`\n🧹 Processing prompt configs...`);
+    const clearedNodes = [];
+    let clearedCount = 0;
 
     // Create a copy of the prompt flow data to modify
     const updatedData = [...promptFlowData];
@@ -145,85 +105,48 @@ async function updatePromptConfigs(filePath, options = {}) {
       console.log(`\n--- Node ${i + 1} of ${analysis.totalNodesToProcess} ---`);
       console.log(`Name: ${node.name}`);
       console.log(`ID: ${node.id}`);
-      console.log(`Description: ${node.description || "No description"}`);
 
-      // Show current prompt config status
+      // Show current prompt config (first few lines for preview)
       if (node.prompt_config && Object.keys(node.prompt_config).length > 0) {
-        console.log(`Current prompt config: Has existing config`);
-      } else {
-        console.log(`Current prompt config: No config (will create new)`);
+        console.log(
+          `Current prompt config: ${JSON.stringify(
+            node.prompt_config,
+            null,
+            2
+          ).substring(0, 200)}${
+            Object.keys(node.prompt_config).length > 0 &&
+            JSON.stringify(node.prompt_config, null, 2).length > 200
+              ? "..."
+              : ""
+          }`
+        );
       }
 
-      const shouldCreateConfigForThisNode = await askUserToContinue(
-        `Create prompt config for "${node.name}"? (Y/n): `
+      const shouldClearThisNode = await askUserToContinue(
+        `Clear prompt config for "${node.name}"? (Y/n): `
       );
 
-      if (shouldCreateConfigForThisNode) {
-        console.log(`  🔄 Processing ${node.name}...`);
-
-        try {
-          let customConfig = null;
-          if (configGenerator) {
-            customConfig = await configGenerator(node);
-          }
-
-          // Find the node in the updatedData array and update its config
-          const nodeIndex = updatedData.findIndex(
-            (item) => item.id === node.id
-          );
-          if (nodeIndex !== -1) {
-            const updatedItem = updateNodeWithPromptConfig(
-              updatedData[nodeIndex],
-              customConfig
-            );
-            updatedData[nodeIndex] = updatedItem;
-            updatedNodes.push({
-              id: node.id,
-              name: node.name,
-              description: node.description,
-            });
-            updatedCount++;
-            console.log(`  ✅ Created prompt config for "${node.name}"`);
-          }
-        } catch (error) {
-          console.error(`  ❌ Error processing ${node.name}:`, error.message);
-          // Use basic config as fallback
-          try {
-            const nodeIndex = updatedData.findIndex(
-              (item) => item.id === node.id
-            );
-            if (nodeIndex !== -1) {
-              const updatedItem = updateNodeWithPromptConfig(
-                updatedData[nodeIndex],
-                null
-              );
-              updatedData[nodeIndex] = updatedItem;
-              updatedNodes.push({
-                id: node.id,
-                name: node.name,
-                description: node.description,
-              });
-              updatedCount++;
-              console.log(
-                `  ⚠️  Used basic config for "${node.name}" due to error`
-              );
-            }
-          } catch (fallbackError) {
-            console.error(
-              `  ❌ Fallback also failed for ${node.name}:`,
-              fallbackError.message
-            );
-          }
+      if (shouldClearThisNode) {
+        // Find the node in the updatedData array and clear its config
+        const nodeIndex = updatedData.findIndex((item) => item.id === node.id);
+        if (nodeIndex !== -1) {
+          updatedData[nodeIndex] = clearPromptConfig(updatedData[nodeIndex]);
+          clearedNodes.push({
+            id: node.id,
+            name: node.name,
+          });
+          clearedCount++;
+          console.log(`  ✅ Cleared prompt config for "${node.name}"`);
         }
       } else {
         console.log(`  ⏭️  Skipped "${node.name}"`);
       }
     }
 
-    const updateResults = {
+    const clearResults = {
       updatedData,
-      updatedCount,
-      updatedNodes,
+      clearedCount,
+      clearedNodes,
     };
 
     // Create output directory if it doesn't exist
@@ -233,33 +156,30 @@ async function updatePromptConfigs(filePath, options = {}) {
 
     // Save updated data only if changes were made
     const outputFilePath = path.join(outputDir, path.basename(filePath));
-    if (updateResults.updatedCount > 0) {
+    if (clearResults.clearedCount > 0) {
       fs.writeFileSync(
         outputFilePath,
-        JSON.stringify(updateResults.updatedData, null, 2)
+        JSON.stringify(clearResults.updatedData, null, 2)
       );
     }
 
-    console.log(`\n🎉 Prompt config update process completed!`);
-    if (updateResults.updatedCount > 0) {
-      console.log(`✅ Created configs for ${updateResults.updatedCount} nodes`);
+    console.log(`\n🎉 Config clearing process completed!`);
+    if (clearResults.clearedCount > 0) {
+      console.log(`✅ Cleared configs from ${clearResults.clearedCount} nodes`);
       console.log(`💾 Updated file saved to: ${outputFilePath}`);
 
-      // Display summary of updated nodes
-      console.log("\n📋 Updated Nodes Summary:");
-      updateResults.updatedNodes.forEach((nodeInfo) => {
+      // Display summary of cleared nodes
+      console.log("\n📋 Cleared Configs Summary:");
+      clearResults.clearedNodes.forEach((nodeInfo) => {
         console.log(`  - ${nodeInfo.name} (${nodeInfo.id})`);
-        if (nodeInfo.description) {
-          console.log(`    Description: ${nodeInfo.description}`);
-        }
       });
     } else {
-      console.log(`ℹ️  No configs were created (all nodes were skipped)`);
+      console.log(`ℹ️  No configs were cleared (all nodes were skipped)`);
       console.log(`💾 No changes made to the file`);
     }
 
     const skippedCount =
-      analysis.totalNodesToProcess - updateResults.updatedCount;
+      analysis.totalNodesToProcess - clearResults.clearedCount;
     if (skippedCount > 0) {
       console.log(`⏭️  Skipped ${skippedCount} nodes`);
     }
@@ -272,8 +192,8 @@ async function updatePromptConfigs(filePath, options = {}) {
  * Main execution function
  */
 async function main() {
-  console.log("🚀 Starting Prompt Config Update Process");
-  console.log("=========================================");
+  console.log("🧹 Starting Prompt Config Clearing Process");
+  console.log("==========================================");
 
   let inputFilePath;
 
@@ -357,17 +277,12 @@ async function main() {
       process.exit(1);
     }
 
-    // Ask if user wants to use advanced config generation
-    const useAdvancedConfig = await askUserToContinue(
-      "\nUse advanced agent config converter? (This uses the agent-config lib) (Y/n): "
-    );
+    console.log("Starting config clearing process...\n");
 
-    console.log("Starting prompt config update process...\n");
+    // Clear configs
+    await clearPromptConfigs(inputFilePath);
 
-    // Update prompt configs
-    await updatePromptConfigs(inputFilePath, { useAdvancedConfig });
-
-    console.log("\n🎉 Prompt config update process completed!");
+    console.log("\n🎉 Config clearing completed successfully!");
 
     // Close readline interface and exit cleanly
     rl.close();
@@ -381,13 +296,11 @@ async function main() {
 
 // Export functions for use in other modules
 module.exports = {
-  updatePromptConfigs,
-  needsPromptConfig,
-  isGroupNode,
-  analyzeNodesForPromptConfig,
-  createBasicPromptConfig,
-  updateNodeWithPromptConfig,
-  updateAllPromptConfigs,
+  clearPromptConfigs,
+  hasPromptConfig,
+  clearPromptConfig,
+  analyzeNodesForClearing,
+  clearAllPromptConfigs,
 };
 
 // Run the script if it's called directly

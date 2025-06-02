@@ -77,8 +77,12 @@ function sortNodesByDependencies(nodes) {
  * @returns {Array} - Array of grouped sections with ordered steps
  */
 function groupNodesIntoSections(nodes) {
-  // Filter out group definitions (they start with "group_")
+  // Separate group definitions from step nodes
+  const groupNodes = nodes.filter((node) => node.id.startsWith("group_"));
   const stepNodes = nodes.filter((node) => !node.id.startsWith("group_"));
+
+  // Create a map of group IDs to group data for easy lookup
+  const groupMap = new Map(groupNodes.map((group) => [group.id, group]));
 
   // Group nodes by group_id
   const groupedNodes = {};
@@ -101,10 +105,22 @@ function groupNodesIntoSections(nodes) {
     // Sort nodes within group by dependencies
     const sortedNodes = sortNodesByDependencies(groupNodes);
 
+    // Get the group data to use for section title
+    const groupData = groupMap.get(groupId);
+    let sectionTitle;
+
+    if (groupData) {
+      // Use the group's name
+      sectionTitle = toTitleCase(groupData.name);
+    } else {
+      // Fallback to the old behavior if group data not found
+      sectionTitle = toTitleCase(groupId.replace(/^group_/, ""));
+    }
+
     // Create section
     const section = {
       id: toKebabCase(groupId),
-      title: toTitleCase(groupId.replace(/^group_/, "")),
+      title: sectionTitle,
       order: sectionOrder++,
       steps: sortedNodes.map((node) => ({
         id: toKebabCase(node.name),
