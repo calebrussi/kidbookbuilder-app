@@ -9,8 +9,8 @@ const workflowJson = {
   title: "Character Creation Quiz",
   description:
     "Create your perfect story character through this interactive quiz",
-  createdAt: "2025-06-02T23:32:40.677Z",
-  updatedAt: "2025-06-02T23:32:40.678Z",
+  createdAt: "2025-06-02T23:39:18.933Z",
+  updatedAt: "2025-06-02T23:39:18.934Z",
   sections: [
     {
       id: "group-1",
@@ -24,13 +24,6 @@ const workflowJson = {
           sectionId: "group-1",
           agentId: "agent_01jwsfjmrpe9krabbdk03tzdt4",
         },
-        {
-          id: "how-old-are-you",
-          title: "How old are you?",
-          order: 1,
-          sectionId: "group-1",
-          agentId: "agent_01jwsfmwdaeyztbnexhynqxt3g",
-        },
       ],
     },
     {
@@ -41,7 +34,7 @@ const workflowJson = {
         {
           id: "what-types-of-stories-do-you-love",
           title: "What types of stories do you love?",
-          order: 2,
+          order: 1,
           sectionId: "group-2",
           agentId: "agent_01jwsfmz9rff7sbrpr3wq9bmqc",
         },
