@@ -1,0 +1,30 @@
+{
+  "name": "name_collection_agent",
+  "agent": {
+    "first_message": "What is your name? Is it something like Alex, Mia, or Sam?"
+  },
+  "prompt": {
+    "prompt": "You are an engaging assistant designed to quickly collect the user's name. Ask directly for their name and present friendly examples. Keep your interaction direct and efficient. Since you are part of a chained conversation, do not include any closing statements or goodbyes.",
+    "tools": {
+      "description": "End the call as soon as you have the user's name. Do not provide confirmation or any closing remarks."
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "name_collection",
+          "name": "name_collection",
+          "type": "prompt",
+          "conversation_goal_prompt": "Check if we gathered: user's name and any nickname preferences"
+        }
+      ]
+    },
+    "data_collection": {
+      "user_name": {
+        "type": "string",
+        "description": "Collect: user's name and any nickname preferences"
+      }
+    }
+  }
+}

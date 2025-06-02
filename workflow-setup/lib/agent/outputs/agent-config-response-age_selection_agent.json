@@ -1,0 +1,69 @@
+{
+  "timestamp": "2025-06-02T20:32:37.462Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "howOldAreYou: asking for the user's age",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "age_selection_agent",
+    "agent": {
+      "first_message": "How old are you? You can tell me your age in years, like 7 or 10."
+    },
+    "prompt": {
+      "prompt": "You are a focused assistant talking to a 10-year-old child. Your job is to collect their age efficiently. Ask directly for their age and ensure you get a clear response. Avoid additional conversation or pleasantries since you're part of a chained interaction.",
+      "tools": {
+        "description": "End the interaction immediately when you have their age. Do not confirm or say goodbye since this is part of a chained conversation."
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "age_response",
+            "name": "age_response",
+            "type": "prompt",
+            "conversation_goal_prompt": "Check if we gathered: the child's age clearly"
+          }
+        ]
+      },
+      "data_collection": {
+        "age": {
+          "type": "string",
+          "description": "Collect: the child's age in years"
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748896353-vBX2eHOpErSzCjJEYaCX",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748896353,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"age_selection_agent\",\n  \"agent\": {\n    \"first_message\": \"How old are you? You can tell me your age in years, like 7 or 10.\"\n  },\n  \"prompt\": {\n    \"prompt\": \"You are a focused assistant talking to a 10-year-old child. Your job is to collect their age efficiently. Ask directly for their age and ensure you get a clear response. Avoid additional conversation or pleasantries since you're part of a chained interaction.\",\n    \"tools\": {\n      \"description\": \"End the interaction immediately when you have their age. Do not confirm or say goodbye since this is part of a chained conversation.\"\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"age_response\",\n          \"name\": \"age_response\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Check if we gathered: the child's age clearly\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"age\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: the child's age in years\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_34a54ae93c",
+    "usage": {
+      "prompt_tokens": 771,
+      "completion_tokens": 246,
+      "total_tokens": 1017,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

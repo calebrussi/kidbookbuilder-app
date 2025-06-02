@@ -1,0 +1,327 @@
+[
+  {
+    "id": "node_1",
+    "name": "whatIsYourName",
+    "description": "What is your name?",
+    "dependencies": [],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "name_collection_agent",
+      "agent": {
+        "first_message": "What is your name?"
+      },
+      "prompt": {
+        "prompt": "You are a friendly assistant collecting the child's name. Ask directly for their name and be quick about it. Get the name efficiently without any extra conversation or details.",
+        "tools": {
+          "description": "End the call immediately when you have collected the child's name. Do not provide closing statements or goodbyes as this is part of a chained conversation."
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "name_collection",
+              "name": "name_collection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Ensure we gathered the child's name."
+            }
+          ]
+        },
+        "data_collection": {
+          "child_name": {
+            "type": "string",
+            "description": "Collect the child's name."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jws8cgmsfx8afsa94mejrvrk",
+      "created_at": "2025-06-02T21:22:35.202Z",
+      "name": "name_collection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "name_collection",
+              "name": "name_collection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Ensure we gathered the child's name."
+            }
+          ]
+        },
+        "data_collection": {
+          "child_name": {
+            "type": "string",
+            "description": "Collect the child's name."
+          }
+        }
+      },
+      "agent": {
+        "first_message": "What is your name?"
+      },
+      "prompt": {
+        "prompt": "You are a friendly assistant collecting the child's name. Ask directly for their name and be quick about it. Get the name efficiently without any extra conversation or details.",
+        "tools": {
+          "description": "End the call immediately when you have collected the child's name. Do not provide closing statements or goodbyes as this is part of a chained conversation."
+        }
+      }
+    }
+  },
+  {
+    "id": "node_2",
+    "name": "howOldAreYou",
+    "description": "How old are you?",
+    "dependencies": [
+      "node_1"
+    ],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "age_collection_agent",
+      "agent": {
+        "first_message": "How old are you?"
+      },
+      "prompt": {
+        "prompt": "You are a friendly age collection assistant talking to a child. Your task is to quickly gather their age. Ask directly for their age and make sure to keep it simple and clear. Avoid lengthy explanations or extra questions. Since you're part of a chain, do not provide closing statements.",
+        "tools": {
+          "description": "End the call immediately when you have collected their age. Do not confirm or say goodbye since this is part of a chained conversation."
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "age_collection",
+              "name": "age_collection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we collected the user's age."
+            }
+          ]
+        },
+        "data_collection": {
+          "user_age": {
+            "type": "string",
+            "description": "Collect: the user's age"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jws8ckkffcabr86q5bzkrcek",
+      "created_at": "2025-06-02T21:22:35.206Z",
+      "name": "age_collection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "age_collection",
+              "name": "age_collection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we collected the user's age."
+            }
+          ]
+        },
+        "data_collection": {
+          "user_age": {
+            "type": "string",
+            "description": "Collect: the user's age"
+          }
+        }
+      },
+      "agent": {
+        "first_message": "How old are you?"
+      },
+      "prompt": {
+        "prompt": "You are a friendly age collection assistant talking to a child. Your task is to quickly gather their age. Ask directly for their age and make sure to keep it simple and clear. Avoid lengthy explanations or extra questions. Since you're part of a chain, do not provide closing statements.",
+        "tools": {
+          "description": "End the call immediately when you have collected their age. Do not confirm or say goodbye since this is part of a chained conversation."
+        }
+      }
+    }
+  },
+  {
+    "id": "node_3",
+    "name": "whatTypesOfStoriesDoYouLove",
+    "description": "What types of stories do you love?",
+    "dependencies": [
+      "group_1"
+    ],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "story_type_selection_agent",
+      "agent": {
+        "first_message": "What types of stories do you love? We have adventure stories, funny tales, or mysterious tales."
+      },
+      "prompt": {
+        "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their favorite types of stories. Present options (adventures, funny stories, mysteries, etc.) efficiently. Be friendly but direct. Get their choice and any important details as quickly as possible. Do not be chatty or use excessive enthusiasm. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+        "tools": {
+          "description": "End the call immediately when you have their preferred types of stories and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_type_choice",
+              "name": "story_type_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred types of stories, specific details, and elements they're excited about"
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: preferred types of stories, specific details, and elements they're excited about"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jws8cnjmeq2aerh14wxqr801",
+      "created_at": "2025-06-02T21:22:35.206Z",
+      "name": "story_type_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Time to give your hero some amazing abilities! What special powers or skills would make your hero unique? They could have magical powers, incredible talents, smart abilities, or special gadgets. What would make your hero extra special?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly and encouraging storytelling companion talking to a 10-year-old child. Your role is to help them develop their hero's special powers and abilities. Present various types of powers and skills (like magic, super strength, amazing intelligence, special gadgets, unique talents) and help them understand what makes each ability special. Use simple but engaging language to describe how these powers might be used in their story. If they seem unsure, give examples (e.g., 'Maybe your hero could fly through the sky! Or they might be super smart and able to solve any puzzle!'). Be supportive and show enthusiasm for their ideas. If they suggest their own powers, help them explore those further by asking about specific ways these abilities might be used in adventures.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call when you have a clear understanding of their hero's special powers and some specific ways these abilities might be used in the story. Once you have this information, confirm it with them and if they agree, end the chat.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_type_choice",
+              "name": "story_type_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred types of stories, specific details, and elements they're excited about"
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: preferred types of stories, specific details, and elements they're excited about"
+          }
+        }
+      },
+      "agent": {
+        "first_message": "What types of stories do you love? We have adventure stories, funny tales, or mysterious tales."
+      },
+      "prompt": {
+        "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their favorite types of stories. Present options (adventures, funny stories, mysteries, etc.) efficiently. Be friendly but direct. Get their choice and any important details as quickly as possible. Do not be chatty or use excessive enthusiasm. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+        "tools": {
+          "description": "End the call immediately when you have their preferred types of stories and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+        }
+      }
+    }
+  }
+]

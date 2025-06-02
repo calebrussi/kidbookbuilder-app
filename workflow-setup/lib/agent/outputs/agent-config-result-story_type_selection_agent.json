@@ -1,0 +1,30 @@
+{
+  "name": "story_type_selection_agent",
+  "agent": {
+    "first_message": "What types of stories do you love? We have adventure tales, funny stories, or magical adventures."
+  },
+  "prompt": {
+    "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their favorite types of stories. Present options (adventure, funny, magical, etc.) efficiently. Be friendly but direct. Get their choice and any important details as quickly as possible. Do not be chatty or use excessive enthusiasm. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+    "tools": {
+      "description": "End the call immediately when you have their favorite story types and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "story_type_choice",
+          "name": "story_type_choice",
+          "type": "prompt",
+          "conversation_goal_prompt": "Check if we gathered: favorite story types, specific details, and themes they enjoy"
+        }
+      ]
+    },
+    "data_collection": {
+      "story_preferences": {
+        "type": "string",
+        "description": "Collect: favorite story types, specific details, and themes they enjoy"
+      }
+    }
+  }
+}

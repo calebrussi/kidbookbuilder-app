@@ -1,0 +1,69 @@
+{
+  "timestamp": "2025-06-02T20:32:33.628Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "whatIsYourName: asking for the user's name",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "name_collection_agent",
+    "agent": {
+      "first_message": "What is your name? Is it something like Alex, Mia, or Sam?"
+    },
+    "prompt": {
+      "prompt": "You are an engaging assistant designed to quickly collect the user's name. Ask directly for their name and present friendly examples. Keep your interaction direct and efficient. Since you are part of a chained conversation, do not include any closing statements or goodbyes.",
+      "tools": {
+        "description": "End the call as soon as you have the user's name. Do not provide confirmation or any closing remarks."
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "name_collection",
+            "name": "name_collection",
+            "type": "prompt",
+            "conversation_goal_prompt": "Check if we gathered: user's name and any nickname preferences"
+          }
+        ]
+      },
+      "data_collection": {
+        "user_name": {
+          "type": "string",
+          "description": "Collect: user's name and any nickname preferences"
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1748896349-hfWmD8wLmGPMpsBjxJWV",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1748896349,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"name_collection_agent\",\n  \"agent\": {\n    \"first_message\": \"What is your name? Is it something like Alex, Mia, or Sam?\"\n  },\n  \"prompt\": {\n    \"prompt\": \"You are an engaging assistant designed to quickly collect the user's name. Ask directly for their name and present friendly examples. Keep your interaction direct and efficient. Since you are part of a chained conversation, do not include any closing statements or goodbyes.\",\n    \"tools\": {\n      \"description\": \"End the call as soon as you have the user's name. Do not provide confirmation or any closing remarks.\"\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"name_collection\",\n          \"name\": \"name_collection\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Check if we gathered: user's name and any nickname preferences\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"user_name\": {\n        \"type\": \"string\",\n        \"description\": \"Collect: user's name and any nickname preferences\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_34a54ae93c",
+    "usage": {
+      "prompt_tokens": 771,
+      "completion_tokens": 240,
+      "total_tokens": 1011,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}
