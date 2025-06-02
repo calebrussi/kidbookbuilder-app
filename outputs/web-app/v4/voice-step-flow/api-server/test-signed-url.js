@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
 // Configuration
 const SERVER_URL = "http://localhost:3001";

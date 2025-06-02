@@ -8,7 +8,13 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "api-start": "node api-server/src/server.js",
+    "api-dev": "nodemon api-server/src/server.js",
+    "api-build": "echo Fake Building Functions",
+    "api-test": "node api-server/test-signed-url.js",
+    "api-test:quick": "node api-server/test-quick.js",
+    "api-test:step": "node api-server/test-quick.js"
   },
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.1.0",

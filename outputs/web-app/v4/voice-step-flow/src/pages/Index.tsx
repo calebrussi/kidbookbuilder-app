@@ -20,7 +20,7 @@ const Index = () => {
     resetProgress,
     updateStepConversationId,
     updateStepConversationProgress
-  } = useProgress();
+  } = useProgress(workflow, workflowLoading);
 
   // Initialize the processing service and pass the current progress state and handlers
   useProcessing(true, progress, {

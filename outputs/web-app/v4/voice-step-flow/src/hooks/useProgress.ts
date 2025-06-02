@@ -1,13 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
 import { UserProgress, StepStatus, CapturedData } from '../types/userProgress';
+import { Workflow } from '../types/workflow';
 import { storageService } from '../services/storageService';
 import { progressService } from '../services/progressService';
 
-export const useProgress = () => {
+export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolean) => {
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Don't initialize progress until workflow is loaded
+    if (workflowLoading || !workflow) {
+      return;
+    }
+
     const initializeProgress = () => {
       try {
         const session = storageService.getCurrentSession();
@@ -27,7 +33,7 @@ export const useProgress = () => {
     };
 
     initializeProgress();
-  }, []);
+  }, [workflow, workflowLoading]);
 
   const updateStepStatus = useCallback((stepId: string, status: StepStatus, capturedData?: CapturedData[]) => {
     setProgress(prevProgress => {
