@@ -60,7 +60,7 @@ router.get("/health", healthHandler);
 router.get("/conversation/:conversationId", getConversationHandler);
 
 router.post("/workflow", getWorkflowHandler);
-router.post("/workflow.json", getWorkflowSimpleHandler);
+router.get("/workflow.json", getWorkflowSimpleHandler);
 
 router.post("/workflow/agent", getSignedUrlHandler);
 
