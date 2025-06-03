@@ -1,0 +1,326 @@
+[
+  {
+    "id": "node_1",
+    "name": "whatIsYourName",
+    "description": "What is your name?",
+    "dependencies": [],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "name_collection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "What's your name? You can tell me first name, last name, or both.",
+          "prompt": {
+            "prompt": "You are a friendly assistant collecting names from children. Ask for their first name, last name, or both directly. Make sure to get their answer quickly without extra conversation. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "tools": [
+              {
+                "description": "End the call immediately when you have their name(s). Do not confirm or say goodbye since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "name_collection",
+              "name": "name_collection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: first name, last name, or both"
+            }
+          ]
+        },
+        "data_collection": {
+          "name_info": {
+            "type": "string",
+            "description": "Collect: first name, last name, or both"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwsha7qdfynthgxjrm98jxmt",
+      "created_at": "2025-06-02T23:58:40.101Z",
+      "name": "name_collection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "What's your name? You can tell me first name, last name, or both.",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a friendly assistant collecting names from children. Ask for their first name, last name, or both directly. Make sure to get their answer quickly without extra conversation. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call immediately when you have their name(s). Do not confirm or say goodbye since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "name_collection",
+              "name": "name_collection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: first name, last name, or both"
+            }
+          ]
+        },
+        "data_collection": {
+          "name_info": {
+            "type": "string",
+            "description": "Collect: first name, last name, or both"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_2",
+    "name": "whatKindOfHobbies",
+    "description": "What kind of hobbies do you enjoy?",
+    "dependencies": [
+      "node_1"
+    ],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "hobby_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "What hobbies do you enjoy? Do you like drawing, playing sports, or playing video games?",
+          "prompt": {
+            "prompt": "You are a focused assistant talking to a 10-year-old child. Quickly find out what hobbies they enjoy by presenting options like drawing, sports, or video games. Be friendly but direct. Get their choices and any other important details as quickly as possible. Do not be chatty or overly enthusiastic, and avoid closing statements.",
+            "tools": [
+              {
+                "description": "End the call immediately once you have their preferred hobbies and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "hobby_choice",
+              "name": "hobby_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred hobbies, specific details, and any related interests."
+            }
+          ]
+        },
+        "data_collection": {
+          "hobby_preferences": {
+            "type": "string",
+            "description": "Collect: preferred hobbies, specific details, and any related interests."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwshab0cfk6v9xstg310rdxx",
+      "created_at": "2025-06-02T23:58:40.103Z",
+      "name": "hobby_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "What hobbies do you enjoy? Do you like drawing, playing sports, or playing video games?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a focused assistant talking to a 10-year-old child. Quickly find out what hobbies they enjoy by presenting options like drawing, sports, or video games. Be friendly but direct. Get their choices and any other important details as quickly as possible. Do not be chatty or overly enthusiastic, and avoid closing statements.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call immediately once you have their preferred hobbies and key details. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "hobby_choice",
+              "name": "hobby_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: preferred hobbies, specific details, and any related interests."
+            }
+          ]
+        },
+        "data_collection": {
+          "hobby_preferences": {
+            "type": "string",
+            "description": "Collect: preferred hobbies, specific details, and any related interests."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_3",
+    "name": "whatTypesOfStories",
+    "description": "What types of stories do you love?",
+    "dependencies": [
+      "group_1"
+    ],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "story_type_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "What types of stories do you love? We have adventure tales, fairy tales, or mysteries.",
+          "prompt": {
+            "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their favorite types of stories. Present options (adventure, fairy tales, mysteries, etc.) efficiently. Be friendly but direct. Get their preferences and any specific interests as quickly as possible. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "tools": [
+              {
+                "description": "End the call immediately when you have their favorite types of stories and any specific interests. Do not confirm or say goodbye since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_type_preference",
+              "name": "story_type_preference",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: favorite story types, specific interests, and elements that excite them."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: favorite story types, specific interests, and elements that excite them."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jwshaf3aepmbw5m9gqtedg23",
+      "created_at": "2025-06-02T23:58:40.103Z",
+      "name": "story_type_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "What types of stories do you love? We have adventure tales, fairy tales, or mysteries.",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their favorite types of stories. Present options (adventure, fairy tales, mysteries, etc.) efficiently. Be friendly but direct. Get their preferences and any specific interests as quickly as possible. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call immediately when you have their favorite types of stories and any specific interests. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_type_preference",
+              "name": "story_type_preference",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: favorite story types, specific interests, and elements that excite them."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_preferences": {
+            "type": "string",
+            "description": "Collect: favorite story types, specific interests, and elements that excite them."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "group_1",
+    "name": "personalIntro",
+    "description": "Personal Intro group containing nodes for name and hobbies",
+    "dependencies": []
+  },
+  {
+    "id": "group_2",
+    "name": "tellMeYourStoryStyle",
+    "description": "Tell Me Your Story Style group containing a node for story preferences",
+    "dependencies": [
+      "group_1"
+    ]
+  }
+]
