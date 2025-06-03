@@ -1,0 +1,41 @@
+{
+  "name": "workflow-setup",
+  "version": "1.0.0",
+  "description": "Clean orchestration tools for managing prompt flows and agent configurations",
+  "main": "scripts/promptFlowCreate.js",
+  "scripts": {
+    "1": "npm run promptFlowCreate",
+    "2": "npm run promptConfigCreate",
+    "3": "npm run agentConfigCreate",
+    "4": "npm run agentCreate",
+    "5": "npm run workflowCreate",
+    "promptCleanup": "npm run promptConfigClear",
+    "agentCleanup": "npm run agentConfigClear",
+    "promptFlowCreate": "node scripts/promptFlowCreate.js",
+    "promptConfigCreate": "node scripts/promptConfigCreate.js",
+    "promptConfigClear": "node scripts/promptConfigClear.js",
+    "agentConfigCreate": "node scripts/agentConfigCreate.js",
+    "agentConfigClear": "node scripts/agentConfigClear.js",
+    "agentCreate": "node scripts/agentCreate.js",
+    "agentDelete": "node scripts/agentDelete.js",
+    "workflowCreate": "node scripts/workflowCreate.js"
+  },
+  "keywords": [
+    "orchestration",
+    "prompt-flow",
+    "agent-config",
+    "automation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openai": "^4.0.0",
+    "dotenv": "^16.0.0",
+    "lodash": "^4.17.21",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

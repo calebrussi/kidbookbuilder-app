@@ -4,81 +4,47 @@ import path from "path";
 import url from "url";
 const { fileURLToPath } = url;
 
+// TODO: Hacky workaround because Netlify doesn't support import.meta.url
 const workflowJson = {
   id: "character-creation-quiz",
   title: "Character Creation Quiz",
   description:
     "Create your perfect story character through this interactive quiz",
-  createdAt: "2024-01-01T00:00:00.000Z",
-  updatedAt: "2024-01-01T00:00:00.000Z",
+  createdAt: "2025-06-02T23:58:54.465Z",
+  updatedAt: "2025-06-02T23:58:54.466Z",
   sections: [
     {
-      id: "introduction",
-      title: "Introduce Yourself",
+      id: "group-1",
+      title: "Personal Intro",
       order: 0,
       steps: [
         {
-          id: "name",
-          title: "What's your name?",
+          id: "what-is-your-name",
+          title: "What is your name?",
           order: 0,
-          sectionId: "introduction",
-          agentId: "agent_01jwefmysxe4bb9xmgdvxrjxzz",
+          sectionId: "group-1",
+          agentId: "agent_01jwsha7qdfynthgxjrm98jxmt",
+        },
+        {
+          id: "what-kind-of-hobbies",
+          title: "What kind of hobbies do you enjoy?",
+          order: 1,
+          sectionId: "group-1",
+          agentId: "agent_01jwshab0cfk6v9xstg310rdxx",
         },
       ],
     },
     {
-      id: "story-style",
+      id: "group-2",
       title: "Tell Me Your Story Style",
       order: 1,
       steps: [
         {
-          id: "favorite-stories",
-          title: "What stories do you love?",
-          order: 1,
-          sectionId: "story-style",
-          agentId: "agent_01jwefn1xpfj8rkz2qga8ak021",
-        },
-        {
-          id: "story-length",
-          title: "How long should your story be?",
+          id: "what-types-of-stories",
+          title: "What types of stories do you love?",
           order: 2,
-          sectionId: "story-style",
-          agentId: "agent_01jwejc6azejc9xnq5n9a22qp3",
-        },
-      ],
-    },
-    {
-      id: "story-world",
-      title: "Design Your Story World",
-      order: 2,
-      steps: [
-        {
-          id: "world-type",
-          title: "Magic or Real World?",
-          order: 3,
-          sectionId: "story-world",
-          agentId: "agent_01jwejc9a2fgy980awe2c4xkkf",
-        },
-        {
-          id: "setting",
-          title: "Pick Your Setting",
-          order: 4,
-          sectionId: "story-world",
-          agentId: "agent_01jwejcbnjehk87612zrhhmxw6",
-        },
-        {
-          id: "time-period",
-          title: "When Does It Happen?",
-          order: 5,
-          sectionId: "story-world",
-          agentId: "agent_01jwejcdsxenc8s8yr9j336rbp",
-        },
-        {
-          id: "environment",
-          title: "Weather & Places",
-          order: 6,
-          sectionId: "story-world",
-          agentId: "agent_01jwejcfxqfd4ayw49rfrk4rd8",
+          sectionId: "group-2",
+          agentId: "agent_01jwshaf3aepmbw5m9gqtedg23",
         },
       ],
     },

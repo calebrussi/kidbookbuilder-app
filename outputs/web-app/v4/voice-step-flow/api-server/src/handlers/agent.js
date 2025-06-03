@@ -81,6 +81,12 @@ const getSignedUrlHandler = async (req, res) => {
   } catch (error) {
     console.error(`❌ [${requestId}] Error generating signed URL:`, error);
 
+    console.log(
+      `🔒 [${requestId}] Last 4 digits of ELEVEN_LABS_API_KEY: ${elevenLabsApiKey.slice(
+        -4
+      )}`
+    );
+
     // Handle specific ElevenLabs API errors
     if (error.statusCode === 404) {
       return res.status(404).json({
