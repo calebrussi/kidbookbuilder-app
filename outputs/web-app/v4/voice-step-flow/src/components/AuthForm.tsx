@@ -46,7 +46,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuth, loading, error }) =>
             />
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="passcode" className="block text-sm font-medium text-gray-700 mb-2">
               Passcode
             </label>
@@ -60,7 +60,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuth, loading, error }) =>
               required
               disabled={loading}
             />
-          </div>
+          </div> */}
 
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -75,7 +75,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuth, loading, error }) =>
 
           <button
             type="submit"
-            disabled={loading || !name.trim() || !passcode.trim()}
+            disabled={loading || !name.trim()}
             className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center"
           >
             {loading ? (

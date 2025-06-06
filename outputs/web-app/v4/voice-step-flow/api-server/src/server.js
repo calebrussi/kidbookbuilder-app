@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: [".env.local", ".env"] });
 
 // Import handlers
 import {
@@ -26,6 +26,16 @@ app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   next();
 });
+
+// Log env vars on startup
+console.log("Environment variables loaded:");
+console.log("- PORT:", process.env.PORT);
+console.log(
+  "- QUIZ_PASSCODE:",
+  process.env.QUIZ_PASSCODE ? "[SET]" : "[NOT SET]"
+);
+console.log("- LOG_LEVEL:", process.env.LOG_LEVEL);
+console.log("- CORS_ORIGIN:", process.env.CORS_ORIGIN);
 
 // Health check endpoint
 app.get("/health", healthHandler);
