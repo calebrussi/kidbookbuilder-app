@@ -58,25 +58,47 @@ const getWorkflowHandler = (req, res) => {
   console.log(`📋 POST /api/workflow - Request from: ${name || "unknown"}`);
   console.log(`📝 Request body:`, JSON.stringify(req.body, null, 2));
 
-  // Validate input
-  if (!name || !passcode) {
+  // Check if QUIZ_PASSCODE is set before deciding validation requirements
+  const validPasscode = process.env.QUIZ_PASSCODE;
+  console.log(
+    `🔑 QUIZ_PASSCODE env var:`,
+    validPasscode ? "[SET TO: " + validPasscode + "]" : "[NOT SET]"
+  );
+  console.log(`🔒 User provided passcode: "${passcode}"`);
+  console.log(`🔍 Comparing: "${passcode}" === "${validPasscode}"`);
+  console.log(`🔍 Type check: typeof validPasscode = ${typeof validPasscode}`);
+
+  // Validate input - only require passcode if QUIZ_PASSCODE is set
+  if (!name || (validPasscode && validPasscode.trim() !== "" && !passcode)) {
     return res.status(400).json({
       success: false,
       error: "Bad Request",
-      message: "Name and passcode are required",
+      message:
+        validPasscode && validPasscode.trim() !== ""
+          ? "Name and passcode are required"
+          : "Name is required",
     });
   }
 
-  // Check passcode (you can modify this logic as needed)
-  const validPasscode = process.env.QUIZ_PASSCODE || "demo123";
-
-  if (passcode !== validPasscode) {
+  // Only check the passcode if QUIZ_PASSCODE is actually set and not empty
+  if (
+    validPasscode &&
+    validPasscode.trim() !== "" &&
+    passcode !== validPasscode
+  ) {
     console.log(`❌ Authentication failed for ${name} - Invalid passcode`);
     return res.status(401).json({
       success: false,
       error: "Unauthorized",
       message: "Invalid passcode",
     });
+  }
+
+  // If QUIZ_PASSCODE is not set or empty, log that we're bypassing authentication
+  if (!validPasscode || validPasscode.trim() === "") {
+    console.log(
+      `ℹ️ Authentication bypassed for ${name} - No passcode required`
+    );
   }
 
   // console.log(`✅ Authentication successful for: ${name}`);
