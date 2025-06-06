@@ -12,7 +12,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuth, loading, error }) =>
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim() && passcode.trim()) {
+    if (name.trim()) {
       onAuth(name.trim(), passcode.trim());
     }
   };
