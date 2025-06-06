@@ -4,6 +4,20 @@ const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 
+// Ensure output directories exist
+const mainOutputDir = path.join(__dirname, "..", "outputs");
+const agentResponsesDir = path.join(__dirname, "..", "lib", "agent", "outputs");
+
+if (!fs.existsSync(mainOutputDir)) {
+  fs.mkdirSync(mainOutputDir, { recursive: true });
+  console.log(`Created main outputs directory: ${mainOutputDir}`);
+}
+
+if (!fs.existsSync(agentResponsesDir)) {
+  fs.mkdirSync(agentResponsesDir, { recursive: true });
+  console.log(`Created agent responses directory: ${agentResponsesDir}`);
+}
+
 // Import the createAgent function from local lib folder
 const { createAgent } = require("../lib/agent/agentCreate.js");
 
@@ -70,9 +84,28 @@ async function createElevenLabsAgent(node) {
     // Create the agent using the agentCreate function
     const agentResponse = await createAgent(node.elevenlabs_config);
 
+    // Save a copy of the response with the node name for better context
+    const agentResponsesDir = path.join(
+      __dirname,
+      "..",
+      "lib",
+      "agent",
+      "outputs"
+    );
+    if (!fs.existsSync(agentResponsesDir)) {
+      fs.mkdirSync(agentResponsesDir, { recursive: true });
+    }
+
+    const nodeResponsePath = path.join(
+      agentResponsesDir,
+      `agent-response-${node.name}-${agentResponse.agent_id}.json`
+    );
+    fs.writeFileSync(nodeResponsePath, JSON.stringify(agentResponse, null, 2));
+
     console.log(
       `✅ Successfully created agent for ${node.name} with ID: ${agentResponse.agent_id}`
     );
+    console.log(`✅ Saved agent response to ${nodeResponsePath}`);
 
     return agentResponse;
   } catch (error) {
@@ -100,7 +133,7 @@ async function createElevenLabsAgents(filePath, options = {}) {
     }
 
     // Read and parse the prompt flow JSON
-    const promptFlowData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    let promptFlowData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
     if (!Array.isArray(promptFlowData)) {
       throw new Error("The prompt flow file should contain an array of nodes");
@@ -194,6 +227,33 @@ async function createElevenLabsAgents(filePath, options = {}) {
           });
           createdCount++;
 
+          // Update the promptFlowData immediately after each agent creation
+          const singleResponse = {
+            nodeId: node.id,
+            nodeName: node.name,
+            agentData: agentResponse,
+            success: true,
+          };
+
+          // Update nodes with agent data using lib function for this single node
+          const singleUpdateResult = updateAllNodesWithAgentData(
+            promptFlowData,
+            [singleResponse]
+          );
+
+          // Update our working copy of the prompt flow data for subsequent iterations
+          promptFlowData = singleUpdateResult.updatedData;
+
+          // Save updated data to disk immediately
+          const outputFilePath = path.join(outputDir, path.basename(filePath));
+          fs.writeFileSync(
+            outputFilePath,
+            JSON.stringify(promptFlowData, null, 2)
+          );
+          console.log(
+            `  💾 Updated PromptFlow JSON with agent ID: ${agentResponse.agent_id}`
+          );
+
           console.log(`  ✅ Agent created with ID: ${agentResponse.agent_id}`);
 
           // Add a small delay to avoid rate limiting
@@ -218,31 +278,20 @@ async function createElevenLabsAgents(filePath, options = {}) {
       }
     }
 
-    // Update nodes with agent data using lib function
-    console.log(`\n📝 Updating nodes with agent data...`);
+    // Since we've been updating the PromptFlow.json file incrementally,
+    // we don't need to do a batch update here anymore
+    console.log(`\n📝 Nodes were updated with agent data incrementally`);
     const successfulResponses = agentResponses.filter((r) => r.success);
-    let updateResults = { updatedData: promptFlowData, updatedCount: 0 };
+    const updatedCount = successfulResponses.length;
 
-    if (successfulResponses.length > 0) {
-      updateResults = updateAllNodesWithAgentData(
-        promptFlowData,
-        successfulResponses
-      );
-    }
-
-    // Create output directory if it doesn't exist
+    // Create output directory if it doesn't exist - shouldn't be needed anymore
+    // as we should have created it earlier, but keeping for safety
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    // Save updated data only if changes were made
+    // Final output file path - already used during incremental updates
     const outputFilePath = path.join(outputDir, path.basename(filePath));
-    if (successfulResponses.length > 0) {
-      fs.writeFileSync(
-        outputFilePath,
-        JSON.stringify(updateResults.updatedData, null, 2)
-      );
-    }
 
     // Summary
     const successCount = agentResponses.filter((r) => r.success).length;
@@ -252,10 +301,8 @@ async function createElevenLabsAgents(filePath, options = {}) {
     console.log(`\n🎉 Agent creation process completed!`);
     if (successCount > 0) {
       console.log(`✅ Successfully created: ${successCount} agents`);
-      console.log(
-        `📝 Updated: ${updateResults.updatedCount} nodes with agent data`
-      );
-      console.log(`💾 Updated file saved to: ${outputFilePath}`);
+      console.log(`📝 Updated: ${updatedCount} nodes with agent data`);
+      console.log(`💾 Final updated file saved to: ${outputFilePath}`);
     } else {
       console.log(
         `ℹ️  No agents were created (all nodes were skipped or failed)`

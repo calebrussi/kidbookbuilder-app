@@ -29,6 +29,13 @@ if (!fs.existsSync(outputsDir)) {
   console.log(`Created outputs directory: ${outputsDir}`);
 }
 
+// Create specific directory for agent responses
+const agentResponsesDir = path.join(__dirname, "outputs");
+if (!fs.existsSync(agentResponsesDir)) {
+  fs.mkdirSync(agentResponsesDir, { recursive: true });
+  console.log(`Created agent responses directory: ${agentResponsesDir}`);
+}
+
 /**
  * Function to create an agent using the provided configuration
  * @param {Object} agentConfig - The agent configuration object
@@ -41,8 +48,10 @@ async function createAgent(agentConfig) {
 
   const url = "https://api.elevenlabs.io/v1/convai/agents/create";
 
+  let response;
+  let rawResponseText = "";
   try {
-    const response = await fetch(url, {
+    response = await fetch(url, {
       method: "POST",
       headers: {
         "xi-api-key": API_KEY,
@@ -51,15 +60,67 @@ async function createAgent(agentConfig) {
       body: JSON.stringify(agentConfig),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Failed to create agent: ${JSON.stringify(errorData)}`);
-    }
+    // Save raw response for debugging
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const rawResponsePath = path.join(
+      agentResponsesDir,
+      `agent-raw-response-${timestamp}.txt`
+    );
 
-    const data = await response.json();
-    return data;
+    // Try to get response text and save it regardless of whether it's valid JSON
+    try {
+      rawResponseText = await response.text();
+      fs.writeFileSync(rawResponsePath, rawResponseText);
+      console.log(`\nSaved raw API response to ${rawResponsePath}`);
+
+      // Now try to parse as JSON
+      if (!response.ok) {
+        // Try to parse error as JSON
+        try {
+          const errorData = JSON.parse(rawResponseText);
+          throw new Error(
+            `Failed to create agent: ${JSON.stringify(errorData)}`
+          );
+        } catch (parseError) {
+          // If we can't parse as JSON, include the raw text
+          throw new Error(
+            `Failed to create agent: ${rawResponseText.substring(0, 500)}...`
+          );
+        }
+      }
+
+      // Parse successful response
+      const data = JSON.parse(rawResponseText);
+      return data;
+    } catch (responseError) {
+      console.error("Error processing response:", responseError);
+      throw responseError;
+    }
   } catch (error) {
     console.error("Error creating agent:", error);
+
+    // Save error details for debugging
+    const errorPath = path.join(
+      agentResponsesDir,
+      `agent-error-${new Date().toISOString().replace(/[:.]/g, "-")}.json`
+    );
+
+    fs.writeFileSync(
+      errorPath,
+      JSON.stringify(
+        {
+          timestamp: new Date().toISOString(),
+          responseCode: response?.code,
+          error: error.message,
+          stack: error.stack,
+          rawResponseText: rawResponseText,
+        },
+        null,
+        2
+      )
+    );
+
+    console.log(`\nSaved error details to ${errorPath}`);
     throw error;
   }
 }
@@ -96,36 +157,48 @@ async function main() {
     // Generate timestamp for file naming
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 
-    // Save creation response to JSON file only if DEBUG is enabled
-    if (process.env.DEBUG === "true") {
-      const outputFilePath = path.join(
-        outputsDir,
-        `agent-create-response-${timestamp}.json`
-      );
-      fs.writeFileSync(outputFilePath, JSON.stringify(createdAgent, null, 2));
-      console.log(`\nSaved create response to ${outputFilePath}`);
-    }
+    // Always save creation response to JSON file
+    const outputFilePath = path.join(
+      outputsDir,
+      `agent-create-response-${timestamp}.json`
+    );
+    fs.writeFileSync(outputFilePath, JSON.stringify(createdAgent, null, 2));
+    console.log(`\nSaved create response to ${outputFilePath}`);
+
+    // Also save to the agent/outputs directory for easy access
+    const agentOutputPath = path.join(
+      agentResponsesDir,
+      `agent-create-response-${createdAgent.agent_id}.json`
+    );
+    fs.writeFileSync(agentOutputPath, JSON.stringify(createdAgent, null, 2));
+    console.log(`\nSaved create response to ${agentOutputPath}`);
 
     // Display initial creation summary
     console.log("\n===== Created Agent =====");
     console.log(`ID: ${createdAgent.agent_id}`);
 
-    // Save the full agent configuration with ID for reference only if DEBUG is enabled
-    if (process.env.DEBUG === "true") {
-      const configWithIdPath = path.join(
-        outputsDir,
-        `agent-create-request-${createdAgent.agent_id}-${timestamp}.json`
-      );
+    // Always save the full agent configuration with ID for reference
+    const configWithIdPath = path.join(
+      outputsDir,
+      `agent-create-request-${createdAgent.agent_id}-${timestamp}.json`
+    );
 
-      // Create a copy of the config and add the agent ID
-      const configWithId = {
-        ...agentConfig,
-        agent_id: createdAgent.agent_id,
-      };
+    // Create a copy of the config and add the agent ID
+    const configWithId = {
+      ...agentConfig,
+      agent_id: createdAgent.agent_id,
+    };
 
-      fs.writeFileSync(configWithIdPath, JSON.stringify(configWithId, null, 2));
-      console.log(`\nSaved agent configuration with ID to ${configWithIdPath}`);
-    }
+    fs.writeFileSync(configWithIdPath, JSON.stringify(configWithId, null, 2));
+    console.log(`\nSaved agent configuration with ID to ${configWithIdPath}`);
+
+    // Also save to the agent/outputs directory for easy access
+    const agentConfigPath = path.join(
+      agentResponsesDir,
+      `agent-create-request-${createdAgent.agent_id}.json`
+    );
+    fs.writeFileSync(agentConfigPath, JSON.stringify(configWithId, null, 2));
+    console.log(`\nSaved agent configuration with ID to ${agentConfigPath}`);
 
     // Fetch complete agent details using GET endpoint
     console.log(
@@ -133,15 +206,21 @@ async function main() {
     );
     const agentData = await getAgent(createdAgent.agent_id);
 
-    // Save complete agent details to JSON file only if DEBUG is enabled
-    if (process.env.DEBUG === "true") {
-      const detailsFilePath = path.join(
-        outputsDir,
-        `agent-create-${createdAgent.agent_id}-${timestamp}.json`
-      );
-      fs.writeFileSync(detailsFilePath, JSON.stringify(agentData, null, 2));
-      console.log(`\nSaved complete agent details to ${detailsFilePath}`);
-    }
+    // Always save complete agent details to JSON file
+    const detailsFilePath = path.join(
+      outputsDir,
+      `agent-create-${createdAgent.agent_id}-${timestamp}.json`
+    );
+    fs.writeFileSync(detailsFilePath, JSON.stringify(agentData, null, 2));
+    console.log(`\nSaved complete agent details to ${detailsFilePath}`);
+
+    // Also save to the agent/outputs directory for easy access
+    const agentDetailsPath = path.join(
+      agentResponsesDir,
+      `agent-create-${createdAgent.agent_id}-details.json`
+    );
+    fs.writeFileSync(agentDetailsPath, JSON.stringify(agentData, null, 2));
+    console.log(`\nSaved complete agent details to ${agentDetailsPath}`);
 
     // Display detailed agent information
     console.log("\n===== Complete Agent Details =====");
