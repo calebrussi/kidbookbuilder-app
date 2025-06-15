@@ -67,15 +67,15 @@ export function useElevenLabsConversation({
 
   // Function to safely check if media permissions are available
   const checkMediaPermissions = async (): Promise<boolean> => {
-    // Check if we're in a browser environment with mediaDevices API
-    if (typeof window === 'undefined' || 
-        typeof navigator === 'undefined' || 
-        !navigator.mediaDevices) {
-      console.warn("MediaDevices API is not available in this environment");
-      return false;
-    }
-    
     try {
+      // Check if we're in a browser environment with mediaDevices API
+      if (typeof window === 'undefined' || 
+          typeof navigator === 'undefined' || 
+          !navigator.mediaDevices) {
+        console.warn("MediaDevices API is not available in this environment");
+        return false;
+      }
+      
       await navigator.mediaDevices.getUserMedia({ audio: true });
       console.log("Microphone permission granted");
       return true;
@@ -130,6 +130,11 @@ export function useElevenLabsConversation({
         }
 
         const signedUrl = result.data.signedUrl;
+
+        // Ensure conversation object is available and has startSession method
+        if (!conversation || typeof conversation.startSession !== 'function') {
+          throw new Error("ElevenLabs conversation API not properly initialized");
+        }
 
         // Start the conversation with the signedUrl
         await conversation.startSession({
