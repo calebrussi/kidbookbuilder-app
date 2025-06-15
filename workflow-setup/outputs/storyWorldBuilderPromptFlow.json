@@ -1,0 +1,620 @@
+[
+  {
+    "id": "node_1",
+    "name": "whoIsMainCharacter",
+    "description": "Who is the main character in your story?",
+    "dependencies": [],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "main_character_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Who is the main character in your story? You could choose a hero, a princess, or even an alien!",
+          "prompt": {
+            "prompt": "You are a storytelling assistant for a 10-year-old child. Your goal is to quickly gather information about the main character of their story. Ask them to provide the name and a few details about their character efficiently. Keep it friendly but straight to the point. Collect their input rapidly as part of a chained conversation. Avoid extra chatter or lengthy explanations.",
+            "tools": [
+              {
+                "description": "End the call immediately when you have the main character's name and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "main_character_info",
+              "name": "main_character_info",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: main character's name and key details about them."
+            }
+          ]
+        },
+        "data_collection": {
+          "main_character_description": {
+            "type": "string",
+            "description": "Collect: main character's name and a few important details about them."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "name": "main_character_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Who is the main character in your story? You could choose a hero, a princess, or even an alien!",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a storytelling assistant for a 10-year-old child. Your goal is to quickly gather information about the main character of their story. Ask them to provide the name and a few details about their character efficiently. Keep it friendly but straight to the point. Collect their input rapidly as part of a chained conversation. Avoid extra chatter or lengthy explanations.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call immediately when you have the main character's name and key details. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "main_character_info",
+              "name": "main_character_info",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: main character's name and key details about them."
+            }
+          ]
+        },
+        "data_collection": {
+          "main_character_description": {
+            "type": "string",
+            "description": "Collect: main character's name and a few important details about them."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_2",
+    "name": "specialThingAboutCharacter",
+    "description": "What is one special thing about them?",
+    "dependencies": ["node_1"],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "special_thing_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "What is one special thing about your character? It could be a magical power, a unique skill, or a special item they carry.",
+          "prompt": {
+            "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your task is to quickly collect information about a special thing regarding their character. Present options like magical powers, unique skills, or special items efficiently. Be friendly but direct. Capture their answer and any key details as quickly as possible. Do not be chatty or overly enthusiastic, as this is part of a chained conversation.",
+            "tools": [
+              {
+                "description": "End the call immediately when you have their answer about a special aspect of their character and any details they provide. Do not confirm or say goodbye since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "special_thing_choice",
+              "name": "special_thing_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the special attribute of the character and any important details."
+            }
+          ]
+        },
+        "data_collection": {
+          "special_thing_about_character": {
+            "type": "string",
+            "description": "Collect: the special attribute of the character and any important details."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "name": "special_thing_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "What is one special thing about your character? It could be a magical power, a unique skill, or a special item they carry.",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your task is to quickly collect information about a special thing regarding their character. Present options like magical powers, unique skills, or special items efficiently. Be friendly but direct. Capture their answer and any key details as quickly as possible. Do not be chatty or overly enthusiastic, as this is part of a chained conversation.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call immediately when you have their answer about a special aspect of their character and any details they provide. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "special_thing_choice",
+              "name": "special_thing_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the special attribute of the character and any important details."
+            }
+          ]
+        },
+        "data_collection": {
+          "special_thing_about_character": {
+            "type": "string",
+            "description": "Collect: the special attribute of the character and any important details."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_3",
+    "name": "whereDoesStoryHappen",
+    "description": "Where does your story happen?",
+    "dependencies": ["group_1"],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "story_setting_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "Where does your story take place? You can choose from a magical forest, a bustling city, or a mysterious cave.",
+          "prompt": {
+            "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their story setting preference. Present options (magical forest, bustling city, mysterious cave) efficiently. Be friendly but direct. Get their choice and any significant details as quickly as possible. Do not be chatty or use excessive enthusiasm. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "tools": [
+              {
+                "description": "End the call immediately when you have their preferred setting and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_setting_choice",
+              "name": "story_setting_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the preferred story setting and any important details."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_setting": {
+            "type": "string",
+            "description": "Collect: the preferred story setting and any important details."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "name": "story_setting_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "Where does your story take place? You can choose from a magical forest, a bustling city, or a mysterious cave.",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their story setting preference. Present options (magical forest, bustling city, mysterious cave) efficiently. Be friendly but direct. Get their choice and any significant details as quickly as possible. Do not be chatty or use excessive enthusiasm. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call immediately when you have their preferred setting and key details. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "story_setting_choice",
+              "name": "story_setting_choice",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the preferred story setting and any important details."
+            }
+          ]
+        },
+        "data_collection": {
+          "story_setting": {
+            "type": "string",
+            "description": "Collect: the preferred story setting and any important details."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_4",
+    "name": "weatherLikeThere",
+    "description": "What is the weather like there?",
+    "dependencies": ["node_3"],
+    "group_id": "group_2",
+    "prompt_config": {
+      "name": "weather_query_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "What's the weather like where you are? Is it sunny, rainy, or snowy?",
+          "prompt": {
+            "prompt": "You are a helpful assistant. Your job is to quickly find out about the weather in the child's location. Ask directly about the current conditions and encourage them to provide specific details. Be friendly but efficient. Get the weather conditions and any relevant details as quickly as possible. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "tools": [
+              {
+                "description": "End the call immediately when you have the weather conditions and any important details like temperature, activities enabled, or feelings about the weather. Do not confirm or say goodbye since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "weather_info",
+              "name": "weather_info",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: current weather conditions, temperature, and any related feelings or activities."
+            }
+          ]
+        },
+        "data_collection": {
+          "weather_conditions": {
+            "type": "string",
+            "description": "Collect: current weather conditions, temperature, and any related feelings or activities."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "name": "weather_query_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "What's the weather like where you are? Is it sunny, rainy, or snowy?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a helpful assistant. Your job is to quickly find out about the weather in the child's location. Ask directly about the current conditions and encourage them to provide specific details. Be friendly but efficient. Get the weather conditions and any relevant details as quickly as possible. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call immediately when you have the weather conditions and any important details like temperature, activities enabled, or feelings about the weather. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "weather_info",
+              "name": "weather_info",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: current weather conditions, temperature, and any related feelings or activities."
+            }
+          ]
+        },
+        "data_collection": {
+          "weather_conditions": {
+            "type": "string",
+            "description": "Collect: current weather conditions, temperature, and any related feelings or activities."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_5",
+    "name": "whatDoesCharacterWant",
+    "description": "What does your character want to find or do?",
+    "dependencies": ["group_2"],
+    "group_id": "group_3",
+    "prompt_config": {
+      "name": "character_goal_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "What does your character want to find or do? For example, are they looking for treasure, a friend, or an adventure?",
+          "prompt": {
+            "prompt": "You are an efficient storytelling assistant talking to a 10-year-old child. Your task is to quickly gather what the character wants to find or do. Give examples (treasure, a friend, an adventure) to help them decide. Focus on getting their answer without lengthy conversations. Since you're part of a chained conversation, don't provide closing statements or goodbyes.",
+            "tools": [
+              {
+                "description": "End the conversation immediately once you have their character's goals or desires. Do not confirm or say goodbye since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "character_goal",
+              "name": "character_goal",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: character's goals or desires and any important details related to them"
+            }
+          ]
+        },
+        "data_collection": {
+          "character_desires": {
+            "type": "string",
+            "description": "Collect: what the character wants to find or do"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "name": "character_goal_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "What does your character want to find or do? For example, are they looking for treasure, a friend, or an adventure?",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are an efficient storytelling assistant talking to a 10-year-old child. Your task is to quickly gather what the character wants to find or do. Give examples (treasure, a friend, an adventure) to help them decide. Focus on getting their answer without lengthy conversations. Since you're part of a chained conversation, don't provide closing statements or goodbyes.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation immediately once you have their character's goals or desires. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "character_goal",
+              "name": "character_goal",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: character's goals or desires and any important details related to them"
+            }
+          ]
+        },
+        "data_collection": {
+          "character_desires": {
+            "type": "string",
+            "description": "Collect: what the character wants to find or do"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "node_6",
+    "name": "oneChallengeTheyFace",
+    "description": "What is one challenge they face?",
+    "dependencies": ["node_5"],
+    "group_id": "group_3",
+    "prompt_config": {
+      "name": "challenge_selection_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "What is one challenge you face? It can be something like homework, making friends, or trying a new sport.",
+          "prompt": {
+            "prompt": "You are a focused assistant helping a child identify a challenge they face. Ask clearly about a specific challenge and ensure they share any important details quickly. Be friendly but direct. Get their response without extra comments or enthusiasm, as you are part of a chained conversation.",
+            "tools": [
+              {
+                "description": "End the call as soon as you have their response about a challenge they face. Do not confirm or provide goodbyes since this is part of a chained conversation."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "challenge_selection",
+              "name": "challenge_selection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the specific challenge and any relevant details about it."
+            }
+          ]
+        },
+        "data_collection": {
+          "challenge_details": {
+            "type": "string",
+            "description": "Collect: the specific challenge they face and any relevant details."
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "name": "challenge_selection_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "What is one challenge you face? It can be something like homework, making friends, or trying a new sport.",
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a focused assistant helping a child identify a challenge they face. Ask clearly about a specific challenge and ensure they share any important details quickly. Be friendly but direct. Get their response without extra comments or enthusiasm, as you are part of a chained conversation.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the call as soon as you have their response about a challenge they face. Do not confirm or provide goodbyes since this is part of a chained conversation.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "challenge_selection",
+              "name": "challenge_selection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Check if we gathered: the specific challenge and any relevant details about it."
+            }
+          ]
+        },
+        "data_collection": {
+          "challenge_details": {
+            "type": "string",
+            "description": "Collect: the specific challenge they face and any relevant details."
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "group_1",
+    "name": "mainCharacter",
+    "description": "Main Character group containing nodes for defining the main character and their special traits",
+    "dependencies": []
+  },
+  {
+    "id": "group_2",
+    "name": "storyWorld",
+    "description": "Story World group containing nodes for the location and weather of the story",
+    "dependencies": ["group_1"]
+  },
+  {
+    "id": "group_3",
+    "name": "storyAdventure",
+    "description": "Story Adventure group containing nodes for character goals and challenges",
+    "dependencies": ["group_2"]
+  }
+]

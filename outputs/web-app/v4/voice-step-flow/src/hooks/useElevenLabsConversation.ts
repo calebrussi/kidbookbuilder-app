@@ -65,15 +65,35 @@ export function useElevenLabsConversation({
     },
   });
 
+  // Function to safely check if media permissions are available
+  const checkMediaPermissions = async (): Promise<boolean> => {
+    try {
+      // Check if we're in a browser environment with mediaDevices API
+      if (typeof window === 'undefined' || 
+          typeof navigator === 'undefined' || 
+          !navigator.mediaDevices) {
+        console.warn("MediaDevices API is not available in this environment");
+        return false;
+      }
+      
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log("Microphone permission granted");
+      return true;
+    } catch (error) {
+      console.warn("Microphone access error:", error);
+      return false;
+    }
+  };
+  
   const startConversation = useCallback(
     async (customAgentId?: string) => {
       setIsLoading(true);
       setError(null);
 
       try {
-        // Request microphone permission
-        await navigator.mediaDevices.getUserMedia({ audio: true });
-
+        // Try to get microphone permissions, but continue either way
+        await checkMediaPermissions();
+        
         const targetAgentId =
           customAgentId || agentId || import.meta.env.VITE_ELEVENLABS_AGENT_ID;
 
@@ -88,6 +108,8 @@ export function useElevenLabsConversation({
         if (!baseUrl) {
           throw new Error("VITE_API_BASE_URL is not set in your environment variables.");
         }
+        console.log(`Requesting signed URL for agent ID: ${targetAgentId}`);
+        
         const response = await fetch(`${baseUrl}/api/workflow/agent`, {
           method: "POST",
           headers: {
@@ -97,7 +119,9 @@ export function useElevenLabsConversation({
         });
 
         if (!response.ok) {
-          throw new Error("Failed to get signedUrl from backend");
+          const errorText = await response.text().catch(() => null);
+          console.error("Failed to get signedUrl, response:", response.status, errorText);
+          throw new Error(`Failed to get signedUrl from backend: ${response.status} ${response.statusText}`);
         }
 
         const result = await response.json();
@@ -106,6 +130,11 @@ export function useElevenLabsConversation({
         }
 
         const signedUrl = result.data.signedUrl;
+
+        // Ensure conversation object is available and has startSession method
+        if (!conversation || typeof conversation.startSession !== 'function') {
+          throw new Error("ElevenLabs conversation API not properly initialized");
+        }
 
         // Start the conversation with the signedUrl
         await conversation.startSession({
@@ -123,7 +152,7 @@ export function useElevenLabsConversation({
         setIsLoading(false);
       }
     },
-    [conversation, agentId, onMessage, onError]
+    [conversation, agentId, onError]
   );
 
   const stopConversation = useCallback(async () => {
@@ -152,8 +181,18 @@ export function useElevenLabsConversation({
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    
+    // Send the message to ElevenLabs if conversation is connected
+    if (conversation.status === "connected") {
+      try {
+        conversation.sendUserMessage(content);
+      } catch (error) {
+        console.error("Failed to send user message to ElevenLabs:", error);
+      }
+    }
+    
     return userMessage;
-  }, []);
+  }, [conversation]);
 
   const clearMessages = useCallback(() => {
     setMessages([]);
@@ -171,5 +210,6 @@ export function useElevenLabsConversation({
     clearMessages,
     setError,
     conversation, // Expose the conversation object for direct access
+    isConnected: conversation.status === "connected"
   };
 }
