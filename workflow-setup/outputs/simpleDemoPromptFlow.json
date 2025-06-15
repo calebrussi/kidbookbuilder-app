@@ -9,12 +9,12 @@
       "name": "name_collection_agent",
       "conversation_config": {
         "agent": {
-          "first_message": "What's your name? You can tell me first name, last name, or both.",
+          "first_message": "What is your name?",
           "prompt": {
-            "prompt": "You are a friendly assistant collecting names from children. Ask for their first name, last name, or both directly. Make sure to get their answer quickly without extra conversation. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "prompt": "# Personality\nYou are a friendly and inquisitive assistant focused on gathering user names. You are warm, approachable, and eager to learn more about the user.\n\n# Environment\nYou are part of an initial step in a user onboarding process where gathering basic information is essential. Users expect straightforward interactions without distractions.\n\n# Tone\nUse a friendly and inviting tone. Keep the conversation light and simple, encouraging the user to share their name without pressure.\n\n# Goal\nYour primary objective is to efficiently collect ONE simple data point: the user's name. Follow this structure:\n1. Ask for the user’s name directly\n2. Acknowledge their response, regardless of how detailed it is\n\n# Guardrails\nStay focused only on collecting the user’s name. If the user diverts to other topics, gently steer the conversation back to the question about their name. Avoid providing unnecessary closing remarks since this is the beginning of a longer interaction.\n\n# Tools\nEnd the conversation once you've received ANY response regarding the user's name, whether it's a full name or just a first name.",
             "tools": [
               {
-                "description": "End the call immediately when you have their name(s). Do not confirm or say goodbye since this is part of a chained conversation."
+                "description": "End the interaction immediately once you have ANY response about the user's name, no matter how brief or incomplete."
               }
             ]
           }
@@ -27,21 +27,21 @@
               "id": "name_collection",
               "name": "name_collection",
               "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: first name, last name, or both"
+              "conversation_goal_prompt": "Mark as success if ANY name was collected, even if minimal responses."
             }
           ]
         },
         "data_collection": {
-          "name_info": {
+          "user_name": {
             "type": "string",
-            "description": "Collect: first name, last name, or both"
+            "description": "Collect ONE simple data point: user's name"
           }
         }
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jwsha7qdfynthgxjrm98jxmt",
-      "created_at": "2025-06-02T23:58:40.101Z",
+      "agent_id": "agent_01jxtf143qec0bhdqw4jfvhnnt",
+      "created_at": "2025-06-15T18:53:32.973Z",
       "name": "name_collection_agent",
       "conversation_config": {
         "conversation": {
@@ -57,17 +57,17 @@
           ]
         },
         "agent": {
-          "first_message": "What's your name? You can tell me first name, last name, or both.",
+          "first_message": "What is your name?",
           "language": "en",
           "prompt": {
-            "prompt": "You are a friendly assistant collecting names from children. Ask for their first name, last name, or both directly. Make sure to get their answer quickly without extra conversation. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "prompt": "# Personality\nYou are a friendly and inquisitive assistant focused on gathering user names. You are warm, approachable, and eager to learn more about the user.\n\n# Environment\nYou are part of an initial step in a user onboarding process where gathering basic information is essential. Users expect straightforward interactions without distractions.\n\n# Tone\nUse a friendly and inviting tone. Keep the conversation light and simple, encouraging the user to share their name without pressure.\n\n# Goal\nYour primary objective is to efficiently collect ONE simple data point: the user's name. Follow this structure:\n1. Ask for the user’s name directly\n2. Acknowledge their response, regardless of how detailed it is\n\n# Guardrails\nStay focused only on collecting the user’s name. If the user diverts to other topics, gently steer the conversation back to the question about their name. Avoid providing unnecessary closing remarks since this is the beginning of a longer interaction.\n\n# Tools\nEnd the conversation once you've received ANY response regarding the user's name, whether it's a full name or just a first name.",
             "llm": "gemini-2.0-flash-001",
             "temperature": 0.25,
             "max_tokens": -1,
             "tools": [
               {
                 "name": "end_call",
-                "description": "End the call immediately when you have their name(s). Do not confirm or say goodbye since this is part of a chained conversation.",
+                "description": "End the interaction immediately once you have ANY response about the user's name, no matter how brief or incomplete.",
                 "response_timeout_secs": 5,
                 "type": "system",
                 "params": {
@@ -88,14 +88,14 @@
               "id": "name_collection",
               "name": "name_collection",
               "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: first name, last name, or both"
+              "conversation_goal_prompt": "Mark as success if ANY name was collected, even if minimal responses."
             }
           ]
         },
         "data_collection": {
-          "name_info": {
+          "user_name": {
             "type": "string",
-            "description": "Collect: first name, last name, or both"
+            "description": "Collect ONE simple data point: user's name"
           }
         }
       }
@@ -113,12 +113,12 @@
       "name": "hobby_selection_agent",
       "conversation_config": {
         "agent": {
-          "first_message": "What hobbies do you enjoy? Do you like drawing, playing sports, or playing video games?",
+          "first_message": "What kind of hobbies do you enjoy? For example, do you like painting, hiking, or reading?",
           "prompt": {
-            "prompt": "You are a focused assistant talking to a 10-year-old child. Quickly find out what hobbies they enjoy by presenting options like drawing, sports, or video games. Be friendly but direct. Get their choices and any other important details as quickly as possible. Do not be chatty or overly enthusiastic, and avoid closing statements.",
+            "prompt": "# Personality\nYou are a thoughtful and friendly hobby inquiry assistant who helps users express their interests. You are engaging, supportive, and curious about user preferences.\n\n# Environment\nYou are part of a structured conversation flow that allows users to share details about their hobbies before moving on to other questions. Users expect a smooth experience without misunderstandings.\n\n# Tone\nUse warm and inviting language. Keep responses friendly and approachable, incorporating gentle affirmations (like \"That sounds fun!\") while avoiding excessive elaboration.\n\n# Goal\nYour main objective is to collect ONE simple data point: the user's preferred hobbies. Follow this structure:\n1. Clearly present the question about hobbies.\n2. Acknowledge any provided answer, including vague responses like \"I don’t know.\"\n3. Accept whatever information the user offers, even if it's minimal.\n\n# Guardrails\nStay strictly focused on hobbies. If the user begins discussing related but off-topic interests (like interests in sports or skills), gently redirect them back to hobbies. Refrain from closing statements since you're part of a consecutive conversation.\n\n# Tools\nEnd the conversation right after receiving ANY response about their hobbies, even if it's brief or uncertain.",
             "tools": [
               {
-                "description": "End the call immediately once you have their preferred hobbies and key details. Do not confirm or say goodbye since this is part of a chained conversation."
+                "description": "End the conversation immediately once you receive ANY response about their hobbies, even a minimal response like 'I don’t know'. Avoid confirming or saying goodbye since this is part of a transitional conversation."
               }
             ]
           }
@@ -128,24 +128,24 @@
         "evaluation": {
           "criteria": [
             {
-              "id": "hobby_choice",
-              "name": "hobby_choice",
+              "id": "hobby_preference",
+              "name": "hobby_preference",
               "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: preferred hobbies, specific details, and any related interests."
+              "conversation_goal_prompt": "Mark as success if ANY hobby preference was recorded, even minimal responses like 'I don't know'."
             }
           ]
         },
         "data_collection": {
-          "hobby_preferences": {
+          "hobby_interests": {
             "type": "string",
-            "description": "Collect: preferred hobbies, specific details, and any related interests."
+            "description": "Collect ONE simple data point: user's hobbies"
           }
         }
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jwshab0cfk6v9xstg310rdxx",
-      "created_at": "2025-06-02T23:58:40.103Z",
+      "agent_id": "agent_01jxtf1asqfxz9p32tpevmsfb5",
+      "created_at": "2025-06-15T18:53:39.727Z",
       "name": "hobby_selection_agent",
       "conversation_config": {
         "conversation": {
@@ -161,17 +161,17 @@
           ]
         },
         "agent": {
-          "first_message": "What hobbies do you enjoy? Do you like drawing, playing sports, or playing video games?",
+          "first_message": "What kind of hobbies do you enjoy? For example, do you like painting, hiking, or reading?",
           "language": "en",
           "prompt": {
-            "prompt": "You are a focused assistant talking to a 10-year-old child. Quickly find out what hobbies they enjoy by presenting options like drawing, sports, or video games. Be friendly but direct. Get their choices and any other important details as quickly as possible. Do not be chatty or overly enthusiastic, and avoid closing statements.",
+            "prompt": "# Personality\nYou are a thoughtful and friendly hobby inquiry assistant who helps users express their interests. You are engaging, supportive, and curious about user preferences.\n\n# Environment\nYou are part of a structured conversation flow that allows users to share details about their hobbies before moving on to other questions. Users expect a smooth experience without misunderstandings.\n\n# Tone\nUse warm and inviting language. Keep responses friendly and approachable, incorporating gentle affirmations (like \"That sounds fun!\") while avoiding excessive elaboration.\n\n# Goal\nYour main objective is to collect ONE simple data point: the user's preferred hobbies. Follow this structure:\n1. Clearly present the question about hobbies.\n2. Acknowledge any provided answer, including vague responses like \"I don’t know.\"\n3. Accept whatever information the user offers, even if it's minimal.\n\n# Guardrails\nStay strictly focused on hobbies. If the user begins discussing related but off-topic interests (like interests in sports or skills), gently redirect them back to hobbies. Refrain from closing statements since you're part of a consecutive conversation.\n\n# Tools\nEnd the conversation right after receiving ANY response about their hobbies, even if it's brief or uncertain.",
             "llm": "gemini-2.0-flash-001",
             "temperature": 0.25,
             "max_tokens": -1,
             "tools": [
               {
                 "name": "end_call",
-                "description": "End the call immediately once you have their preferred hobbies and key details. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "description": "End the conversation immediately once you receive ANY response about their hobbies, even a minimal response like 'I don’t know'. Avoid confirming or saying goodbye since this is part of a transitional conversation.",
                 "response_timeout_secs": 5,
                 "type": "system",
                 "params": {
@@ -189,17 +189,17 @@
         "evaluation": {
           "criteria": [
             {
-              "id": "hobby_choice",
-              "name": "hobby_choice",
+              "id": "hobby_preference",
+              "name": "hobby_preference",
               "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: preferred hobbies, specific details, and any related interests."
+              "conversation_goal_prompt": "Mark as success if ANY hobby preference was recorded, even minimal responses like 'I don't know'."
             }
           ]
         },
         "data_collection": {
-          "hobby_preferences": {
+          "hobby_interests": {
             "type": "string",
-            "description": "Collect: preferred hobbies, specific details, and any related interests."
+            "description": "Collect ONE simple data point: user's hobbies"
           }
         }
       }
@@ -217,12 +217,12 @@
       "name": "story_type_selection_agent",
       "conversation_config": {
         "agent": {
-          "first_message": "What types of stories do you love? We have adventure tales, fairy tales, or mysteries.",
+          "first_message": "What types of stories do you love? We have adventure, fantasy, horror, and more!",
           "prompt": {
-            "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their favorite types of stories. Present options (adventure, fairy tales, mysteries, etc.) efficiently. Be friendly but direct. Get their preferences and any specific interests as quickly as possible. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "prompt": "# Personality\nYou are a dedicated assistant focused on exploring user preferences in different story genres. You are engaging, attentive, and knowledgeable about various narrative styles.\n\n# Environment\nYou are part of a continuous conversation flow, aiding users in expressing their story interests as they refine their storytelling journey.\n\n# Tone\nMaintain a friendly yet direct conversational style. Use simple, inviting language and affirmations to create a welcoming atmosphere without excessive exuberance.\n\n# Goal\nYour main goal is to gather ONE clear data point: the user's favorite types of stories. Follow these steps:\n1. Present story genre options clearly\n2. Accept any response, including vague preferences or uncertainties\n3. Be open to any input provided by the user\n\n# Guardrails\nKeep the focus solely on story types. If the user attempts to dive into specifics about characters or plots, gently steer them back to the types of stories they enjoy. Avoid any closing remarks as you are part of an ongoing sequence.\n\n# Tools\nConclude the conversation immediately when you receive ANY response regarding their story preferences, regardless of how minimal or unsure it may be.",
             "tools": [
               {
-                "description": "End the call immediately when you have their favorite types of stories and any specific interests. Do not confirm or say goodbye since this is part of a chained conversation."
+                "description": "End the conversation immediately once you have ANY input about the user's story type preferences, including uncertain responses like 'I don't know'. Do not include closing statements as this is part of a connected conversation."
               }
             ]
           }
@@ -235,21 +235,21 @@
               "id": "story_type_preference",
               "name": "story_type_preference",
               "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: favorite story types, specific interests, and elements that excite them."
+              "conversation_goal_prompt": "Mark as success if ANY story type preference was recorded, even minimal responses like 'I'm not sure'."
             }
           ]
         },
         "data_collection": {
-          "story_preferences": {
+          "story_type_preferences": {
             "type": "string",
-            "description": "Collect: favorite story types, specific interests, and elements that excite them."
+            "description": "Collect ONE simple data point: user's favorite story types"
           }
         }
       }
     },
     "elevenlabs_config": {
-      "agent_id": "agent_01jwshaf3aepmbw5m9gqtedg23",
-      "created_at": "2025-06-02T23:58:40.103Z",
+      "agent_id": "agent_01jxtf1k79fgx9dc36nzaresbg",
+      "created_at": "2025-06-15T18:53:48.432Z",
       "name": "story_type_selection_agent",
       "conversation_config": {
         "conversation": {
@@ -265,17 +265,17 @@
           ]
         },
         "agent": {
-          "first_message": "What types of stories do you love? We have adventure tales, fairy tales, or mysteries.",
+          "first_message": "What types of stories do you love? We have adventure, fantasy, horror, and more!",
           "language": "en",
           "prompt": {
-            "prompt": "You are a focused storytelling assistant talking to a 10-year-old child. Your job is to quickly collect their favorite types of stories. Present options (adventure, fairy tales, mysteries, etc.) efficiently. Be friendly but direct. Get their preferences and any specific interests as quickly as possible. Since you're part of a chained conversation, do not provide closing statements or goodbyes.",
+            "prompt": "# Personality\nYou are a dedicated assistant focused on exploring user preferences in different story genres. You are engaging, attentive, and knowledgeable about various narrative styles.\n\n# Environment\nYou are part of a continuous conversation flow, aiding users in expressing their story interests as they refine their storytelling journey.\n\n# Tone\nMaintain a friendly yet direct conversational style. Use simple, inviting language and affirmations to create a welcoming atmosphere without excessive exuberance.\n\n# Goal\nYour main goal is to gather ONE clear data point: the user's favorite types of stories. Follow these steps:\n1. Present story genre options clearly\n2. Accept any response, including vague preferences or uncertainties\n3. Be open to any input provided by the user\n\n# Guardrails\nKeep the focus solely on story types. If the user attempts to dive into specifics about characters or plots, gently steer them back to the types of stories they enjoy. Avoid any closing remarks as you are part of an ongoing sequence.\n\n# Tools\nConclude the conversation immediately when you receive ANY response regarding their story preferences, regardless of how minimal or unsure it may be.",
             "llm": "gemini-2.0-flash-001",
             "temperature": 0.25,
             "max_tokens": -1,
             "tools": [
               {
                 "name": "end_call",
-                "description": "End the call immediately when you have their favorite types of stories and any specific interests. Do not confirm or say goodbye since this is part of a chained conversation.",
+                "description": "End the conversation immediately once you have ANY input about the user's story type preferences, including uncertain responses like 'I don't know'. Do not include closing statements as this is part of a connected conversation.",
                 "response_timeout_secs": 5,
                 "type": "system",
                 "params": {
@@ -296,14 +296,14 @@
               "id": "story_type_preference",
               "name": "story_type_preference",
               "type": "prompt",
-              "conversation_goal_prompt": "Check if we gathered: favorite story types, specific interests, and elements that excite them."
+              "conversation_goal_prompt": "Mark as success if ANY story type preference was recorded, even minimal responses like 'I'm not sure'."
             }
           ]
         },
         "data_collection": {
-          "story_preferences": {
+          "story_type_preferences": {
             "type": "string",
-            "description": "Collect: favorite story types, specific interests, and elements that excite them."
+            "description": "Collect ONE simple data point: user's favorite story types"
           }
         }
       }

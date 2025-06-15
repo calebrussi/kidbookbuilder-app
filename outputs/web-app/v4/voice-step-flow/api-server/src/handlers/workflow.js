@@ -10,8 +10,8 @@ const workflowJson = {
   title: "Character Creation Quiz",
   description:
     "Create your perfect story character through this interactive quiz",
-  createdAt: "2025-06-02T23:58:54.465Z",
-  updatedAt: "2025-06-02T23:58:54.466Z",
+  createdAt: "2025-06-15T18:53:59.325Z",
+  updatedAt: "2025-06-15T18:53:59.326Z",
   sections: [
     {
       id: "group-1",
@@ -23,14 +23,14 @@ const workflowJson = {
           title: "What is your name?",
           order: 0,
           sectionId: "group-1",
-          agentId: "agent_01jwsha7qdfynthgxjrm98jxmt",
+          agentId: "agent_01jxtf143qec0bhdqw4jfvhnnt",
         },
         {
           id: "what-kind-of-hobbies",
           title: "What kind of hobbies do you enjoy?",
           order: 1,
           sectionId: "group-1",
-          agentId: "agent_01jwshab0cfk6v9xstg310rdxx",
+          agentId: "agent_01jxtf1asqfxz9p32tpevmsfb5",
         },
       ],
     },
@@ -44,13 +44,12 @@ const workflowJson = {
           title: "What types of stories do you love?",
           order: 2,
           sectionId: "group-2",
-          agentId: "agent_01jwshaf3aepmbw5m9gqtedg23",
+          agentId: "agent_01jxtf1k79fgx9dc36nzaresbg",
         },
       ],
     },
   ],
 };
-
 // Get workflow endpoint with authentication - using relative path from project root
 const getWorkflowHandler = (req, res) => {
   const { name, passcode } = req.body;
