@@ -10,8 +10,8 @@ const workflowJson = {
   title: "Character Creation Quiz",
   description:
     "Create your perfect story character through this interactive quiz",
-  createdAt: "2025-06-18T00:25:43.612Z",
-  updatedAt: "2025-06-18T00:25:43.613Z",
+  createdAt: "2025-06-18T17:39:55.750Z",
+  updatedAt: "2025-06-18T17:39:55.750Z",
   sections: [
     {
       id: "group-1",
@@ -23,14 +23,14 @@ const workflowJson = {
           title: "What is your name?",
           order: 0,
           sectionId: "group-1",
-          agentId: "agent_01jy06tg14fxxv0ymvha6ybjrj",
+          agentId: "agent_01jy2207cne3qrq2n9gte7kkxh",
         },
         {
           id: "what-kind-of-hobbies",
           title: "What kind of hobbies do you enjoy?",
           order: 1,
           sectionId: "group-1",
-          agentId: "agent_01jy06tjdjfnmrnwrxfw1mwxa8",
+          agentId: "agent_01jy2209fyff3s8x0w7q79xa7z",
         },
       ],
     },
@@ -44,7 +44,7 @@ const workflowJson = {
           title: "What types of stories do you love?",
           order: 2,
           sectionId: "group-2",
-          agentId: "agent_01jy06tmrtfb0ae1wd9e551njw",
+          agentId: "agent_01jy220c09exm8ac3mcgzka7kn",
         },
       ],
     },
