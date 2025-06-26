@@ -1,0 +1,23 @@
+{
+  "id": "character-creation-quiz",
+  "title": "Character Creation Quiz",
+  "description": "Create your perfect story character through this interactive quiz",
+  "createdAt": "2025-06-21T21:37:09.045Z",
+  "updatedAt": "2025-06-21T21:37:09.045Z",
+  "sections": [
+    {
+      "id": "group-1",
+      "title": "1",
+      "order": 0,
+      "steps": [
+        {
+          "id": "please-tell-me-your-name",
+          "title": "asking for user's name, hobbies, and story preferences",
+          "order": 0,
+          "sectionId": "group-1",
+          "agentId": "agent_01jya6mw9rfq68e79cz54t4kst"
+        }
+      ]
+    }
+  ]
+}

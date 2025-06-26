@@ -1,0 +1,121 @@
+[
+  {
+    "id": "node_1",
+    "name": "pleaseTellMeYourName",
+    "description": "asking for user's name, hobbies, and story preferences",
+    "dependencies": [],
+    "group_id": "group_1",
+    "prompt_config": {
+      "name": "name_hobbies_story_preferences_agent",
+      "conversation_config": {
+        "agent": {
+          "first_message": "What's your name? I would love to know about your hobbies and your story preferences, too!",
+          "prompt": {
+            "prompt": "# Personality\nYou are a friendly and engaging assistant focused on gathering personal information from users. You are curious, supportive, and eager to help users express themselves.\n\n# Environment\nYou facilitate a seamless conversation where users feel comfortable sharing their personal details. You form part of a larger interaction process where personal preferences guide content creation.\n\n# Tone\nUse a warm and inviting tone, encouraging users to share. Responses should be brief and casual, with natural speaking patterns incorporated (e.g., \"That sounds fun!\").\n\n# Goal\nYour goal is to collect three simple data points: the user's name, hobbies, and story preferences. Follow this structure:\n1. Ask for the user's name clearly.\n2. Transition smoothly to asking about hobbies and story preferences.\n3. Accept any information shared, even if brief or unclear.\n\n# Guardrails\nStay focused on collecting the user's name, hobbies, and story preferences only. If users diverge into unrelated topics, guide them back to these areas without closing statements since you're part of a continuing conversation.\n\n# Tools\nCRITICAL: End the conversation IMMEDIATELY after collecting all required data points: name, hobbies, and story preferences. Do not wait for user response, do not engage further.",
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation immediately after collecting the user's name, hobbies, and story preferences."
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "user_info_collection",
+              "name": "user_info_collection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Mark as success if ALL responses (name, hobbies, story preferences) were collected, even minimal or uncertain."
+            }
+          ]
+        },
+        "data_collection": {
+          "user_name": {
+            "type": "string",
+            "description": "Collect ONE simple data point: user's name"
+          },
+          "user_hobbies": {
+            "type": "string",
+            "description": "Collect ONE simple data point: user's hobbies preferences"
+          },
+          "user_story_preferences": {
+            "type": "string",
+            "description": "Collect ONE simple data point: user's story preferences"
+          }
+        }
+      }
+    },
+    "elevenlabs_config": {
+      "agent_id": "agent_01jya6mw9rfq68e79cz54t4kst",
+      "created_at": "2025-06-21T21:34:55.219Z",
+      "name": "name_hobbies_story_preferences_agent",
+      "conversation_config": {
+        "conversation": {
+          "text_only": false,
+          "max_duration_seconds": 600,
+          "client_events": [
+            "audio",
+            "interruption",
+            "user_transcript",
+            "agent_response",
+            "agent_response_correction",
+            "vad_score"
+          ]
+        },
+        "agent": {
+          "first_message": "What's your name? I would love to know about your hobbies and your story preferences, too!",
+          "language": "en",
+          "prompt": {
+            "prompt": "# Personality\nYou are a friendly and engaging assistant focused on gathering personal information from users. You are curious, supportive, and eager to help users express themselves.\n\n# Environment\nYou facilitate a seamless conversation where users feel comfortable sharing their personal details. You form part of a larger interaction process where personal preferences guide content creation.\n\n# Tone\nUse a warm and inviting tone, encouraging users to share. Responses should be brief and casual, with natural speaking patterns incorporated (e.g., \"That sounds fun!\").\n\n# Goal\nYour goal is to collect three simple data points: the user's name, hobbies, and story preferences. Follow this structure:\n1. Ask for the user's name clearly.\n2. Transition smoothly to asking about hobbies and story preferences.\n3. Accept any information shared, even if brief or unclear.\n\n# Guardrails\nStay focused on collecting the user's name, hobbies, and story preferences only. If users diverge into unrelated topics, guide them back to these areas without closing statements since you're part of a continuing conversation.\n\n# Tools\nCRITICAL: End the conversation IMMEDIATELY after collecting all required data points: name, hobbies, and story preferences. Do not wait for user response, do not engage further.",
+            "llm": "gemini-2.0-flash-001",
+            "temperature": 0.25,
+            "max_tokens": -1,
+            "tools": [
+              {
+                "name": "end_call",
+                "description": "End the conversation immediately after collecting the user's name, hobbies, and story preferences.",
+                "response_timeout_secs": 5,
+                "type": "system",
+                "params": {
+                  "system_tool_type": "end_call"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "platform_settings": {
+        "auth": {
+          "enable_auth": true
+        },
+        "evaluation": {
+          "criteria": [
+            {
+              "id": "user_info_collection",
+              "name": "user_info_collection",
+              "type": "prompt",
+              "conversation_goal_prompt": "Mark as success if ALL responses (name, hobbies, story preferences) were collected, even minimal or uncertain."
+            }
+          ]
+        },
+        "data_collection": {
+          "user_name": {
+            "type": "string",
+            "description": "Collect ONE simple data point: user's name"
+          },
+          "user_hobbies": {
+            "type": "string",
+            "description": "Collect ONE simple data point: user's hobbies preferences"
+          },
+          "user_story_preferences": {
+            "type": "string",
+            "description": "Collect ONE simple data point: user's story preferences"
+          }
+        }
+      }
+    }
+  }
+]
