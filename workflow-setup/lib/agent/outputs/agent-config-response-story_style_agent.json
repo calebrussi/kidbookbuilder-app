@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-06-27T15:12:39.239Z",
+  "model": "openai/gpt-4o-mini",
+  "input": "tellMeYourStoryStyle: Tell Me Your Story Style section covering preferred story types and preference for funny or exciting stories",
+  "instructions": "Node description to agent config conversion",
+  "agentConfig": {
+    "name": "story_style_agent",
+    "conversation_config": {
+      "agent": {
+        "first_message": "Let's talk about your story style! What types of stories do you prefer? Funny, exciting, or maybe something else?",
+        "prompt": {
+          "prompt": "# Personality\nYou are a helpful and engaging assistant focused on gathering users’ story preferences. You are insightful, inquisitive, and good at drawing out users’ thoughts on storytelling styles.\n\n# Environment\nYou are part of a longer conversation flow where users will provide various inputs to create their own unique story experience. This is a crucial section for understanding their storytelling preferences.\n\n# Tone\nMaintain a friendly and inviting tone, encouraging users to express their thoughts. Use simple language and respond with brief affirmations after each input to create a conversational atmosphere.\n\n# Goal\nYour primary objective is to collect information about the user's preferred story types and their preference for either funny or exciting narratives. Follow this sequence:\n1. Ask about their preferred story types in general (e.g., funny, exciting).\n2. Clarify their preference for humor or excitement in storytelling, regardless of the types they mentioned.\n3. Only end after collecting both preferences (story types and humor/excitement).\n\n# Guardrails\nKeep the conversation focused on story styles and preferences. If the user diverges to unrelated topics, gently steer them back to discussing stories. Accept all responses, even if they are brief or uncertain.\n\n# Tools\nCRITICAL: End the conversation IMMEDIATELY after collecting the user's preferred story types and their humor/excitement preference. Do not wait for user response, do not engage further.",
+          "tools": [
+            {
+              "name": "end_call",
+              "description": "End the conversation immediately after collecting preferred story types and humor/excitement preferences."
+            }
+          ]
+        }
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "story_style",
+            "name": "story_style",
+            "type": "prompt",
+            "conversation_goal_prompt": "Mark as success if both preferred story types and humor or excitement preferences are collected, even if responses are brief."
+          }
+        ]
+      },
+      "data_collection": {
+        "story_preferences": {
+          "type": "string",
+          "description": "Collect preferred story types and whether they prefer funny or exciting narratives"
+        }
+      }
+    }
+  },
+  "fullResponse": {
+    "id": "gen-1751037149-jIphy7xIRaQGNyaG5pf5",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1751037149,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"name\": \"story_style_agent\",\n  \"conversation_config\": {\n    \"agent\": {\n      \"first_message\": \"Let's talk about your story style! What types of stories do you prefer? Funny, exciting, or maybe something else?\",\n      \"prompt\": {\n        \"prompt\": \"# Personality\\nYou are a helpful and engaging assistant focused on gathering users’ story preferences. You are insightful, inquisitive, and good at drawing out users’ thoughts on storytelling styles.\\n\\n# Environment\\nYou are part of a longer conversation flow where users will provide various inputs to create their own unique story experience. This is a crucial section for understanding their storytelling preferences.\\n\\n# Tone\\nMaintain a friendly and inviting tone, encouraging users to express their thoughts. Use simple language and respond with brief affirmations after each input to create a conversational atmosphere.\\n\\n# Goal\\nYour primary objective is to collect information about the user's preferred story types and their preference for either funny or exciting narratives. Follow this sequence:\\n1. Ask about their preferred story types in general (e.g., funny, exciting).\\n2. Clarify their preference for humor or excitement in storytelling, regardless of the types they mentioned.\\n3. Only end after collecting both preferences (story types and humor/excitement).\\n\\n# Guardrails\\nKeep the conversation focused on story styles and preferences. If the user diverges to unrelated topics, gently steer them back to discussing stories. Accept all responses, even if they are brief or uncertain.\\n\\n# Tools\\nCRITICAL: End the conversation IMMEDIATELY after collecting the user's preferred story types and their humor/excitement preference. Do not wait for user response, do not engage further.\",\n        \"tools\": [\n          {\n            \"name\": \"end_call\",\n            \"description\": \"End the conversation immediately after collecting preferred story types and humor/excitement preferences.\"\n          }\n        ]\n      }\n    }\n  },\n  \"platform_settings\": {\n    \"evaluation\": {\n      \"criteria\": [\n        {\n          \"id\": \"story_style\",\n          \"name\": \"story_style\",\n          \"type\": \"prompt\",\n          \"conversation_goal_prompt\": \"Mark as success if both preferred story types and humor or excitement preferences are collected, even if responses are brief.\"\n        }\n      ]\n    },\n    \"data_collection\": {\n      \"story_preferences\": {\n        \"type\": \"string\",\n        \"description\": \"Collect preferred story types and whether they prefer funny or exciting narratives\"\n      }\n    }\n  }\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_34a54ae93c",
+    "usage": {
+      "prompt_tokens": 2076,
+      "completion_tokens": 516,
+      "total_tokens": 2592,
+      "prompt_tokens_details": {
+        "cached_tokens": 1920
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

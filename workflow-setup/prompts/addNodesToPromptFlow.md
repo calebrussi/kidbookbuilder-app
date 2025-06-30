@@ -41,13 +41,13 @@ JSON array of nodes and groups with required fields:
 ## Processing Rules
 
 1. **Groups**: Main nodes (numbered, bold) become groups with camelCase names
-2. **Nodes**: Sub-nodes (bullet points) become individual nodes with camelCase names
+2. **Nodes**: Each main node (numbered, bold) becomes ONE single node that handles all its bullet points
 3. **Dependencies**:
-   - Each sub-node depends on the previous sub-node in its group
-   - First sub-node in a group depends on the previous group
+   - Each node depends on the previous node
    - Groups depend on previous groups
 4. **IDs**: Use "node_X" for nodes, "group_X" for groups (increment X)
-5. **Names**: Convert to camelCase, extract key concept from description
+5. **Names**: Convert to camelCase, extract key concept from main node title
+6. **Description**: Combine all bullet points into a single description for the node
 
 ## Example
 
@@ -69,8 +69,8 @@ Output:
 [
   {
     "id": "node_1",
-    "name": "chooseGenre",
-    "description": "selecting the type of story",
+    "name": "storyFoundation",
+    "description": "Story Foundation section covering genre selection and setting selection",
     "dependencies": [],
     "group_id": "group_1",
     "prompt_config": {},
@@ -78,27 +78,9 @@ Output:
   },
   {
     "id": "node_2",
-    "name": "settingSelection",
-    "description": "where the story takes place",
+    "name": "characterDevelopment",
+    "description": "Character Development section covering main hero definition and supporting characters creation",
     "dependencies": ["node_1"],
-    "group_id": "group_1",
-    "prompt_config": {},
-    "elevenlabs_config": {}
-  },
-  {
-    "id": "node_3",
-    "name": "mainHero",
-    "description": "defining the protagonist",
-    "dependencies": ["group_1"],
-    "group_id": "group_2",
-    "prompt_config": {},
-    "elevenlabs_config": {}
-  },
-  {
-    "id": "node_4",
-    "name": "supportingCharacters",
-    "description": "creating friends and family",
-    "dependencies": ["node_3"],
     "group_id": "group_2",
     "prompt_config": {},
     "elevenlabs_config": {}
@@ -106,13 +88,13 @@ Output:
   {
     "id": "group_1",
     "name": "storyFoundation",
-    "description": "Story Foundation group containing nodes for genre selection and setting selection",
+    "description": "Story Foundation group containing the story foundation node",
     "dependencies": []
   },
   {
     "id": "group_2",
     "name": "characterDevelopment",
-    "description": "Character Development group containing nodes for main hero and supporting characters",
+    "description": "Character Development group containing the character development node",
     "dependencies": ["group_1"]
   }
 ]

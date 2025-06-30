@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-06-27T15:10:38.554Z",
+  "model": "openai/gpt-4o-mini",
+  "inputFile": "/Users/calebrussi/Sites/calebrussi/kidbookbuilder-app/workflow-setup/inputs/adventureCharacterQuiz.md",
+  "outputFileName": "adventureCharacterQuizPromptFlow",
+  "instructions": "Markdown nodes to prompt flow conversion",
+  "promptFlow": [
+    {
+      "id": "node_1",
+      "name": "personalIntro",
+      "description": "Personal Intro section covering user name, age, and hobbies",
+      "dependencies": [],
+      "group_id": "group_1",
+      "prompt_config": {},
+      "elevenlabs_config": {}
+    },
+    {
+      "id": "node_2",
+      "name": "tellMeYourStoryStyle",
+      "description": "Tell Me Your Story Style section covering preferred story types and preference for funny or exciting stories",
+      "dependencies": [
+        "node_1"
+      ],
+      "group_id": "group_2",
+      "prompt_config": {},
+      "elevenlabs_config": {}
+    },
+    {
+      "id": "node_3",
+      "name": "createYourCharacter",
+      "description": "Create Your Character section covering character name, special ability, and favorite activity",
+      "dependencies": [
+        "node_2"
+      ],
+      "group_id": "group_3",
+      "prompt_config": {},
+      "elevenlabs_config": {}
+    }
+  ],
+  "fullResponse": {
+    "id": "gen-1751037033-ZqcNOGJIbort3WLiZ1pi",
+    "provider": "OpenAI",
+    "model": "openai/gpt-4o-mini",
+    "object": "chat.completion",
+    "created": 1751037033,
+    "choices": [
+      {
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"nodes\": [\n    {\n      \"id\": \"node_1\",\n      \"name\": \"personalIntro\",\n      \"description\": \"Personal Intro section covering user name, age, and hobbies\",\n      \"dependencies\": [],\n      \"group_id\": \"group_1\",\n      \"prompt_config\": {},\n      \"elevenlabs_config\": {}\n    },\n    {\n      \"id\": \"node_2\",\n      \"name\": \"tellMeYourStoryStyle\",\n      \"description\": \"Tell Me Your Story Style section covering preferred story types and preference for funny or exciting stories\",\n      \"dependencies\": [\"node_1\"],\n      \"group_id\": \"group_2\",\n      \"prompt_config\": {},\n      \"elevenlabs_config\": {}\n    },\n    {\n      \"id\": \"node_3\",\n      \"name\": \"createYourCharacter\",\n      \"description\": \"Create Your Character section covering character name, special ability, and favorite activity\",\n      \"dependencies\": [\"node_2\"],\n      \"group_id\": \"group_3\",\n      \"prompt_config\": {},\n      \"elevenlabs_config\": {}\n    }\n  ],\n  \"groups\": [\n    {\n      \"id\": \"group_1\",\n      \"name\": \"personalIntro\",\n      \"description\": \"Personal Intro group containing the personal intro node\",\n      \"dependencies\": []\n    },\n    {\n      \"id\": \"group_2\",\n      \"name\": \"tellMeYourStoryStyle\",\n      \"description\": \"Tell Me Your Story Style group containing the tell me your story style node\",\n      \"dependencies\": [\"group_1\"]\n    },\n    {\n      \"id\": \"group_3\",\n      \"name\": \"createYourCharacter\",\n      \"description\": \"Create Your Character group containing the create your character node\",\n      \"dependencies\": [\"group_2\"]\n    }\n  ]\n}",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "system_fingerprint": "fp_34a54ae93c",
+    "usage": {
+      "prompt_tokens": 788,
+      "completion_tokens": 378,
+      "total_tokens": 1166,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

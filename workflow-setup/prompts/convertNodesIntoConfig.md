@@ -3,11 +3,14 @@
 ## Input Format
 
 Text descriptions of conversation nodes that collect information from users.
-Example: "Pick Your Setting (kingdoms, space, underwater, etc.)"
+Can be either:
+
+- Single question: "Pick Your Setting (kingdoms, space, underwater, etc.)"
+- Multi-question section: "Personal Intro section covering name, age, and hobbies"
 
 ## Output Format
 
-JSON config with required fields:
+JSON config with required fields for handling single or multiple related questions:
 
 ```json
 {
@@ -71,15 +74,17 @@ CRITICAL: End the conversation IMMEDIATELY after collecting the required data. D
    - **Personality**: Define agent identity, core traits, and functional role
    - **Environment**: Establish communication context (chained conversation)
    - **Tone**: Specify conversational style (friendly, efficient, direct)
-   - **Goal**: Clear information collection objectives with structured steps
+   - **Goal**: Clear information collection objectives. For multi-question sections, structure as sequence of questions to ask in order.
    - **Guardrails**: Define conversation boundaries to maintain focus
-   - **Tools**: When to end conversation (after collecting required data)
+   - **Tools**: When to end conversation (after collecting ALL required data for the section)
 4. **Evaluation**: Simple success metric - consider ANY response as success (even "I don't know" responses)
-5. **Data collection**: Field name and description of ONE simple data point to collect
+5. **Data collection**: Field name and description. For multi-question sections, collect all related information as single data point
 
 6. **Acknowledgment Structure**: Use a simple affirmation without asking if they need anything else
 
 ## Example
+
+### Single Question Input
 
 Input: "Pick Your Setting (kingdoms, space, underwater, etc.)"
 
@@ -117,6 +122,50 @@ Output:
       "setting_preferences": {
         "type": "string",
         "description": "Collect ONE simple data point: story setting"
+      }
+    }
+  }
+}
+```
+
+### Multi-Question Section Input
+
+Input: "Personal Intro section covering name, age, and hobbies"
+
+Output:
+
+```json
+{
+  "name": "personal_intro_agent",
+  "conversation_config": {
+    "agent": {
+      "first_message": "Hi! Let's get to know you better. What's your name?",
+      "prompt": {
+        "prompt": "# Personality\nYou are a friendly conversation assistant who helps collect personal information from users in a natural, sequential way. You are warm, patient, and good at guiding conversations through multiple questions.\n\n# Environment\nYou are part of a chained conversation flow where users progress through multiple agents. This is the introduction stage, so set a welcoming tone for the entire experience.\n\n# Tone\nUse warm, friendly language that feels natural and conversational. Ask questions one at a time and acknowledge each response before moving to the next question.\n\n# Goal\nYour objective is to collect personal introduction information through a sequence of questions:\n1. First ask for their name and wait for response\n2. Then ask for their age and wait for response  \n3. Finally ask about their hobbies and wait for response\n4. Only end after collecting responses to all three questions (name, age, hobbies)\n\n# Guardrails\nStay focused on the personal introduction questions only. If users try to skip ahead to other topics, gently bring them back to the current question. Accept any level of detail they provide, even brief responses.\n\n# Tools\nCRITICAL: End the conversation IMMEDIATELY after collecting responses to all three questions (name, age, hobbies). Do not wait for user response, do not engage further.",
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the conversation immediately after collecting name, age, and hobby information."
+          }
+        ]
+      }
+    }
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "personal_intro",
+          "name": "personal_intro",
+          "type": "prompt",
+          "conversation_goal_prompt": "Mark as success if personal introduction information was collected (name, age, hobbies), even if responses are brief or incomplete."
+        }
+      ]
+    },
+    "data_collection": {
+      "personal_info": {
+        "type": "string",
+        "description": "Collect personal introduction information: name, age, and hobbies"
       }
     }
   }

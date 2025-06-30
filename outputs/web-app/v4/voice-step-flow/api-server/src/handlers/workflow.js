@@ -10,41 +10,50 @@ const workflowJson = {
   title: "Character Creation Quiz",
   description:
     "Create your perfect story character through this interactive quiz",
-  createdAt: "2025-06-18T17:39:55.750Z",
-  updatedAt: "2025-06-18T17:39:55.750Z",
+  createdAt: "2025-06-27T15:13:59.061Z",
+  updatedAt: "2025-06-27T15:13:59.063Z",
   sections: [
     {
       id: "group-1",
-      title: "Personal Intro",
+      title: "1",
       order: 0,
       steps: [
         {
-          id: "what-is-your-name",
-          title: "What is your name?",
+          id: "personal-intro",
+          title: "Personal Intro section covering user name, age, and hobbies",
           order: 0,
           sectionId: "group-1",
-          agentId: "agent_01jy2207cne3qrq2n9gte7kkxh",
-        },
-        {
-          id: "what-kind-of-hobbies",
-          title: "What kind of hobbies do you enjoy?",
-          order: 1,
-          sectionId: "group-1",
-          agentId: "agent_01jy2209fyff3s8x0w7q79xa7z",
+          agentId: "agent_01jyrz7c7gfh2r31zmjyntqf7d",
         },
       ],
     },
     {
       id: "group-2",
-      title: "Tell Me Your Story Style",
+      title: "2",
       order: 1,
       steps: [
         {
-          id: "what-types-of-stories",
-          title: "What types of stories do you love?",
-          order: 2,
+          id: "tell-me-your-story-style",
+          title:
+            "Tell Me Your Story Style section covering preferred story types and preference for funny or exciting stories",
+          order: 1,
           sectionId: "group-2",
-          agentId: "agent_01jy220c09exm8ac3mcgzka7kn",
+          agentId: "agent_01jyrz7g5nenpay0nm14xczk7s",
+        },
+      ],
+    },
+    {
+      id: "group-3",
+      title: "3",
+      order: 2,
+      steps: [
+        {
+          id: "create-your-character",
+          title:
+            "Create Your Character section covering character name, special ability, and favorite activity",
+          order: 2,
+          sectionId: "group-3",
+          agentId: "agent_01jyrz7jqrfr8t9pv9sqgwdgy0",
         },
       ],
     },
