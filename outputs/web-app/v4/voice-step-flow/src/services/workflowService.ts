@@ -1,4 +1,5 @@
 import { Workflow } from '../types/workflow';
+import { supabase } from '../lib/supabase';
 
 // Fetch workflow.json from the API endpoint instead of importing the local file
 class WorkflowService {
@@ -10,25 +11,32 @@ class WorkflowService {
     if (this.workflow && !name) return this.workflow;
 
     try {
-      // Get auth credentials - either from parameters or localStorage
+      // Get auth credentials - either from parameters or current Supabase user
       let authName = name;
       let authPasscode = passcode;
       
       if (!authName) {
-        const storedAuth = localStorage.getItem('quiz-auth');
-        if (storedAuth) {
-          try {
-            const authData = JSON.parse(storedAuth);
-            authName = authData.userName;
-            // authPasscode = authData.passcode;
-          } catch (error) {
-            throw new Error('Invalid stored authentication data');
+        // First try to get current Supabase user
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.email) {
+          authName = user.email;
+        } else {
+          // Fallback to old localStorage method for backward compatibility
+          const storedAuth = localStorage.getItem('quiz-auth');
+          if (storedAuth) {
+            try {
+              const authData = JSON.parse(storedAuth);
+              authName = authData.userName;
+              // authPasscode = authData.passcode;
+            } catch (error) {
+              throw new Error('Invalid stored authentication data');
+            }
           }
         }
       }
 
       if (!authName) {
-        throw new Error('Username is required');
+        throw new Error('User authentication required');
       }
 
       // Fetch from API endpoint with authentication

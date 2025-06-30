@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { WorkflowHeader } from '../components/WorkflowHeader';
 import { StepList } from '../components/StepList';
 import { ChatInterface } from '../components/ChatInterface';
@@ -6,10 +6,19 @@ import { AuthForm } from '../components/AuthForm';
 import { useWorkflow } from '../hooks/useWorkflow';
 import { useProgress } from '../hooks/useProgress';
 import { useProcessing } from '../hooks/useProcessing';
-import { useAuth } from '../hooks/useAuth';
+import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
 
 const Index = () => {
-  const { isAuthenticated, userName, loading: authLoading, error: authError, authenticate } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const { 
+    isAuthenticated, 
+    user, 
+    loading: authLoading, 
+    error: authError, 
+    authenticate,
+    signOut 
+  } = useSupabaseAuth();
+  
   const { workflow, loading: workflowLoading, error } = useWorkflow(isAuthenticated);
   const { 
     progress, 
@@ -28,11 +37,15 @@ const Index = () => {
     onConversationProgressUpdate: updateStepConversationProgress
   });
 
+  const handleAuthentication = async (email: string, password: string, isSignUp: boolean) => {
+    await authenticate(email, password, isSignUp);
+  };
+
   // Show authentication form if not authenticated
   if (!isAuthenticated) {
     return (
       <AuthForm 
-        onAuth={authenticate}
+        onAuth={handleAuthentication}
         loading={authLoading}
         error={authError}
       />
@@ -45,7 +58,7 @@ const Index = () => {
         <div className="text-center space-y-4">
           <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
           <p className="text-purple-600 font-medium">
-            {userName ? `Loading your quiz, ${userName}...` : 'Loading your quiz...'}
+            {user?.email ? `Loading your quiz, ${user.email}...` : 'Loading your quiz...'}
           </p>
         </div>
       </div>
