@@ -41,9 +41,9 @@
 
 - ✅ Set up Supabase project and database
 - ✅ Replace passcode system with Supabase Auth (email/password)
-- Configure Supabase authentication in React app
-- Create user profiles table and basic user management
-- Implement data isolation per user (user-scoped data)
+- ✅ Configure Supabase authentication in React app
+- ✅ Create user profiles table and basic user management
+- ✅ Implement data isolation per user (user-scoped data)
 
 ### Phase 2: User-Scoped Data Management (Priority 2 - Depends on Phase 1) - Using Supabase
 
