@@ -4,10 +4,12 @@ import { StepList } from '../components/StepList';
 import { ChatInterface } from '../components/ChatInterface';
 import { AuthForm } from '../components/AuthForm';
 import { UserProfile } from '../components/UserProfile';
+import { ProgressDebugPanel } from '../components/ProgressDebugPanel';
 import { useWorkflow } from '../hooks/useWorkflow';
 import { useProgress } from '../hooks/useProgress'; // Keep using the original for now
 import { useProcessing } from '../hooks/useProcessing';
 import { useAuth } from '../context/AuthContext';
+import { useRealtimeProgress } from '../hooks/useRealtimeProgress';
 
 const Index = () => {
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
@@ -28,6 +30,13 @@ const Index = () => {
     updateStepConversationId,
     updateStepConversationProgress
   } = useProgress(workflow, workflowLoading);
+
+  // Get real-time connection status for debug panel
+  const { isConnected: isRealtimeConnected } = useRealtimeProgress({
+    userId: user?.id,
+    workflowId: workflow?.id || 'character-creation-quiz',
+    enabled: !!user && !!workflow // Re-enable real-time
+  });
 
   // Initialize the processing service and pass the current progress state and handlers
   useProcessing(true, progress, {
@@ -164,6 +173,12 @@ const Index = () => {
           </div>
         </div>
       </div>
+      
+      {/* Debug panel - only shows in development */}
+      <ProgressDebugPanel 
+        progress={progress}
+        isRealtimeConnected={isRealtimeConnected}
+      />
     </div>
   );
 };
