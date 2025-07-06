@@ -1,29 +1,30 @@
 import { useState, useEffect, useCallback } from 'react';
-import { UserProgress, StepStatus, CapturedData } from '../types/userProgress';
+import { UserProgress, StepStatus, CapturedData, Message, Analysis } from '../types/userProgress';
 import { Workflow } from '../types/workflow';
 import { storageService } from '../services/storageService';
 import { progressService } from '../services/progressService';
 import { SupabaseProgressService } from '../services/supabaseProgressService';
 import { useRealtimeProgress } from './useRealtimeProgress';
 import { useAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabase';
 
 export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolean) => {
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
-  // Set up real-time subscriptions for progress updates
+  // Set up real-time subscriptions for progress updates (temporarily disabled for debugging)
+  const isConnected = false; // Temporarily disable real-time
+  
+  /*
   const { isConnected } = useRealtimeProgress({
     userId: user?.id,
     workflowId: workflow?.id || 'character-creation-quiz',
     onProgressUpdate: (payload) => {
-      console.log('📡 Real-time progress update received in hook:', payload);
-      // TODO: Update local progress state when real-time updates come in
-      // This will sync progress across multiple browser tabs/devices
+      console.log('📡 Real-time progress update received:', payload);
     },
     enabled: !!user && !!workflow
   });
+  */
 
   useEffect(() => {
     // Don't initialize progress until workflow is loaded
@@ -39,40 +40,62 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
         
         let userProgress: UserProgress | null = null;
 
-        // For now, skip Supabase and use localStorage until database tables are created
-        console.log('� Using localStorage system (Supabase tables not yet created)...');
-        const session = storageService.getCurrentSession();
-        console.log('📅 Current session:', session);
-        
-        userProgress = storageService.getUserProgress(session.sessionId);
-        console.log('📊 Existing progress from localStorage:', userProgress);
-
-        if (!userProgress) {
-          console.log('➕ Creating new progress...');
-          userProgress = progressService.createNewProgress(session.sessionId, session.workflowId);
-          storageService.saveUserProgress(userProgress);
-          console.log('✅ New progress created:', userProgress);
+        // Try to load from Supabase first if user is authenticated
+        if (user?.id) {
+          console.log('🗄️ Attempting to load progress from Supabase...');
+          try {
+            userProgress = await SupabaseProgressService.loadUserProgress(
+              user.id, 
+              workflow.id || 'character-creation-quiz'
+            );
+            console.log('📊 Supabase progress result:', userProgress);
+          } catch (error) {
+            console.warn('⚠️ Supabase progress loading failed, falling back to localStorage:', error);
+            userProgress = null;
+          }
         }
 
-        // TODO: Migrate to Supabase once database tables are created
-        // if (user?.id) {
-        //   console.log('�️ Attempting to load progress from Supabase...');
-        //   try {
-        //     userProgress = await SupabaseProgressService.loadUserProgress(
-        //       user.id, 
-        //       workflow.id || 'character-creation-quiz'
-        //     );
-        //     console.log('📊 Supabase progress result:', userProgress);
-        //   } catch (error) {
-        //     console.warn('⚠️ Supabase progress loading failed, falling back to localStorage:', error);
-        //     userProgress = null;
-        //   }
-        // }
+        // Fallback to localStorage system if Supabase fails or no user
+        if (!userProgress) {
+          console.log('📁 Falling back to localStorage system...');
+          const session = storageService.getCurrentSession();
+          console.log('📅 Current session:', session);
+          
+          userProgress = storageService.getUserProgress(session.sessionId);
+          console.log('📊 Existing progress from localStorage:', userProgress);
+
+          if (!userProgress) {
+            console.log('➕ Creating new progress...');
+            userProgress = progressService.createNewProgress(session.sessionId, session.workflowId);
+            storageService.saveUserProgress(userProgress);
+            console.log('✅ New progress created:', userProgress);
+          }
+
+          // If user is authenticated, migrate localStorage data to Supabase
+          if (user?.id && userProgress) {
+            console.log('🔄 Migrating localStorage progress to Supabase...');
+            try {
+              // Don't await this - run in background to avoid blocking UI
+              SupabaseProgressService.saveUserProgress(user.id, userProgress)
+                .then(migrationSuccess => {
+                  if (migrationSuccess) {
+                    console.log('✅ Progress migrated to Supabase successfully');
+                  } else {
+                    console.warn('⚠️ Failed to migrate progress to Supabase');
+                  }
+                })
+                .catch(error => {
+                  console.warn('⚠️ Error migrating progress to Supabase:', error);
+                });
+            } catch (error) {
+              console.warn('⚠️ Error starting Supabase migration:', error);
+            }
+          }
+        }
 
         console.log('🎯 Setting progress state...');
         setProgress(userProgress);
         console.log('✅ Progress initialization complete!');
-        console.log('📡 Real-time connection:', isConnected ? 'Connected' : 'Disconnected');
       } catch (error) {
         console.error('❌ Failed to initialize progress:', error);
       } finally {
@@ -108,7 +131,7 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
       
       return updatedProgress;
     });
-  }, [user?.id]); // Add user?.id as dependency
+  }, [user?.id]); // progressService and storageService are stable
 
   const activateStep = useCallback((stepId: string) => {
     if (!progress) return;
@@ -171,16 +194,24 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
         return updatedProgress;
       });
     },
-    [user?.id] // Add user?.id as dependency
+    [user?.id]
   );
 
   const updateStepConversationProgress = useCallback(
     (
       stepId: string,
-      progressData: { stepStatus?: StepStatus, analysis?: any; success?: boolean; conversationStatus?: string }
+      progressData: { 
+        stepStatus?: StepStatus; 
+        analysis?: Analysis; 
+        success?: boolean; 
+        conversationStatus?: string;
+        messages?: Message[]; // Add messages support
+      }
     ) => {
       setProgress(prevProgress => {
         if (!prevProgress) return null;
+
+        console.log('🔄 Updating step conversation progress:', { stepId, progressData });
 
         const updatedProgress = progressService.updateStepConversationProgress(
           prevProgress,
@@ -191,7 +222,7 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
         storageService.saveUserProgress(updatedProgress);
         
         console.log("Updated Progress (inside hook):", updatedProgress);
-        console.log("Step status after update (inside hook):", updatedProgress.stepProgress[stepId]?.status);
+        console.log("Messages after update:", updatedProgress.stepProgress[stepId]?.messages);
 
         // If the conversation was successful and it completed the step, check for next step
         if (

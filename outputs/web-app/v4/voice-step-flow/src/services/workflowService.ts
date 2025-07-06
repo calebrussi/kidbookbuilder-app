@@ -1,5 +1,6 @@
 import { Workflow } from '../types/workflow';
 import { supabase } from '../lib/supabase';
+import { PersonalizedAgentService } from './personalizedAgentService';
 
 // Load workflows from Supabase database
 class WorkflowService {
@@ -26,12 +27,43 @@ class WorkflowService {
 
       console.log('🔍 WorkflowService: Fetching workflows from database...');
       
-      // Temporarily use hardcoded workflow data to bypass database issues
-      console.log('⚠️  WorkflowService: Using hardcoded workflow for debugging...');
+      // Use real API workflow instead of hardcoded
+      console.log('📡 WorkflowService: Fetching workflow from API...');
       
-      const hardcodedWorkflow = {
+      const response = await fetch('/api/workflow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: 'character-creation-quiz', // Dummy name for API
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
+
+      const apiWorkflow = await response.json();
+      
+      // Cache the API workflow
+      this.workflow = {
+        ...apiWorkflow,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as Workflow;
+      
+      console.log('✅ WorkflowService: Using API workflow:', this.workflow);
+      return this.workflow;
+
+    } catch (error) {
+      console.error('❌ WorkflowService: Failed to load workflow from API:', error);
+      console.log('🔄 WorkflowService: Falling back to hardcoded workflow...');
+      
+      // Fallback to hardcoded workflow when API fails
+      const fallbackWorkflow = {
         id: "character-creation-quiz",
-        title: "Character Creation Quiz",
+        title: "Character Creation Quiz", 
         description: "Create your perfect story character through this interactive quiz",
         sections: [
           {
@@ -44,81 +76,50 @@ class WorkflowService {
                 title: "What is your name?",
                 order: 0,
                 sectionId: "introduction",
-                agentId: "placeholder-agent-id"
-              }
-            ]
+                agentId: "agent_01jz94kfyffcsteqk4t0yzvb19",
+              },
+            ],
           },
           {
-            id: "story-style",
+            id: "story-style", 
             title: "Tell Me Your Story Style",
             order: 1,
             steps: [
               {
-                id: "favorite-stories",
+                id: "story-preferences",
                 title: "What stories do you love?",
                 order: 1,
                 sectionId: "story-style",
-                agentId: "placeholder-agent-id"
+                agentId: "agent_01jz94kpdjekxv5c8n41z1tbc6",
               },
-              {
-                id: "story-length",
-                title: "How long should your story be?",
-                order: 2,
-                sectionId: "story-style",
-                agentId: "placeholder-agent-id"
-              }
-            ]
+            ],
           },
           {
-            id: "story-world",
-            title: "Design Your Story World",
+            id: "character-creation",
+            title: "Create Your Character", 
             order: 2,
             steps: [
               {
-                id: "world-type",
-                title: "Magic or Real World?",
-                order: 3,
-                sectionId: "story-world",
-                agentId: "placeholder-agent-id"
+                id: "character-details",
+                title: "Character name, special ability, and favorite activity",
+                order: 2,
+                sectionId: "character-creation",
+                agentId: "agent_01jz94kta6encvtk7rabyatkkb",
               },
-              {
-                id: "setting",
-                title: "Pick Your Setting",
-                order: 4,
-                sectionId: "story-world",
-                agentId: "placeholder-agent-id"
-              },
-              {
-                id: "time-period",
-                title: "When Does It Happen?",
-                order: 5,
-                sectionId: "story-world",
-                agentId: "placeholder-agent-id"
-              },
-              {
-                id: "environment",
-                title: "Weather & Places",
-                order: 6,
-                sectionId: "story-world",
-                agentId: "placeholder-agent-id"
-              }
-            ]
-          }
-        ]
+            ],
+          },
+        ],
       };
 
-      // Cache the hardcoded workflow
+      // Cache the fallback workflow
       this.workflow = {
-        ...hardcodedWorkflow,
+        ...fallbackWorkflow,
         createdAt: new Date(),
         updatedAt: new Date()
       } as Workflow;
       
-      console.log('✅ WorkflowService: Using hardcoded workflow:', this.workflow);
+      console.log('✅ WorkflowService: Using fallback workflow:', this.workflow);
       return this.workflow;
-    } catch (error) {
-      console.error('❌ WorkflowService: Failed to load workflow:', error);
-      throw new Error(error instanceof Error ? error.message : 'Unable to load workflow data');
     }
   }
 
@@ -154,6 +155,33 @@ class WorkflowService {
     }
     
     return null;
+  }
+
+  /**
+   * Get personalized agent ID for a user and step
+   */
+  static async getPersonalizedAgentId(
+    userId: string, 
+    stepId: string, 
+    userProgress?: any
+  ): Promise<string> {
+    try {
+      // Extract personalization data from user's progress
+      const personalization = PersonalizedAgentService.extractPersonalizationFromProgress(userProgress);
+      
+      // Get appropriate agent (static or dynamic)
+      const agentId = await PersonalizedAgentService.getAgentForStep(
+        userId, 
+        stepId, 
+        personalization
+      );
+      
+      return agentId;
+    } catch (error) {
+      console.error(`Error getting personalized agent for ${stepId}:`, error);
+      // Fallback to hardcoded agent
+      return "agent_01jz94kfyffcsteqk4t0yzvb19";
+    }
   }
 }
 

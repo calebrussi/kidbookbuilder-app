@@ -39,8 +39,11 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   // Get the agent ID for the current step
   const getCurrentStepAgentId = () => {
-    // Use the agent ID passed as prop, or fall back to environment variable
-    return agentId || import.meta.env.VITE_ELEVENLABS_AGENT_ID;
+    // Use the agent ID passed as prop - this should always be set by PersonalizedAgentService
+    if (!agentId) {
+      throw new Error('No agent ID provided. PersonalizedAgentService should have set the agent ID.');
+    }
+    return agentId;
   };
 
   // Get the conversation ID for the current step
@@ -63,6 +66,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       
       // Only process assistant messages here (user messages are handled in the sendMessage function)
       if (message.isBot && currentProgress) {
+        console.log('🤖 Processing assistant message:', message.content);
+        
         // Save the assistant message to the user's progress
         const updatedProgress = progressService.addMessage(
           currentProgress,
@@ -73,16 +78,36 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           }
         );
 
+        console.log('📝 Updated progress with assistant message:', {
+          stepId: updatedProgress.currentStepId,
+          messageCount: updatedProgress.stepProgress[updatedProgress.currentStepId]?.messages?.length
+        });
+
         // Update the current progress state
         setCurrentProgress(updatedProgress);
 
+        // Notify parent component about the progress update
+        if (onConversationProgressUpdate) {
+          const messages = updatedProgress.stepProgress[updatedProgress.currentStepId]?.messages || [];
+          console.log('📤 Notifying parent with messages:', messages.length);
+          
+          onConversationProgressUpdate(
+            updatedProgress.currentStepId,
+            {
+              messages: messages
+            }
+          );
+        }
+
         // If we have access to storage service, update the progress there too
         if (onConversationIdUpdate) {
-          onConversationIdUpdate(
-            updatedProgress.currentStepId,
-            updatedProgress.stepProgress[updatedProgress.currentStepId]
-              .conversationId
-          );
+          const stepProgress = updatedProgress.stepProgress[updatedProgress.currentStepId];
+          if (stepProgress && stepProgress.conversationId) {
+            onConversationIdUpdate(
+              updatedProgress.currentStepId,
+              stepProgress.conversationId
+            );
+          }
         }
       }
     },
@@ -166,6 +191,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const sendUserMessage = (content: string) => {
     if (!content.trim() || !isConnected) return;
 
+    console.log('👤 Processing user message:', content);
+
     // Use the addUserMessage from ElevenLabs hook to add the message to the UI
     const message = addUserMessage(content);
 
@@ -180,15 +207,35 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         }
       );
 
+      console.log('📝 Updated progress with user message:', {
+        stepId: updatedProgress.currentStepId,
+        messageCount: updatedProgress.stepProgress[updatedProgress.currentStepId]?.messages?.length
+      });
+
       setCurrentProgress(updatedProgress);
+
+      // Notify parent component about the progress update
+      if (onConversationProgressUpdate) {
+        const messages = updatedProgress.stepProgress[updatedProgress.currentStepId]?.messages || [];
+        console.log('📤 Notifying parent with messages:', messages.length);
+        
+        onConversationProgressUpdate(
+          updatedProgress.currentStepId,
+          {
+            messages: messages
+          }
+        );
+      }
 
       // If we have a way to update the conversation ID, use it
       if (onConversationIdUpdate) {
-        onConversationIdUpdate(
-          updatedProgress.currentStepId,
-          updatedProgress.stepProgress[updatedProgress.currentStepId]
-            .conversationId
-        );
+        const stepProgress = updatedProgress.stepProgress[updatedProgress.currentStepId];
+        if (stepProgress && stepProgress.conversationId) {
+          onConversationIdUpdate(
+            updatedProgress.currentStepId,
+            stepProgress.conversationId
+          );
+        }
       }
     }
   };
@@ -248,14 +295,25 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {/* <h4 className="text-sm font-medium text-gray-700 mb-3">Conversation</h4> */}
         <ScrollArea className="h-64 border border-gray-200 rounded-lg">
           <div className="p-4 space-y-3">
-            {/* Derive messagesToDisplay from currentProgress */}
-            {(currentProgress.stepProgress[currentProgress.currentStepId]?.messages || []).length === 0 ? (
+            {/* Debug logging */}
+            {(() => {
+              const currentMessages = progress.stepProgress[progress.currentStepId]?.messages || [];
+              console.log('🖼️ Rendering messages:', {
+                stepId: progress.currentStepId,
+                messageCount: currentMessages.length,
+                messages: currentMessages
+              });
+              return null;
+            })()}
+            
+            {/* Derive messagesToDisplay from progress (parent state) */}
+            {(progress.stepProgress[progress.currentStepId]?.messages || []).length === 0 ? (
               <div className="text-center text-gray-500 py-8">
                 <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                 <p>No messages yet. Start a conversation to begin!</p>
               </div>
             ) : (
-              (currentProgress.stepProgress[currentProgress.currentStepId]?.messages || []).map((message) => (
+              (progress.stepProgress[progress.currentStepId]?.messages || []).map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.role === 'ai' ? 'justify-start' : 'justify-end'}`}

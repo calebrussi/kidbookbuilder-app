@@ -27,10 +27,18 @@ export class SupabaseProgressService {
         .limit(1)
         .maybeSingle();
 
-      const { data: progressData, error: progressError } = await Promise.race([
+      const result = await Promise.race([
         progressPromise,
         timeoutPromise
-      ]) as any;
+      ]);
+
+      // Handle timeout case
+      if (result === null) {
+        console.warn('⚠️ Supabase progress loading timed out, using localStorage fallback');
+        return null;
+      }
+
+      const { data: progressData, error: progressError } = result;
 
       if (progressError) {
         console.error('❌ Error loading user progress from Supabase:', progressError);

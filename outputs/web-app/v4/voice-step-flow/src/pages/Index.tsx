@@ -10,9 +10,11 @@ import { useProgress } from '../hooks/useProgress'; // Keep using the original f
 import { useProcessing } from '../hooks/useProcessing';
 import { useAuth } from '../context/AuthContext';
 import { useRealtimeProgress } from '../hooks/useRealtimeProgress';
+import { PersonalizedAgentService } from '../services/personalizedAgentService';
 
 const Index = () => {
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [currentAgentId, setCurrentAgentId] = useState<string | undefined>(undefined);
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   
@@ -43,6 +45,61 @@ const Index = () => {
     onConversationIdUpdate: updateStepConversationId,
     onConversationProgressUpdate: updateStepConversationProgress
   });
+
+  // Update agent ID when progress or workflow changes
+  useEffect(() => {
+    const updateAgentId = async () => {
+      console.log('🔧 updateAgentId called:', { 
+        hasProgress: !!progress, 
+        hasWorkflow: !!workflow, 
+        hasUser: !!user,
+        currentStepId: progress?.currentStepId 
+      });
+      
+      if (!progress || !workflow || !user) {
+        console.log('⏹️ Missing required data, setting agentId to undefined');
+        setCurrentAgentId(undefined);
+        return;
+      }
+
+      // Clear current agent ID while resolving new one
+      console.log('🔄 Clearing current agent ID and resolving new one...');
+      setCurrentAgentId(undefined);
+
+      try {
+        console.log('🚀 Starting agent resolution...');
+        // Extract user personalization data from progress
+        const userPersonalization = PersonalizedAgentService.extractPersonalizationFromProgress(progress);
+        console.log('📊 Extracted personalization data:', userPersonalization);
+        
+        // Add timeout to prevent hanging
+        const timeoutPromise = new Promise<string>((_, reject) => 
+          setTimeout(() => reject(new Error('Agent resolution timeout')), 15000)
+        );
+        
+        const agentPromise = PersonalizedAgentService.getAgentForStep(
+          user.id,
+          progress.currentStepId,
+          workflow,
+          userPersonalization
+        );
+        
+        const agentId = await Promise.race([agentPromise, timeoutPromise]);
+        console.log('🎯 Agent ID resolved:', agentId);
+        setCurrentAgentId(agentId);
+      } catch (error) {
+        console.error('❌ Error getting agent ID:', error);
+        // Fallback to direct workflow lookup
+        const fallbackAgentId = workflow.sections
+          .flatMap(s => s.steps)
+          .find(step => step.id === progress.currentStepId)?.agentId;
+        console.log('🔄 Using fallback agent ID:', fallbackAgentId);
+        setCurrentAgentId(fallbackAgentId);
+      }
+    };
+
+    updateAgentId();
+  }, [progress?.currentStepId, workflow, user]);
 
   const handleAuthentication = async (email: string, password: string, isSignUpMode: boolean) => {
     setAuthLoading(true);
@@ -135,11 +192,7 @@ const Index = () => {
   }
 
   const getCurrentStepAgentId = () => {
-    if (!progress || !workflow) return undefined;
-    
-    return workflow.sections
-      .flatMap(s => s.steps)
-      .find(step => step.id === progress.currentStepId)?.agentId;
+    return currentAgentId;
   };
 
   return (
@@ -163,13 +216,22 @@ const Index = () => {
           </div>
           
           <div className="lg:sticky lg:top-8 lg:self-start">
-            <ChatInterface
-              progress={progress}
-              onCompleteStep={completeCurrentStep}
-              agentId={getCurrentStepAgentId()}
-              onConversationIdUpdate={updateStepConversationId}
-              onConversationProgressUpdate={updateStepConversationProgress}
-            />
+            {currentAgentId ? (
+              <ChatInterface
+                progress={progress}
+                onCompleteStep={completeCurrentStep}
+                agentId={getCurrentStepAgentId()}
+                onConversationIdUpdate={updateStepConversationId}
+                onConversationProgressUpdate={updateStepConversationProgress}
+              />
+            ) : (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                  <p className="text-gray-600">Loading conversation agent...</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

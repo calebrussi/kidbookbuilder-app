@@ -166,6 +166,7 @@ class ProgressService {
       analysis?: Analysis;
       success?: boolean;
       conversationStatus?: string;
+      messages?: Message[]; // Add messages support
     }
   ): UserProgress {
     const updatedProgress = { ...progress };
@@ -191,6 +192,7 @@ class ProgressService {
       capturedData: newCaptured,
       success: progressData.success !== undefined ? progressData.success : prevStep.success,
       conversationStatus: progressData.conversationStatus || prevStep.conversationStatus,
+      messages: progressData.messages || prevStep.messages || [], // Update messages if provided
       lastModified: new Date()
     };
 

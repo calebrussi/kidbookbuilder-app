@@ -48,8 +48,8 @@
 ### Phase 2: User-Scoped Data Management (Priority 2 - Depends on Phase 1) - Using Supabase
 
 - ✅ Design Supabase database schema for user progress
-- ❌ Create tables: user_progress, step_progress, captured_data
-- ❌ Set up Row Level Security (RLS) policies for data isolation
+- ✅ Create tables: user_progress, step_progress, captured_data
+- ✅ Set up Row Level Security (RLS) policies for data isolation
 - ✅ User-specific workflow loading (each user gets their own experience)
 - ✅ Implement Supabase real-time subscriptions for progress sync (code ready)
 - ✅ Migration from localStorage to Supabase database (code ready)
@@ -57,13 +57,21 @@
 - ✅ Real-time updates across browser tabs/devices (code ready)
 - ✅ Offline resilience with localStorage fallback
 - ✅ Debug panel for testing and troubleshooting
+- ✅ Agent conversation data persistence (names, preferences, etc.)
 
 ### Phase 3: Personalized Agent System (Priority 3 - Depends on Phase 1 & 2)
 
-- User-specific agent creation (not global agents)
-- Dynamic workflow generation per user
-- Agent lifecycle management (create/cleanup per user session)
-- Automated personalized agent creation based on user data
+- ✅ Design PersonalizedAgentService architecture
+- ✅ Implement static vs dynamic agent selection logic
+- ✅ Create user_agents database table for agent mappings
+- ✅ Build agent personalization prompt generation system
+- ✅ User data extraction from progress (names, preferences, etc.)
+- 🔄 User-specific agent creation (API endpoint testing in progress)
+- ❌ Dynamic workflow generation per user
+- ❌ Agent lifecycle management (create/cleanup per user session)
+- 🔄 Automated personalized agent creation based on user data (data extraction fixed)
+- ❌ API endpoints for dynamic agent creation and cleanup
+- ❌ Integration with existing workflow-setup scripts
 
 ### Phase 4: Story Generation & Continuation (Priority 4 - Creative Features)
 
