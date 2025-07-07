@@ -64,6 +64,13 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
           userProgress = storageService.getUserProgress(session.sessionId);
           console.log('📊 Existing progress from localStorage:', userProgress);
 
+          // Check if progress is corrupted (empty currentStepId)
+          if (userProgress && !userProgress.currentStepId) {
+            console.warn('🚨 Corrupted progress detected (empty currentStepId), clearing and creating fresh...');
+            userProgress = null;
+            storageService.clearAllData();
+          }
+
           if (!userProgress) {
             console.log('➕ Creating new progress...');
             userProgress = progressService.createNewProgress(session.sessionId, session.workflowId);

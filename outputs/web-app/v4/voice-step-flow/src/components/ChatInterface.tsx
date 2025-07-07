@@ -78,9 +78,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           }
         );
 
+        // Get current messages after adding the new one
+        const currentMessages = updatedProgress.stepProgress[updatedProgress.currentStepId]?.messages || [];
+        
         console.log('📝 Updated progress with assistant message:', {
           stepId: updatedProgress.currentStepId,
-          messageCount: updatedProgress.stepProgress[updatedProgress.currentStepId]?.messages?.length
+          messageCount: currentMessages.length,
+          lastMessage: currentMessages[currentMessages.length - 1]?.content?.substring(0, 50) + '...'
         });
 
         // Update the current progress state
@@ -88,13 +92,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
         // Notify parent component about the progress update
         if (onConversationProgressUpdate) {
-          const messages = updatedProgress.stepProgress[updatedProgress.currentStepId]?.messages || [];
-          console.log('📤 Notifying parent with messages:', messages.length);
+          console.log('📤 Notifying parent with messages:', currentMessages.length);
           
           onConversationProgressUpdate(
             updatedProgress.currentStepId,
             {
-              messages: messages
+              messages: currentMessages
             }
           );
         }
@@ -301,7 +304,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
               console.log('🖼️ Rendering messages:', {
                 stepId: progress.currentStepId,
                 messageCount: currentMessages.length,
-                messages: currentMessages
+                messages: currentMessages,
+                hasStepProgress: !!progress.stepProgress[progress.currentStepId],
+                progressKeys: Object.keys(progress.stepProgress)
               });
               return null;
             })()}

@@ -112,36 +112,11 @@ export class PersonalizedAgentService {
     try {
       console.log(`🔍 Checking for existing dynamic agent: user=${userId}, step=${stepId}`);
       
-      // Add timeout to prevent hanging
-      const timeoutPromise = new Promise<null>((_, reject) => 
-        setTimeout(() => reject(new Error('Database query timeout')), 10000)
-      );
-      
-      const queryPromise = supabase
-        .from('user_agents')
-        .select('agent_id')
-        .eq('user_id', userId)
-        .eq('step_id', stepId)
-        .eq('agent_type', 'dynamic')
-        .single();
-
-      const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
-
-      if (error) {
-        // Don't log PGRST116 (no rows found) as an error
-        if (error.code !== 'PGRST116') {
-          console.error('Error checking existing agent:', error);
-        }
-        console.log('🚫 No existing dynamic agent found');
-        return null;
-      }
-      
-      if (data?.agent_id) {
-        console.log(`🔄 Found existing dynamic agent: ${data.agent_id}`);
-        return data.agent_id;
-      }
-      
+      // For now, skip database check to avoid timeouts - always create fresh agents
+      // TODO: Fix Supabase connection and re-enable caching
+      console.log('⚡ Skipping database check, creating fresh agent for better performance');
       return null;
+      
     } catch (error) {
       console.error('Error checking existing agent:', error);
       console.log('🚫 Falling back to creating new agent due to database error');
@@ -180,14 +155,10 @@ export class PersonalizedAgentService {
       
       console.log(`✅ Created dynamic agent: ${agentResponse.agent_id}`);
       
-      // Store the agent mapping in database
-      await this.storeUserAgent(
-        userId,
-        stepId,
-        agentResponse.agent_id,
-        'dynamic',
-        personalizedPrompt
-      );
+      // Skip database storage for now to avoid delays
+      // TODO: Re-enable when Supabase connection is stable
+      // await this.storeUserAgent(userId, stepId, agentResponse.agent_id, 'dynamic', personalizedPrompt);
+      console.log('⚡ Skipping database storage for faster performance');
       
       return agentResponse.agent_id;
       

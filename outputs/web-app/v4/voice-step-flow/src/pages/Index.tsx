@@ -4,7 +4,6 @@ import { StepList } from '../components/StepList';
 import { ChatInterface } from '../components/ChatInterface';
 import { AuthForm } from '../components/AuthForm';
 import { UserProfile } from '../components/UserProfile';
-import { ProgressDebugPanel } from '../components/ProgressDebugPanel';
 import { useWorkflow } from '../hooks/useWorkflow';
 import { useProgress } from '../hooks/useProgress'; // Keep using the original for now
 import { useProcessing } from '../hooks/useProcessing';
@@ -72,9 +71,9 @@ const Index = () => {
         const userPersonalization = PersonalizedAgentService.extractPersonalizationFromProgress(progress);
         console.log('📊 Extracted personalization data:', userPersonalization);
         
-        // Add timeout to prevent hanging
+        // Add timeout to prevent hanging - increased for dynamic agent creation
         const timeoutPromise = new Promise<string>((_, reject) => 
-          setTimeout(() => reject(new Error('Agent resolution timeout')), 15000)
+          setTimeout(() => reject(new Error('Agent resolution timeout')), 30000)
         );
         
         const agentPromise = PersonalizedAgentService.getAgentForStep(
@@ -235,12 +234,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-      
-      {/* Debug panel - only shows in development */}
-      <ProgressDebugPanel 
-        progress={progress}
-        isRealtimeConnected={isRealtimeConnected}
-      />
     </div>
   );
 };

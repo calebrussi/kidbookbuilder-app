@@ -37,71 +37,113 @@ export async function createPersonalizedAgent(request: CreateAgentRequest): Prom
     throw new Error('ElevenLabs API key not configured');
   }
 
+  console.log('🔑 API Key status:', {
+    hasApiKey: !!apiKey,
+    keyLength: apiKey?.length || 0,
+    keyPrefix: apiKey?.substring(0, 8) + '...' || 'none',
+    envVarName: 'VITE_ELEVENLABS_API_KEY'
+  });
+
   console.log('🎯 Creating personalized agent:', {
     name: request.name,
     description: request.description.substring(0, 100) + '...'
   });
 
   try {
-    // Try different possible endpoints for agent creation
-    const endpoints = [
-      'https://api.elevenlabs.io/v1/convai/agents',
-      'https://api.elevenlabs.io/v1/agents',
-      'https://api.elevenlabs.io/v1/convai/agent',
-      'https://api.elevenlabs.io/v1/agent'
-    ];
+    // Use the exact same approach as your working scripts
+    console.log('🔗 Using working endpoint: https://api.elevenlabs.io/v1/convai/agents/create');
     
-    let lastError;
-    
-    for (const endpoint of endpoints) {
-      try {
-        console.log(`🔗 Trying endpoint: ${endpoint}`);
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'xi-api-key': apiKey,
+    const response = await fetch('https://api.elevenlabs.io/v1/convai/agents/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'xi-api-key': apiKey,
+      },
+      body: JSON.stringify({
+        name: request.name,
+        conversation_config: {
+          conversation: {
+            text_only: false,
+            max_duration_seconds: 600,
+            client_events: [
+              "audio",
+              "interruption", 
+              "user_transcript",
+              "agent_response",
+              "agent_response_correction",
+              "vad_score"
+            ]
           },
-          body: JSON.stringify({
-            name: request.name,
-            description: request.description,
-            prompt: request.prompt,
-            voice_id: request.voice_id || 'pNInz6obpgDQGcFmaJgB', // Default voice
+          agent: {
+            first_message: "Hi! I'm here to help you with this part of your story creation journey.",
             language: request.language || 'en',
-            // Additional ElevenLabs agent configuration
-            conversation_config: {
-              agent_prompt: request.prompt,
-              turn_detection: {
-                type: 'server_vad',
-                threshold: 0.5,
-                silence_duration_ms: 500
-              }
+            prompt: {
+              prompt: request.prompt,
+              llm: "gemini-2.0-flash-001",
+              temperature: 0.7,
+              max_tokens: -1,
+              tools: [
+                {
+                  name: "end_call",
+                  description: "End the call when the conversation objective has been achieved.",
+                  response_timeout_secs: 20,
+                  type: "system",
+                  params: {
+                    system_tool_type: "end_call"
+                  }
+                }
+              ]
             }
-          })
-        });
-
-        if (response.ok) {
-          const agentData = await response.json();
-          console.log(`✅ Successfully created personalized agent with ${endpoint}:`, agentData.agent_id);
-          return {
-            agent_id: agentData.agent_id,
-            name: agentData.name || request.name,
-            status: 'created'
-          };
-        } else {
-          const errorData = await response.json().catch(() => ({}));
-          lastError = `${endpoint}: ${response.status} - ${errorData.message || response.statusText}`;
-          console.log(`❌ Failed ${endpoint}: ${response.status}`);
+          },
+          tts: {
+            voice_id: request.voice_id || 'pNInz6obpgDQGcFmaJgB'
+          }
+        },
+        platform_settings: {
+          auth: {
+            enable_auth: true
+          },
+          evaluation: {},
+          data_collection: {}
         }
-      } catch (endpointError) {
-        lastError = `${endpoint}: ${endpointError.message}`;
-        console.log(`❌ Error with ${endpoint}:`, endpointError.message);
-      }
-    }
-    
-    // If all endpoints failed, throw the last error
-    throw new Error(`All ElevenLabs API endpoints failed. Last error: ${lastError}`);
+      })
+    });
 
+    if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = { message: 'Failed to parse error response' };
+      }
+      
+      console.error('❌ ElevenLabs API Error Details:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorData,
+        requestBody: {
+          name: request.name,
+          description: request.description?.substring(0, 100) + '...',
+          promptLength: request.prompt?.length,
+          voice_id: request.voice_id || 'pNInz6obpgDQGcFmaJgB'
+        }
+      });
+      
+      throw new Error(`ElevenLabs API error: ${response.status} - ${errorData.message || response.statusText}`);
+    }
+
+    const agentData = await response.json();
+    console.log('✅ Successfully created personalized agent:', agentData.agent_id);
+    
+    return {
+      agent_id: agentData.agent_id,
+      name: agentData.name || request.name,
+      description: agentData.description,
+      prompt: agentData.prompt,
+      voice_id: agentData.voice_id,
+      status: 'created'
+    };
+    
   } catch (error) {
     console.error('❌ Failed to create personalized agent:', error);
     throw error;

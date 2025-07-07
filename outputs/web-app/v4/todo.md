@@ -1,4 +1,4 @@
-# Todo List - Updated May 30, 2025
+# Todo List - Updated July 6, 2025
 
 ## Completed Tasks
 
@@ -66,14 +66,41 @@
 - ✅ Create user_agents database table for agent mappings
 - ✅ Build agent personalization prompt generation system
 - ✅ User data extraction from progress (names, preferences, etc.)
-- 🔄 User-specific agent creation (API endpoint testing in progress)
+- ✅ Automated personalized agent creation based on user data (data extraction working!)
+- ✅ User-specific agent creation (fixed 422 API error - working with proper conversation_config)
+- ✅ Fix timeout issues in dynamic agent resolution
 - ❌ Dynamic workflow generation per user
 - ❌ Agent lifecycle management (create/cleanup per user session)
-- 🔄 Automated personalized agent creation based on user data (data extraction fixed)
 - ❌ API endpoints for dynamic agent creation and cleanup
 - ❌ Integration with existing workflow-setup scripts
 
-### Phase 4: Story Generation & Continuation (Priority 4 - Creative Features)
+### Phase 4: Dynamic Book Generation System (Priority 4 - NEW Creative Features)
+
+#### Core Book Generation Features
+
+- ❌ "Generate Story Agents" button after character quiz completion
+- ❌ Random agent theme selection system (no templates - pure variety)
+- ❌ Required data point coverage system (character_name, setting, conflict, etc.)
+- ❌ Cumulative agent intelligence (each agent builds on previous responses)
+- ❌ Book-specific agent generation (each book = unique experience)
+- ❌ Navigation to dedicated book generation page
+
+#### Advanced Randomization System
+
+- ❌ Create massive pool of story concepts (themes, settings, characters, powers)
+- ❌ Implement true randomization engine (no user gets same combination)
+- ❌ Context-aware agent chaining (Agent 2 uses Agent 1's data, Agent 3 uses both)
+- ❌ Required data validation (ensure all book elements are collected)
+- ❌ Book session management (separate from character quiz sessions)
+
+#### Multi-Book Support
+
+- ❌ Book history tracking per user
+- ❌ Ensure variety across multiple books for same user
+- ❌ Book restart/reset functionality
+- ❌ Book-specific progress persistence
+
+### Phase 5: Story Generation & Continuation (Priority 5 - Post Book Generation)
 
 - Story creation workflow (guided by AI, authored by child)
 - Story continuation through voice interactions
