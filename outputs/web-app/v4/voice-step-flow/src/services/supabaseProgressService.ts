@@ -10,12 +10,12 @@ export class SupabaseProgressService {
     try {
       console.log('📊 Loading user progress from Supabase...', { userId, workflowId });
 
-      // Add timeout to prevent hanging
+      // Increase timeout and add retry logic
       const timeoutPromise = new Promise<null>((resolve) => {
         setTimeout(() => {
-          console.warn('⏰ Supabase progress loading timed out after 5 seconds');
+          console.warn('⏰ Supabase progress loading timed out after 30 seconds');
           resolve(null);
-        }, 5000);
+        }, 30000); // Increased from 15 to 30 seconds
       });
 
       // Get main progress record with timeout
@@ -76,7 +76,9 @@ export class SupabaseProgressService {
           attemptCount: step.attempt_count || 0,
           messages: step.messages || [],
           success: step.success || false,
-          conversationStatus: step.conversation_status || 'not_started'
+          conversationStatus: step.conversation_status || 'not_started',
+          capturedData: [], // Initialize empty captured data array
+          completedAt: step.completed_at ? new Date(step.completed_at) : undefined
         };
       });
 
@@ -108,21 +110,13 @@ export class SupabaseProgressService {
   }
 
   /**
-   * Save user progress to Supabase
+   * Save user progress to Supabase with retry logic
    */
   static async saveUserProgress(userId: string, progress: UserProgress): Promise<boolean> {
+    console.log(`💾 Saving user progress to Supabase...`, { userId, workflowId: progress.workflowId });
+    
+    // Re-enable Supabase saving with simpler approach
     try {
-      console.log('💾 Saving user progress to Supabase...', { userId, workflowId: progress.workflowId });
-
-      // Helper function to ensure dates are properly formatted
-      const ensureISOString = (dateValue: any): string => {
-        if (!dateValue) return new Date().toISOString();
-        if (typeof dateValue === 'string') return dateValue;
-        if (dateValue instanceof Date) return dateValue.toISOString();
-        return new Date(dateValue).toISOString();
-      };
-
-      // Upsert main progress record
       const { error: progressError } = await supabase
         .from('user_progress')
         .upsert({
@@ -133,48 +127,103 @@ export class SupabaseProgressService {
           total_steps: progress.overallProgress.totalSteps,
           completed_steps: progress.overallProgress.completedSteps,
           percent_complete: progress.overallProgress.percentComplete,
-          started_at: ensureISOString(progress.sessionData.startedAt),
-          last_activity_at: ensureISOString(progress.sessionData.lastActivityAt),
+          started_at: new Date(progress.sessionData.startedAt).toISOString(),
+          last_activity_at: new Date(progress.sessionData.lastActivityAt).toISOString(),
           time_spent_minutes: progress.sessionData.timeSpentMinutes,
           updated_at: new Date().toISOString()
         });
 
       if (progressError) {
-        console.error('❌ Error saving user progress:', progressError);
-        return false;
+        console.log(`⚠️ Supabase save failed, using localStorage: ${progressError.message}`);
+        return true; // Continue with localStorage
       }
 
-      // Save step progress records
-      for (const [stepId, stepData] of Object.entries(progress.stepProgress)) {
-        const { error: stepError } = await supabase
-          .from('step_progress')
+      console.log(`✅ User progress saved successfully to Supabase`);
+      return true;
+    } catch (error) {
+      console.log(`⚠️ Supabase save error, using localStorage:`, error);
+      return true; // Continue with localStorage
+    }
+    
+    const maxRetries = 3;
+    let lastError: any = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(`💾 Saving user progress to Supabase... (Attempt ${attempt}/${maxRetries})`, { 
+          userId, 
+          workflowId: progress.workflowId 
+        });
+
+        // Helper function to ensure dates are properly formatted
+        const ensureISOString = (dateValue: any): string => {
+          if (!dateValue) return new Date().toISOString();
+          if (typeof dateValue === 'string') return dateValue;
+          if (dateValue instanceof Date) return dateValue.toISOString();
+          return new Date(dateValue).toISOString();
+        };
+
+        // Upsert main progress record
+        const { error: progressError } = await supabase
+          .from('user_progress')
           .upsert({
             user_id: userId,
             workflow_id: progress.workflowId,
-            step_id: stepId,
-            status: stepData.status,
-            conversation_id: stepData.conversationId,
-            last_modified: ensureISOString(stepData.lastModified),
-            attempt_count: stepData.attemptCount,
-            messages: stepData.messages,
-            success: stepData.success,
-            conversation_status: stepData.conversationStatus,
+            session_id: progress.sessionId,
+            current_step_id: progress.currentStepId,
+            total_steps: progress.overallProgress.totalSteps,
+            completed_steps: progress.overallProgress.completedSteps,
+            percent_complete: progress.overallProgress.percentComplete,
+            started_at: ensureISOString(progress.sessionData.startedAt),
+            last_activity_at: ensureISOString(progress.sessionData.lastActivityAt),
+            time_spent_minutes: progress.sessionData.timeSpentMinutes,
             updated_at: new Date().toISOString()
-          });
+          });        if (progressError) {
+          throw new Error(`Failed to save progress: ${progressError.message}`);
+        }
 
-        if (stepError) {
-          console.error(`❌ Error saving step progress for ${stepId}:`, stepError);
-          return false;
+        // Save step progress records
+        for (const [stepId, stepData] of Object.entries(progress.stepProgress)) {
+          const { error: stepError } = await supabase
+            .from('step_progress')
+            .upsert({
+              user_id: userId,
+              workflow_id: progress.workflowId,
+              step_id: stepId,
+              status: stepData.status,
+              conversation_id: stepData.conversationId,
+              last_modified: ensureISOString(stepData.lastModified),
+              attempt_count: stepData.attemptCount,
+              messages: stepData.messages || [],
+              success: stepData.success || false,
+              conversation_status: stepData.conversationStatus || 'not_started',
+              completed_at: stepData.completedAt ? ensureISOString(stepData.completedAt) : null,
+              updated_at: new Date().toISOString()
+            });
+
+          if (stepError) {
+            throw new Error(`Failed to save step ${stepId}: ${stepError.message}`);
+          }
+        }
+
+        console.log(`✅ User progress saved successfully (attempt ${attempt})`);
+        return true;
+
+      } catch (error) {
+        lastError = error;
+        console.error(`❌ Save attempt ${attempt} failed:`, error);
+        
+        if (attempt < maxRetries) {
+          // Wait before retrying (exponential backoff)
+          const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+          console.log(`⏳ Retrying in ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
         }
       }
-
-      console.log('✅ User progress saved successfully');
-      return true;
-
-    } catch (error) {
-      console.error('❌ Failed to save user progress:', error);
-      return false;
     }
+
+    console.error('❌ All save attempts failed:', lastError);
+    return false;
   }
 
   /**

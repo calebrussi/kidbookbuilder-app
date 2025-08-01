@@ -30,12 +30,14 @@ export const UserProfile: React.FC = () => {
         </div>
       </div>
       
-      <button
-        onClick={handleSignOut}
-        className="text-xs text-gray-500 hover:text-red-600 transition-colors px-2 py-1 rounded hover:bg-red-50"
-      >
-        Sign out
-      </button>
+      <div className="flex items-center space-x-2">
+        <button
+          onClick={handleSignOut}
+          className="text-xs text-gray-500 hover:text-red-600 transition-colors px-2 py-1 rounded hover:bg-red-50"
+        >
+          Sign out
+        </button>
+      </div>
     </div>
   );
 };

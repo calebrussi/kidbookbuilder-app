@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { WorkflowHeader } from '../components/WorkflowHeader';
 import { StepList } from '../components/StepList';
 import { ChatInterface } from '../components/ChatInterface';
 import { AuthForm } from '../components/AuthForm';
 import { UserProfile } from '../components/UserProfile';
 import { useWorkflow } from '../hooks/useWorkflow';
-import { useProgress } from '../hooks/useProgress'; // Keep using the original for now
+import { useProgress } from '../hooks/useProgress';
 import { useProcessing } from '../hooks/useProcessing';
 import { useAuth } from '../context/AuthContext';
 import { useRealtimeProgress } from '../hooks/useRealtimeProgress';
@@ -67,7 +68,13 @@ const Index = () => {
 
       try {
         console.log('🚀 Starting agent resolution...');
-        // Extract user personalization data from progress
+        
+        // Check if we need to refresh personalization after new data capture
+        if (progress.shouldRefreshPersonalization) {
+          console.log('🔄 PERSONALIZATION REFRESH: Data capture completed, re-extracting user data...');
+        }
+        
+        // Extract user personalization data from progress (this will now have the latest data)
         const userPersonalization = PersonalizedAgentService.extractPersonalizationFromProgress(progress);
         console.log('📊 Extracted personalization data:', userPersonalization);
         
@@ -194,9 +201,70 @@ const Index = () => {
     return currentAgentId;
   };
 
+  // Check if character quiz is complete
+  const isCharacterQuizComplete = () => {
+    if (!progress) return false;
+    
+    const requiredSteps = ['name', 'story-preferences', 'character-details'];
+    const completionStatus = requiredSteps.map(stepId => ({
+      stepId,
+      status: progress.stepProgress[stepId]?.status,
+      isComplete: progress.stepProgress[stepId]?.status === 'complete'
+    }));
+    
+    // Check if workflow is complete by either:
+    // 1. All required steps are marked as complete, OR
+    // 2. The workflow has reached 'workflow_complete' state
+    const allStepsComplete = requiredSteps.every(stepId => 
+      progress.stepProgress[stepId]?.status === 'complete'
+    );
+    const workflowComplete = progress.currentStepId === 'workflow_complete';
+    const allComplete = allStepsComplete || workflowComplete;
+    
+    console.log('🎯 Quiz completion check:', {
+      allComplete,
+      allStepsComplete,
+      workflowComplete,
+      currentStepId: progress.currentStepId,
+      completionStatus,
+      totalSteps: Object.keys(progress.stepProgress).length,
+      stepProgressSnapshot: Object.fromEntries(
+        Object.entries(progress.stepProgress).map(([key, value]) => [key, { status: value.status, success: value.success }])
+      )
+    });
+    
+    return allComplete;
+  };
+
+  // Get user name for personalization
+  const getUserName = () => {
+    if (!progress) return '';
+    
+    const personalization = PersonalizedAgentService.extractPersonalizationFromProgress(progress);
+    return personalization.userName || '';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
+        
+        {/* Book Generation Prompt - Show when quiz is complete */}
+        {isCharacterQuizComplete() && (
+          <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 className="text-2xl font-bold mb-3">
+              🎉 Great job, {getUserName()}! Your character is ready!
+            </h2>
+            <p className="text-lg mb-4">
+              Now's create your personalized story! Our AI will generate unique story agents just for you.
+            </p>
+            <Link to="/book-generation">
+              <button className="bg-white text-purple-600 hover:bg-gray-100 font-semibold px-6 py-3 rounded">
+                Generate My Story Agents ✨
+              </button>
+            </Link>
+          </div>
+        )}
+        
         <UserProfile />
         <WorkflowHeader 
           title={workflow.title} 
@@ -232,6 +300,16 @@ const Index = () => {
               </div>
             )}
           </div>
+        </div>
+        
+        {/* Discrete Debug Link */}
+        <div className="text-center mt-8">
+          <Link
+            to="/debug"
+            className="text-xs text-gray-400 hover:text-gray-600"
+          >
+            🔧 Debug
+          </Link>
         </div>
       </div>
     </div>

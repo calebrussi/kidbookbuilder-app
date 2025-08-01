@@ -65,13 +65,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       console.log('Chat interface received message:', message);
       
       // Only process assistant messages here (user messages are handled in the sendMessage function)
-      if (message.isBot && currentProgress) {
+      if (message.isBot && progress) {
         console.log('🤖 Processing assistant message:', message.content);
         
         // Save the assistant message to the user's progress
         const updatedProgress = progressService.addMessage(
-          currentProgress,
-          currentProgress.currentStepId,
+          progress, // Use progress from props, not currentProgress
+          progress.currentStepId,
           {
             content: message.content,
             role: message.source,
@@ -87,17 +87,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           lastMessage: currentMessages[currentMessages.length - 1]?.content?.substring(0, 50) + '...'
         });
 
-        // Update the current progress state
+        // Update the local state AND notify parent
         setCurrentProgress(updatedProgress);
 
-        // Notify parent component about the progress update
+        // **CRITICAL FIX: Notify parent with the correct conversation data format**
         if (onConversationProgressUpdate) {
-          console.log('📤 Notifying parent with messages:', currentMessages.length);
+          console.log('📤 Notifying parent with conversation data:', currentMessages.length);
           
           onConversationProgressUpdate(
             updatedProgress.currentStepId,
             {
-              messages: currentMessages
+              messages: currentMessages,
+              success: false, // Conversation is ongoing
+              conversationStatus: 'in_progress'
             }
           );
         }
@@ -300,25 +302,29 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <div className="p-4 space-y-3">
             {/* Debug logging */}
             {(() => {
-              const currentMessages = progress.stepProgress[progress.currentStepId]?.messages || [];
+              const progressMessages = progress.stepProgress[progress.currentStepId]?.messages || [];
+              const currentProgressMessages = currentProgress?.stepProgress[currentProgress.currentStepId]?.messages || [];
               console.log('🖼️ Rendering messages:', {
                 stepId: progress.currentStepId,
-                messageCount: currentMessages.length,
-                messages: currentMessages,
+                progressMessageCount: progressMessages.length,
+                currentProgressMessageCount: currentProgressMessages.length,
+                usingCurrentProgress: currentProgressMessages.length > 0,
                 hasStepProgress: !!progress.stepProgress[progress.currentStepId],
                 progressKeys: Object.keys(progress.stepProgress)
               });
               return null;
             })()}
             
-            {/* Derive messagesToDisplay from progress (parent state) */}
-            {(progress.stepProgress[progress.currentStepId]?.messages || []).length === 0 ? (
+            {/* Derive messagesToDisplay from currentProgress (updated state) if available, otherwise progress */}
+            {((currentProgress?.stepProgress[currentProgress.currentStepId]?.messages) || 
+              (progress.stepProgress[progress.currentStepId]?.messages) || []).length === 0 ? (
               <div className="text-center text-gray-500 py-8">
                 <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                 <p>No messages yet. Start a conversation to begin!</p>
               </div>
             ) : (
-              (progress.stepProgress[progress.currentStepId]?.messages || []).map((message) => (
+              ((currentProgress?.stepProgress[currentProgress.currentStepId]?.messages) || 
+               (progress.stepProgress[progress.currentStepId]?.messages) || []).map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.role === 'ai' ? 'justify-start' : 'justify-end'}`}

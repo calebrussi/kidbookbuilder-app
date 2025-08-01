@@ -133,9 +133,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.error('❌ Sign out error:', error);
         throw error;
       }
-      console.log('✅ Sign out successful - clearing local state');
+      console.log('✅ Sign out successful - clearing local auth state only');
       
-      // Force clear local state even if Supabase call hangs
+      // Force clear local state but preserve progress data
       setUser(null);
       setSession(null);
       
@@ -147,8 +147,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(null);
       setSession(null);
       
-      // Clear all localStorage to ensure clean state
-      localStorage.clear();
+      // Clear only Supabase auth localStorage, preserve user progress data
+      console.log('🗄️ Clearing authentication localStorage only (preserving progress)');
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('sb-') || key.includes('supabase')) {
+          localStorage.removeItem(key);
+        }
+      });
       
       // Force a page refresh to login page
       console.log('🔄 Redirecting to clean login state');

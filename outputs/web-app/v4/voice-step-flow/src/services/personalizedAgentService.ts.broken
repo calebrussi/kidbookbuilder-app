@@ -508,27 +508,11 @@ export class PersonalizedAgentService {
     console.log(`🎲 Selected theme: ${selectedTheme}`);
     
     try {
-      // Generate book agents using existing createPersonalizedAgent function
-      const userPersonalization = this.extractPersonalizationFromProgress(userProgress);
-      const agents = [];
+        userId,
+        userProgress,
+        selectedTheme
+      );
       
-      // Create 3 agents for the book with the selected theme
-      const agentPrompts = [
-        `You are helping create a ${selectedTheme} story. Focus on building the world and setting.`,
-        `You are helping create a ${selectedTheme} story. Focus on character development and relationships.`,
-        `You are helping create a ${selectedTheme} story. Focus on the plot, conflict, and resolution.`
-      ];
-      
-      for (let i = 0; i < agentPrompts.length; i++) {
-        const agent = await createPersonalizedAgent({
-          name: `${userPersonalization.userName}'s ${selectedTheme} Agent ${i + 1}`,
-          description: `Book creation agent for ${selectedTheme} theme`,
-          prompt: agentPrompts[i],
-          userId: userId,
-          stepId: `book-agent-${i + 1}`
-        });
-        agents.push(agent);
-      }
       console.log(`✅ Generated ${agents.length} book agents`);
       return agents;
       

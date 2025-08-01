@@ -58,7 +58,7 @@ class ProcessingService {
         
         // Process each step with 'processing' status
         for (const step of processingSteps) {
-          if (step.conversationId) {
+          if (step && step.conversationId) {
             console.log(`Checking conversation status for step ${step.stepId}, conversation ID: ${step.conversationId}`);
             
             // Fetch and update the conversation data
@@ -72,6 +72,8 @@ class ProcessingService {
               this.currentProgress = updatedProgress;
               console.log(`Updated progress for step ${step.stepId}`);
             }
+          } else {
+            console.warn(`⚠️ Step missing conversationId:`, step);
           }
         }
       } else {
@@ -91,7 +93,9 @@ class ProcessingService {
     const { stepProgress } = progress;
     
     return Object.values(stepProgress).filter(step => 
-      step.conversationStatus === 'processing' || step.conversationStatus === 'in-progress'
+      step && 
+      step.conversationId && 
+      (step.conversationStatus === 'processing' || step.conversationStatus === 'in-progress')
     );
   }
 
@@ -123,15 +127,33 @@ class ProcessingService {
       const analysis = resp.data.analysis || [];
       const success = resp.data.analysis?.call_successful === "success" || false;
       const conversationStatus = resp.data.status;
-    //   const stepStatus:StepStatus = resp.data.analysis?.call_successful || progress.stepProgress[progress.currentStepId].status;
+      
+      // Check if the analysis contains data collection results
+      const hasDataCollection = resp.data.analysis?.data_collection_results && 
+        Object.keys(resp.data.analysis.data_collection_results).length > 0;
+      
+      console.log("🔍 DEBUG: Analysis details:", {
+        hasAnalysis: !!resp.data.analysis,
+        callSuccessful: resp.data.analysis?.call_successful,
+        conversationStatus,
+        hasDataCollection,
+        dataCollectionResults: resp.data.analysis?.data_collection_results,
+        fullAnalysis: resp.data.analysis
+      });
 
       console.log(
-        "Current StepStatus:" + progress.stepProgress[progress.currentStepId].status,
+        "Current StepStatus:" + progress.stepProgress[progress.currentStepId]?.status,
         // "New StepStatus:" + stepStatus,
         "Analysis:", analysis,
         "Success:", success,
         "ConversationStatus:", conversationStatus
       );
+
+      console.log("🔍 DEBUG: About to call updateStepConversationProgress with:", {
+        currentStepId: progress.currentStepId,
+        stepExists: !!progress.stepProgress[progress.currentStepId],
+        analysisData: { analysis: resp.data.analysis, success, conversationStatus }
+      });
 
       // Delegate state mutation to progressService
       const updatedProgress = progressService.updateStepConversationProgress(
@@ -141,9 +163,13 @@ class ProcessingService {
       );
 
        console.log("Updated progress after conversation fetch:", updatedProgress);
+       console.log("🔍 DEBUG: updatedProgress.currentStepId:", updatedProgress?.currentStepId);
+       console.log("🔍 DEBUG: stepProgress keys:", Object.keys(updatedProgress?.stepProgress || {}));
+       console.log("🔍 DEBUG: current step data:", updatedProgress?.stepProgress[updatedProgress?.currentStepId || '']);
 
        // If we have access to update handlers, call them
-      if (handlers?.onConversationIdUpdate) {
+      if (handlers?.onConversationIdUpdate && 
+          updatedProgress?.stepProgress[updatedProgress.currentStepId]?.conversationId) {
         handlers.onConversationIdUpdate(
           updatedProgress.currentStepId,
           updatedProgress.stepProgress[updatedProgress.currentStepId].conversationId

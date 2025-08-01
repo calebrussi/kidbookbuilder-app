@@ -10,11 +10,16 @@ interface LocalStorageSchema {
 }
 
 class StorageService {
-  private static readonly STORAGE_KEY = 'character-quiz-app';
+  private static readonly STORAGE_KEY_PREFIX = 'character-quiz-app';
 
-  private getStorageData(): LocalStorageSchema {
+  private getStorageKey(userId?: string): string {
+    return userId ? `${StorageService.STORAGE_KEY_PREFIX}-${userId}` : StorageService.STORAGE_KEY_PREFIX;
+  }
+
+  private getStorageData(userId?: string): LocalStorageSchema {
     try {
-      const data = localStorage.getItem(StorageService.STORAGE_KEY);
+      const storageKey = this.getStorageKey(userId);
+      const data = localStorage.getItem(storageKey);
       if (!data) return this.getDefaultStorageData();
       
       const parsed = JSON.parse(data);
@@ -42,41 +47,43 @@ class StorageService {
     };
   }
 
-  private saveStorageData(data: LocalStorageSchema): void {
+  private saveStorageData(data: LocalStorageSchema, userId?: string): void {
     try {
-      localStorage.setItem(StorageService.STORAGE_KEY, JSON.stringify(data));
+      const storageKey = this.getStorageKey(userId);
+      localStorage.setItem(storageKey, JSON.stringify(data));
     } catch (error) {
       console.error('Failed to save to localStorage:', error);
     }
   }
 
-  getUserProgress(sessionId: string): UserProgress | null {
-    const data = this.getStorageData();
+  getUserProgress(sessionId: string, userId?: string): UserProgress | null {
+    const data = this.getStorageData(userId);
     const progress = data.userProgress[sessionId] || null;
     
     // If we have progress data, run it through the fixer to ensure all required fields exist
     return progress ? fixProgressData(progress) : null;
   }
 
-  saveUserProgress(progress: UserProgress): void {
-    const data = this.getStorageData();
+  saveUserProgress(progress: UserProgress, userId?: string): void {
+    const data = this.getStorageData(userId);
     data.userProgress[progress.sessionId] = progress;
-    this.saveStorageData(data);
+    this.saveStorageData(data, userId);
   }
 
-  getCurrentSession() {
-    return this.getStorageData().currentSession;
+  getCurrentSession(userId?: string) {
+    return this.getStorageData(userId).currentSession;
   }
 
-  setCurrentSession(sessionId: string, workflowId: string): void {
-    const data = this.getStorageData();
+  setCurrentSession(sessionId: string, workflowId: string, userId?: string): void {
+    const data = this.getStorageData(userId);
     data.currentSession = { sessionId, workflowId };
-    this.saveStorageData(data);
+    this.saveStorageData(data, userId);
   }
 
-  clearAllData(): void {
+  clearAllData(userId?: string): void {
     try {
-      localStorage.removeItem(StorageService.STORAGE_KEY);
+      const storageKey = this.getStorageKey(userId);
+      localStorage.removeItem(storageKey);
     } catch (error) {
       console.error('Failed to clear localStorage:', error);
     }

@@ -78,6 +78,12 @@ class ProgressService {
       percentComplete: (completedCount / updatedProgress.overallProgress.totalSteps) * 100
     };
 
+    // If all steps are complete, mark workflow as finished
+    if (completedCount === updatedProgress.overallProgress.totalSteps) {
+      console.log('🎉 All steps complete! Workflow finished.');
+      updatedProgress.currentStepId = 'workflow_complete';
+    }
+
     // Update session data
     updatedProgress.sessionData.lastActivityAt = new Date();
 
@@ -185,6 +191,16 @@ class ProgressService {
         )
       : [];
 
+    console.log("🔍 DEBUG: Progress service data extraction:", {
+      stepId,
+      hasAnalysis: !!progressData.analysis,
+      hasDataCollection: !!progressData.analysis?.data_collection_results,
+      dataCollectionEntries: progressData.analysis?.data_collection_results ? Object.keys(progressData.analysis.data_collection_results) : [],
+      extractedCapturedData: newCaptured,
+      success: progressData.success,
+      rawDataCollection: progressData.analysis?.data_collection_results
+    });
+
     // Update the progress data for the specific step
     updatedProgress.stepProgress[stepId] = {
       ...prevStep,
@@ -192,9 +208,17 @@ class ProgressService {
       capturedData: newCaptured,
       success: progressData.success !== undefined ? progressData.success : prevStep.success,
       conversationStatus: progressData.conversationStatus || prevStep.conversationStatus,
-      messages: progressData.messages || prevStep.messages || [], // Update messages if provided
+      messages: progressData.messages ? progressData.messages : (prevStep.messages || []), // Preserve existing messages if no new ones provided
       lastModified: new Date()
     };
+
+    console.log("🔍 DEBUG: Step after update:", {
+      stepId,
+      status: updatedProgress.stepProgress[stepId].status,
+      capturedDataCount: updatedProgress.stepProgress[stepId].capturedData?.length || 0,
+      capturedData: updatedProgress.stepProgress[stepId].capturedData,
+      success: updatedProgress.stepProgress[stepId].success
+    });
 
     // If the conversation was successful, mark the step as complete
     if (progressData.success === true && updatedProgress.stepProgress[stepId].status !== 'complete') {
@@ -219,11 +243,58 @@ class ProgressService {
         completedSteps: completedCount,
         percentComplete: (completedCount / updatedProgress.overallProgress.totalSteps) * 100
       };
+      
+      // If all steps are complete, mark workflow as finished
+      if (completedCount === updatedProgress.overallProgress.totalSteps) {
+        console.log('🎉 All steps complete via conversation! Workflow finished.');
+        updatedProgress.currentStepId = 'workflow_complete';
+        
+        // 🔥 NEW: Signal that personalization data should be re-extracted
+        updatedProgress.shouldRefreshPersonalization = true;
+      }
     }
 
     // Update session data
     updatedProgress.sessionData.lastActivityAt = new Date();
 
+    return updatedProgress;
+  }
+
+  /**
+   * Ensures that progress data loaded from external sources has proper step structure
+   */
+  ensureStepStructure(progress: UserProgress, workflow: any): UserProgress {
+    const allSteps = workflow.sections?.flatMap((section: any) => section.steps) || [];
+    const updatedProgress = { ...progress };
+    
+    // Ensure all workflow steps exist in stepProgress
+    allSteps.forEach((step: any) => {
+      const stepId = step.id;
+      if (!updatedProgress.stepProgress[stepId]) {
+        console.log(`🔧 Creating missing step structure for: ${stepId}`);
+        updatedProgress.stepProgress[stepId] = {
+          stepId,
+          status: 'not_started',
+          conversationId: `conv_${stepId}_${Date.now()}`,
+          lastModified: new Date(),
+          attemptCount: 0,
+          messages: [],
+          success: false,
+          conversationStatus: 'not_started',
+          capturedData: []
+        };
+      } else {
+        // Ensure existing steps have all required fields WITHOUT overwriting data
+        const stepProgress = updatedProgress.stepProgress[stepId];
+        if (!stepProgress.messages) stepProgress.messages = [];
+        if (!stepProgress.capturedData) stepProgress.capturedData = [];
+        if (stepProgress.success === undefined) stepProgress.success = false;
+        if (!stepProgress.conversationStatus) stepProgress.conversationStatus = 'not_started';
+        // DON'T reset status or other important fields for existing steps
+        console.log(`✅ Preserved existing step data for: ${stepId} (status: ${stepProgress.status})`);
+      }
+    });
+    
     return updatedProgress;
   }
 }
