@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseAvailable } from '../lib/supabase';
 import { UserProgress } from '../types/userProgress';
 
 interface UseRealtimeProgressProps {
@@ -19,7 +19,10 @@ export const useRealtimeProgress = ({
   const channelRef = useRef<RealtimeChannel | null>(null);
 
   useEffect(() => {
-    if (!enabled || !userId || !workflowId) {
+    if (!enabled || !userId || !workflowId || !isSupabaseAvailable || !supabase) {
+      if (!isSupabaseAvailable) {
+        console.log('🔌 Offline mode: Skipping real-time progress subscription');
+      }
       return;
     }
 

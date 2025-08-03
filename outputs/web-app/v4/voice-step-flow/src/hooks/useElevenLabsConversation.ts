@@ -41,18 +41,36 @@ export function useElevenLabsConversation({
     },
     onMessage: (message) => {
       console.log("ElevenLabs message received:", message);
-      const elevenLabsMessage: ElevenLabsMessage = {
-        id: Date.now().toString(),
-        source: message.source, // Include source from ElevenLabs
-        content:
-          message.message || "I heard you, but I'm processing your request...",
-        timestamp: new Date(),
-        isBot: true,
-        agentId: agentId,
-      };
+      
+      // Check if this is a user message by looking at the source
+      if (message.source === 'user') {
+        console.log("User message detected:", message.message);
+        const userMessage: ElevenLabsMessage = {
+          id: "user-" + Date.now(),
+          source: "user",
+          content: message.message || "User spoke",
+          timestamp: new Date(),
+          isBot: false,
+          agentId: agentId,
+        };
+        
+        setMessages((prev) => [...prev, userMessage]);
+        onMessage?.(userMessage);
+      } else {
+        // AI message
+        const elevenLabsMessage: ElevenLabsMessage = {
+          id: Date.now().toString(),
+          source: message.source, // Include source from ElevenLabs
+          content:
+            message.message || "I heard you, but I'm processing your request...",
+          timestamp: new Date(),
+          isBot: true,
+          agentId: agentId,
+        };
 
-      setMessages((prev) => [...prev, elevenLabsMessage]);
-      onMessage?.(elevenLabsMessage);
+        setMessages((prev) => [...prev, elevenLabsMessage]);
+        onMessage?.(elevenLabsMessage);
+      }
     },
     onError: (error) => {
       console.error("ElevenLabs conversation error:", error);

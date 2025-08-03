@@ -90,9 +90,19 @@ class ProgressService {
     return updatedProgress;
   }
 
-  canActivateStep(progress: UserProgress, stepId: string): boolean {
-    const allSteps = workflowService.getAllSteps();
-    const targetStepIndex = allSteps.findIndex(item => item.step.id === stepId);
+  canActivateStep(progress: UserProgress, stepId: string, workflow?: any): boolean {
+    // For story creation workflow, get steps from the workflow parameter
+    let allSteps;
+    if (workflow && workflow.sections) {
+      allSteps = workflow.sections.flatMap((section: any) => 
+        section.steps.map((step: any) => ({ step, section }))
+      );
+    } else {
+      // Fallback to workflowService for character quiz
+      allSteps = workflowService.getAllSteps();
+    }
+    
+    const targetStepIndex = allSteps.findIndex((item: any) => item.step.id === stepId);
     
     if (targetStepIndex === -1) return false;
 
@@ -119,6 +129,22 @@ class ProgressService {
     return allSteps[currentStepIndex + 1].step.id;
   }
 
+  getNextStepForWorkflow(progress: UserProgress): string | null {
+    // Handle story creation workflow specifically
+    if (progress.workflowId === 'story-creation') {
+      const storyStepOrder = ['setting-questions', 'conflict-questions', 'character-questions'];
+      const currentIndex = storyStepOrder.indexOf(progress.currentStepId);
+      
+      if (currentIndex !== -1 && currentIndex < storyStepOrder.length - 1) {
+        return storyStepOrder[currentIndex + 1];
+      }
+      return null; // No next step or current step not found
+    }
+    
+    // Fall back to the original method for other workflows
+    return this.getNextStep(progress);
+  }
+
   updateStepConversationId(progress: UserProgress, stepId: string, conversationId: string): UserProgress {
     const updatedProgress = { ...progress };
     
@@ -131,8 +157,17 @@ class ProgressService {
       lastModified: new Date(),
     };
 
-    // Update session data
-    updatedProgress.sessionData.lastActivityAt = new Date();
+    // Update session data - add safety check
+    if (updatedProgress.sessionData) {
+      updatedProgress.sessionData.lastActivityAt = new Date();
+    } else {
+      // Initialize sessionData if it doesn't exist
+      updatedProgress.sessionData = {
+        startedAt: new Date(),
+        lastActivityAt: new Date(),
+        timeSpentMinutes: 0
+      };
+    }
 
     return updatedProgress;
   }
@@ -158,8 +193,17 @@ class ProgressService {
       lastModified: new Date()
     };
 
-    // Update session data
-    updatedProgress.sessionData.lastActivityAt = new Date();
+    // Update session data - add safety check
+    if (updatedProgress.sessionData) {
+      updatedProgress.sessionData.lastActivityAt = new Date();
+    } else {
+      // Initialize sessionData if it doesn't exist
+      updatedProgress.sessionData = {
+        startedAt: new Date(),
+        lastActivityAt: new Date(),
+        timeSpentMinutes: 0
+      };
+    }
 
     return updatedProgress;
   }
@@ -176,6 +220,12 @@ class ProgressService {
     }
   ): UserProgress {
     const updatedProgress = { ...progress };
+
+    // Don't process workflow_complete as it's not a real step
+    if (stepId === 'workflow_complete') {
+      console.log('🔍 DEBUG: Skipping processing for workflow_complete stepId');
+      return progress;
+    }
 
     if (!updatedProgress.stepProgress[stepId]) return progress;
 
@@ -205,7 +255,7 @@ class ProgressService {
     updatedProgress.stepProgress[stepId] = {
       ...prevStep,
       analysis: progressData.analysis || prevStep.analysis,
-      capturedData: newCaptured,
+      capturedData: newCaptured.length > 0 ? newCaptured : (prevStep.capturedData || []), // Preserve existing data if no new data
       success: progressData.success !== undefined ? progressData.success : prevStep.success,
       conversationStatus: progressData.conversationStatus || prevStep.conversationStatus,
       messages: progressData.messages ? progressData.messages : (prevStep.messages || []), // Preserve existing messages if no new ones provided
@@ -217,12 +267,23 @@ class ProgressService {
       status: updatedProgress.stepProgress[stepId].status,
       capturedDataCount: updatedProgress.stepProgress[stepId].capturedData?.length || 0,
       capturedData: updatedProgress.stepProgress[stepId].capturedData,
-      success: updatedProgress.stepProgress[stepId].success
+      success: updatedProgress.stepProgress[stepId].success,
+      shouldComplete: (
+        (progressData.success === true) ||
+        (updatedProgress.stepProgress[stepId].success === true) ||
+        (updatedProgress.stepProgress[stepId].capturedData && updatedProgress.stepProgress[stepId].capturedData.length > 0)
+      )
     });
 
-    // If the conversation was successful, mark the step as complete
-    if (progressData.success === true && updatedProgress.stepProgress[stepId].status !== 'complete') {
-      console.log(`Marking step ${stepId} as complete`);
+    // If the conversation was successful OR we have captured data, mark the step as complete
+    const shouldMarkComplete = (
+      (progressData.success === true) ||
+      (updatedProgress.stepProgress[stepId].success === true) ||
+      (updatedProgress.stepProgress[stepId].capturedData && updatedProgress.stepProgress[stepId].capturedData.length > 0)
+    );
+
+    if (shouldMarkComplete && updatedProgress.stepProgress[stepId].status !== 'complete') {
+      console.log(`Marking step ${stepId} as complete (success: ${progressData.success}, hasData: ${!!updatedProgress.stepProgress[stepId].capturedData?.length})`);
       // Create a new reference for stepProgress[stepId] to ensure React detects the state change
       updatedProgress.stepProgress = {
         ...updatedProgress.stepProgress,
@@ -244,18 +305,38 @@ class ProgressService {
         percentComplete: (completedCount / updatedProgress.overallProgress.totalSteps) * 100
       };
       
-      // If all steps are complete, mark workflow as finished
+      // Auto-advance to next step if current step is completed and matches currentStepId
+      if (stepId === updatedProgress.currentStepId) {
+        const nextStepId = this.getNextStepForWorkflow(updatedProgress);
+        if (nextStepId) {
+          console.log(`🚀 Auto-advancing from completed step ${stepId} to next step: ${nextStepId}`);
+          updatedProgress.currentStepId = nextStepId;
+        } else {
+          console.log('🎉 All steps complete! Preparing workflow completion.');
+          updatedProgress.currentStepId = 'workflow_complete';
+        }
+      }
+      
+      // If all steps are complete, prepare for workflow completion
       if (completedCount === updatedProgress.overallProgress.totalSteps) {
-        console.log('🎉 All steps complete via conversation! Workflow finished.');
-        updatedProgress.currentStepId = 'workflow_complete';
+        console.log('🎉 All steps complete via conversation! Preparing workflow completion.');
         
         // 🔥 NEW: Signal that personalization data should be re-extracted
         updatedProgress.shouldRefreshPersonalization = true;
       }
     }
 
-    // Update session data
-    updatedProgress.sessionData.lastActivityAt = new Date();
+    // Update session data - add safety check
+    if (updatedProgress.sessionData) {
+      updatedProgress.sessionData.lastActivityAt = new Date();
+    } else {
+      // Initialize sessionData if it doesn't exist
+      updatedProgress.sessionData = {
+        startedAt: new Date(),
+        lastActivityAt: new Date(),
+        timeSpentMinutes: 0
+      };
+    }
 
     return updatedProgress;
   }
@@ -290,10 +371,36 @@ class ProgressService {
         if (!stepProgress.capturedData) stepProgress.capturedData = [];
         if (stepProgress.success === undefined) stepProgress.success = false;
         if (!stepProgress.conversationStatus) stepProgress.conversationStatus = 'not_started';
+        
+        // 🔥 NEW: Mark step as complete if it has captured data (match behavior of other steps)
+        if (stepProgress.capturedData && stepProgress.capturedData.length > 0 && stepProgress.status !== 'complete') {
+          console.log(`🔄 Auto-completing step ${stepId} because it has ${stepProgress.capturedData.length} captured data items`);
+          stepProgress.status = 'complete';
+          stepProgress.success = true;
+          if (!stepProgress.completedAt) {
+            stepProgress.completedAt = new Date();
+          }
+        }
+        
         // DON'T reset status or other important fields for existing steps
         console.log(`✅ Preserved existing step data for: ${stepId} (status: ${stepProgress.status})`);
       }
     });
+    
+    // Update overall progress counters after potentially auto-completing steps
+    const completedCount = Object.values(updatedProgress.stepProgress).filter(
+      sp => sp.status === 'complete'
+    ).length;
+    
+    updatedProgress.overallProgress = {
+      ...updatedProgress.overallProgress,
+      completedSteps: completedCount,
+      percentComplete: (completedCount / updatedProgress.overallProgress.totalSteps) * 100
+    };
+    
+    // DON'T auto-trigger workflow completion during initialization - let user navigate normally
+    // The workflow will be marked complete when a conversation actually finishes
+    console.log(`📊 Progress updated: ${completedCount}/${updatedProgress.overallProgress.totalSteps} steps complete`);
     
     return updatedProgress;
   }

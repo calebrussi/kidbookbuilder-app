@@ -6,6 +6,7 @@ import { progressService } from '../services/progressService';
 import { SupabaseProgressService } from '../services/supabaseProgressService';
 import { useRealtimeProgress } from './useRealtimeProgress';
 import { useAuth } from '../context/AuthContext';
+import { PersonalizedAgentService } from '../services/personalizedAgentService';
 
 export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolean) => {
   const [progress, setProgress] = useState<UserProgress | null>(null);
@@ -37,6 +38,122 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
         console.log('🔄 Starting progress initialization...');
         console.log('📋 Workflow:', workflow);
         console.log('👤 User:', user?.id);
+        
+        // Check if we're loading story creation progress
+        if (workflow.id === 'story-creation' && user) {
+          const storyProgressKey = `story_progress_${user.id}`;
+          console.log('📖 Loading story creation progress from localStorage');
+          const storedProgress = localStorage.getItem(storyProgressKey);
+          let existingProgress = null;
+          
+          if (storedProgress) {
+            existingProgress = JSON.parse(storedProgress);
+            console.log('✅ Story creation progress loaded successfully');
+            
+            // Validate that the progress matches the workflow structure
+            const requiredSteps = ['setting-questions', 'conflict-questions', 'character-questions'];
+            const hasRequiredSteps = requiredSteps.every(stepId => 
+              existingProgress.stepProgress && existingProgress.stepProgress[stepId]
+            );
+            
+            if (hasRequiredSteps) {
+              setProgress(existingProgress);
+              setLoading(false);
+              return;
+            } else {
+              console.log('📖 Story progress structure mismatch, will recreate');
+              localStorage.removeItem(storyProgressKey);
+            }
+          }
+          
+          // Create fresh story creation progress if none exists or structure is wrong
+          console.log('📖 Creating fresh story creation progress');
+          const sessionId = `story_session_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+          
+          // Try to preserve character data from existing progress or character quiz progress
+          let characterData = null;
+          if (existingProgress?.characterQuizData) {
+            characterData = existingProgress.characterQuizData;
+            console.log('📖 Preserving character data from existing story progress');
+          } else {
+            // Try to load character data from character quiz progress
+            const userSpecificKey = `character-quiz-app-${user.id}`;
+            const charQuizData = localStorage.getItem(userSpecificKey);
+            if (charQuizData) {
+              const charQuizProgress = JSON.parse(charQuizData);
+              console.log('📖 Loading character data from character quiz progress');
+              // Extract personalization from character quiz progress
+              characterData = PersonalizedAgentService.extractPersonalizationFromProgress(charQuizProgress);
+            }
+          }
+          
+          const freshStoryProgress: any = {
+            workflowId: 'story-creation',
+            sessionId: sessionId,
+            currentStepId: 'setting-questions',
+            stepProgress: {
+              'setting-questions': {
+                stepId: 'setting-questions',
+                status: 'in_progress' as const,
+                conversationId: `conv_setting_${Date.now()}`,
+                lastModified: new Date(),
+                attemptCount: 0,
+                messages: [],
+                capturedData: [],
+                analysisResults: null,
+                success: false,
+                conversationStatus: 'not_started'
+              },
+              'conflict-questions': {
+                stepId: 'conflict-questions',
+                status: 'not_started' as const,
+                conversationId: `conv_conflict_${Date.now()}`,
+                lastModified: new Date(),
+                attemptCount: 0,
+                messages: [],
+                capturedData: [],
+                analysisResults: null,
+                success: false,
+                conversationStatus: 'not_started'
+              },
+              'character-questions': {
+                stepId: 'character-questions',
+                status: 'not_started' as const,
+                conversationId: `conv_character_${Date.now()}`,
+                lastModified: new Date(),
+                attemptCount: 0,
+                messages: [],
+                capturedData: [],
+                analysisResults: null,
+                success: false,
+                conversationStatus: 'not_started'
+              }
+            },
+            overallProgress: {
+              completedSteps: 0,
+              totalSteps: 3,
+              percentComplete: 0,
+              lastUpdated: new Date().toISOString()
+            },
+            sessionData: {
+              startedAt: new Date(),
+              lastActivityAt: new Date(),
+              timeSpentMinutes: 0
+            }
+          };
+          
+          // Add character data if available
+          if (characterData) {
+            freshStoryProgress.characterQuizData = characterData;
+            console.log('📖 Added character data to fresh story progress:', characterData);
+          }
+          
+          // Save the fresh progress
+          localStorage.setItem(storyProgressKey, JSON.stringify(freshStoryProgress));
+          setProgress(freshStoryProgress);
+          setLoading(false);
+          return;
+        }
         
         let userProgress: UserProgress | null = null;
         let supabaseAttempted = false;
@@ -237,8 +354,15 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
       if (!prevProgress) return null;
       const updatedProgress = progressService.updateStepStatus(prevProgress, stepId, status, capturedData);
       
-      // Save to localStorage for immediate feedback
-      storageService.saveUserProgress(updatedProgress, user?.id);
+      // Special handling for story creation workflow
+      if (updatedProgress.workflowId === 'story-creation' && user?.id) {
+        const storyProgressKey = `story_progress_${user.id}`;
+        localStorage.setItem(storyProgressKey, JSON.stringify(updatedProgress));
+        console.log('💾 Saved story creation progress to localStorage');
+      } else {
+        // Save to localStorage for immediate feedback (regular quiz workflow)
+        storageService.saveUserProgress(updatedProgress, user?.id);
+      }
       
       // Save to Supabase if user is authenticated (async, don't block UI)
       if (user?.id) {
@@ -306,15 +430,23 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
     // Update React state immediately
     setProgress(newProgress);
     
-    // Clear user-specific localStorage
-    const userSpecificKey = `character-quiz-app-${user.id}`;
-    localStorage.removeItem(userSpecificKey);
-    
-    // Clear old localStorage format too
-    localStorage.removeItem('character-quiz-app');
-    
-    // Save the fresh progress to localStorage
-    storageService.saveUserProgress(newProgress, user.id);
+    // Special handling for story creation workflow
+    if (workflow.id === 'story-creation') {
+      const storyProgressKey = `story_progress_${user.id}`;
+      localStorage.removeItem(storyProgressKey);
+      localStorage.setItem(storyProgressKey, JSON.stringify(newProgress));
+      console.log('💾 Reset story creation progress');
+    } else {
+      // Clear user-specific localStorage for quiz workflow
+      const userSpecificKey = `character-quiz-app-${user.id}`;
+      localStorage.removeItem(userSpecificKey);
+      
+      // Clear old localStorage format too
+      localStorage.removeItem('character-quiz-app');
+      
+      // Save the fresh progress to localStorage
+      storageService.saveUserProgress(newProgress, user.id);
+    }
     
     // Clear Supabase progress
     try {
@@ -335,8 +467,14 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
           conversationId
         );
         
-        // Save to localStorage immediately
-        storageService.saveUserProgress(updatedProgress, user?.id);
+        // Special handling for story creation workflow
+        if (updatedProgress.workflowId === 'story-creation' && user?.id) {
+          const storyProgressKey = `story_progress_${user.id}`;
+          localStorage.setItem(storyProgressKey, JSON.stringify(updatedProgress));
+        } else {
+          // Save to localStorage immediately for quiz workflow
+          storageService.saveUserProgress(updatedProgress, user?.id);
+        }
         
         // Save to Supabase if user is authenticated
         if (user?.id) {
@@ -372,7 +510,14 @@ export const useProgress = (workflow?: Workflow | null, workflowLoading?: boolea
           progressData
         );
         
-        storageService.saveUserProgress(updatedProgress);
+        // Special handling for story creation workflow
+        if (updatedProgress.workflowId === 'story-creation' && user?.id) {
+          const storyProgressKey = `story_progress_${user.id}`;
+          localStorage.setItem(storyProgressKey, JSON.stringify(updatedProgress));
+        } else {
+          // Save to localStorage for quiz workflow
+          storageService.saveUserProgress(updatedProgress);
+        }
         
         console.log("Updated Progress (inside hook):", updatedProgress);
         console.log("Messages after update:", updatedProgress.stepProgress[stepId]?.messages);

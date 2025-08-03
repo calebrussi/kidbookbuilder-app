@@ -125,7 +125,7 @@ export const StepItem: React.FC<StepItemProps> = ({
 
       </button>
       
-      {status === 'complete' && capturedData && (
+      {(status === 'complete' || (status === 'in_progress' && capturedData?.length > 0)) && capturedData && (
         <CapturedDataDisplay data={capturedData} stepTitle={title} />
       )}
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { WorkflowHeader } from '../components/WorkflowHeader';
 import { StepList } from '../components/StepList';
 import { ChatInterface } from '../components/ChatInterface';
@@ -13,15 +13,33 @@ import { useRealtimeProgress } from '../hooks/useRealtimeProgress';
 import { PersonalizedAgentService } from '../services/personalizedAgentService';
 
 const Index = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [currentAgentId, setCurrentAgentId] = useState<string | undefined>(undefined);
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [storyCreationMode, setStoryCreationMode] = useState(false);
   
   const { user, loading: authContextLoading, signIn, signUp } = useAuth();
   const isAuthenticated = !!user;
+
+  // Check for story creation mode from URL parameters
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const mode = searchParams.get('mode');
+    
+    if (mode === 'story-creation') {
+      console.log('📖 Story creation mode detected');
+      setStoryCreationMode(true);
+      
+      // Clear the URL parameter to keep URL clean
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [location]);
   
-  const { workflow, loading: workflowLoading, error } = useWorkflow(isAuthenticated);
+  const { workflow, loading: workflowLoading, error } = useWorkflow(isAuthenticated, storyCreationMode);
   const { 
     progress, 
     loading: progressLoading, 
@@ -140,6 +158,16 @@ const Index = () => {
     }
   };
 
+  // Check if we're in story creation mode
+  const isStoryCreationMode = workflow?.id === 'story-creation';
+
+  // Function to go back to character quiz
+  const handleBackToCharacterQuiz = () => {
+    // Clear any story-related data and navigate back
+    navigate('/');
+    window.location.reload(); // Force reload to get character quiz workflow
+  };
+
   // Show loading while checking authentication
   if (authContextLoading) {
     return (
@@ -248,8 +276,30 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         
-        {/* Book Generation Prompt - Show when quiz is complete */}
-        {isCharacterQuizComplete() && (
+        {/* Story Creation Mode Indicator */}
+        {isStoryCreationMode && (
+          <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-lg shadow-lg mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold mb-2">
+                  📖 Story Creation Mode
+                </h2>
+                <p className="text-lg">
+                  Now talk with your personalized agents to create your story!
+                </p>
+              </div>
+              <button 
+                onClick={handleBackToCharacterQuiz}
+                className="bg-white text-green-600 hover:bg-gray-100 font-semibold px-4 py-2 rounded"
+              >
+                ← Back to Character Quiz
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {/* Book Generation Prompt - Show when quiz is complete and NOT in story mode */}
+        {isCharacterQuizComplete() && !isStoryCreationMode && (
           <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-lg shadow-lg mb-6">
             <h2 className="text-2xl font-bold mb-3">
               🎉 Great job, {getUserName()}! Your character is ready!

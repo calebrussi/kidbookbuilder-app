@@ -73,4 +73,5 @@ export interface UserProgress {
     lastActivityAt: Date;
     timeSpentMinutes: number;
   };
+  shouldRefreshPersonalization?: boolean; // Flag to trigger personalization refresh
 }

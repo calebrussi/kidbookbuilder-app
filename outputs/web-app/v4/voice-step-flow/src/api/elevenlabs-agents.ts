@@ -10,6 +10,9 @@ export interface CreateAgentRequest {
   prompt: string;
   voice_id?: string;
   language?: string;
+  dataFieldName?: string;
+  dataCollectionDescription?: string;
+  firstMessage?: string;
 }
 
 export interface CreateAgentResponse {
@@ -75,7 +78,7 @@ export async function createPersonalizedAgent(request: CreateAgentRequest): Prom
             ]
           },
           agent: {
-            first_message: "Hi! I'm here to help you with this part of your story creation journey.",
+            first_message: request.firstMessage || "Hi! I'm here to help you with this part of your story creation journey.",
             language: request.language || 'en',
             prompt: {
               prompt: request.prompt,
@@ -96,17 +99,28 @@ export async function createPersonalizedAgent(request: CreateAgentRequest): Prom
             }
           },
           tts: {
-            voice_id: request.voice_id || 'pNInz6obpgDQGcFmaJgB'
+            voice_id: request.voice_id || 'ErXwobaYiN019PkySvjV' // Eric - consistent voice for all agents
           }
         },
         platform_settings: {
-          auth: {
-            enable_auth: true
+          evaluation: {
+            criteria: [
+              {
+                id: "story_data_collection",
+                name: "story_data_collection", 
+                type: "prompt",
+                conversation_goal_prompt: "Mark as success if relevant story information was collected through questions and answers, even if responses are brief or incomplete."
+              }
+            ]
           },
-          evaluation: {},
-          data_collection: {}
+          data_collection: {
+            [request.dataFieldName || "story_info"]: {
+              type: "string",
+              description: request.dataCollectionDescription || request.description || "Collect story information through conversational questions and answers"
+            }
+          }
         }
-      })
+      }),
     });
 
     if (!response.ok) {
@@ -125,7 +139,7 @@ export async function createPersonalizedAgent(request: CreateAgentRequest): Prom
           name: request.name,
           description: request.description?.substring(0, 100) + '...',
           promptLength: request.prompt?.length,
-          voice_id: request.voice_id || 'pNInz6obpgDQGcFmaJgB'
+          voice_id: request.voice_id || 'ErXwobaYiN019PkySvjV'
         }
       });
       

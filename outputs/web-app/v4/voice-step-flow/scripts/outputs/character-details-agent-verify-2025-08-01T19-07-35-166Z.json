@@ -1,0 +1,304 @@
+{
+  "agent_id": "agent_01jz94kta6encvtk7rabyatkkb",
+  "name": "create_character_agent",
+  "conversation_config": {
+    "asr": {
+      "quality": "high",
+      "provider": "elevenlabs",
+      "user_input_audio_format": "pcm_16000",
+      "keywords": []
+    },
+    "turn": {
+      "turn_timeout": 7,
+      "silence_end_call_timeout": -1,
+      "mode": "turn"
+    },
+    "tts": {
+      "model_id": "eleven_turbo_v2",
+      "voice_id": "pNInz6obpgDQGcFmaJgB",
+      "supported_voices": [],
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "pronunciation_dictionary_locators": []
+    },
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 600,
+      "client_events": [
+        "audio",
+        "interruption",
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction",
+        "vad_score"
+      ]
+    },
+    "language_presets": {},
+    "agent": {
+      "first_message": "Let's create your character! What's your character's name?",
+      "language": "en",
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      },
+      "prompt": {
+        "prompt": "# Personality\nYou are a supportive character creation assistant, dedicated to guiding users through creating their own characters in a fun and engaging way. You are encouraging, helpful, and patient.\n\n# Environment\nYou are part of a chained conversation flow where users are building characters for a story. Users expect a clear progression through the character-building process.\n\n# Tone\nUse friendly and inviting language that makes users feel comfortable sharing details about their characters. Ask questions one at a time and acknowledge responses before moving on.\n\n# Goal\nYour objective is to collect character creation information through a sequence of questions:\n1. Ask for the character's name and wait for response.\n2. Then ask about their special ability and wait for response.\n3. Finally, ask about their favorite activity and wait for response.\n4. Only end after collecting responses to all three questions (name, special ability, favorite activity).\n\n# Guardrails\nStay focused on character creation questions only. If users try to shift to other topics, gently redirect them back to their character. Accept any level of detail they provide, even brief answers.\n\n# Tools\nCRITICAL: End the conversation IMMEDIATELY after collecting responses to all three questions (name, special ability, favorite activity). Do not wait for user response, do not engage further.",
+        "llm": "gemini-2.0-flash-001",
+        "temperature": 0.25,
+        "max_tokens": -1,
+        "tool_ids": [],
+        "built_in_tools": {
+          "end_call": {
+            "name": "end_call",
+            "description": "End the call when the conversation objective has been achieved.",
+            "response_timeout_secs": 20,
+            "disable_interruptions": false,
+            "force_pre_tool_speech": false,
+            "assignments": [],
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          },
+          "language_detection": null,
+          "transfer_to_agent": null,
+          "transfer_to_number": null,
+          "skip_turn": null,
+          "play_keypad_touch_tone": null,
+          "voicemail_detection": null
+        },
+        "mcp_server_ids": [],
+        "native_mcp_server_ids": [],
+        "knowledge_base": [],
+        "custom_llm": null,
+        "ignore_default_personality": false,
+        "rag": {
+          "enabled": false,
+          "embedding_model": "e5_mistral_7b_instruct",
+          "max_vector_distance": 0.6,
+          "max_documents_length": 50000,
+          "max_retrieved_rag_chunks_count": 20
+        },
+        "timezone": null,
+        "tools": [
+          {
+            "name": "end_call",
+            "description": "End the call when the conversation objective has been achieved.",
+            "response_timeout_secs": 20,
+            "disable_interruptions": false,
+            "force_pre_tool_speech": false,
+            "assignments": [],
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "metadata": {
+    "created_at_unix_secs": 1751579749
+  },
+  "platform_settings": {
+    "auth": {
+      "enable_auth": true,
+      "allowlist": [],
+      "shareable_token": null
+    },
+    "evaluation": {
+      "criteria": [
+        {
+          "id": "character_creation",
+          "name": "character_creation",
+          "type": "prompt",
+          "conversation_goal_prompt": "Mark as success if character creation information was collected (name, special ability, favorite activity), even if responses are brief or incomplete.",
+          "use_knowledge_base": false
+        }
+      ]
+    },
+    "widget": {
+      "variant": "full",
+      "placement": "bottom-right",
+      "expandable": "never",
+      "avatar": {
+        "type": "orb",
+        "color_1": "#2792dc",
+        "color_2": "#9ce6e6"
+      },
+      "feedback_mode": "none",
+      "bg_color": "#ffffff",
+      "text_color": "#000000",
+      "btn_color": "#000000",
+      "btn_text_color": "#ffffff",
+      "border_color": "#e1e1e1",
+      "focus_color": "#000000",
+      "border_radius": null,
+      "btn_radius": null,
+      "action_text": null,
+      "start_call_text": null,
+      "end_call_text": null,
+      "expand_text": null,
+      "listening_text": null,
+      "speaking_text": null,
+      "shareable_page_text": null,
+      "shareable_page_show_terms": true,
+      "terms_text": null,
+      "terms_html": null,
+      "terms_key": null,
+      "show_avatar_when_collapsed": false,
+      "disable_banner": false,
+      "override_link": null,
+      "mic_muting_enabled": false,
+      "transcript_enabled": false,
+      "text_input_enabled": true,
+      "default_expanded": false,
+      "always_expanded": false,
+      "text_contents": {
+        "main_label": null,
+        "start_call": null,
+        "start_chat": null,
+        "new_call": null,
+        "end_call": null,
+        "mute_microphone": null,
+        "change_language": null,
+        "collapse": null,
+        "expand": null,
+        "copied": null,
+        "accept_terms": null,
+        "dismiss_terms": null,
+        "listening_status": null,
+        "speaking_status": null,
+        "connecting_status": null,
+        "chatting_status": null,
+        "input_label": null,
+        "input_placeholder": null,
+        "input_placeholder_text_only": null,
+        "input_placeholder_new_conversation": null,
+        "user_ended_conversation": null,
+        "agent_ended_conversation": null,
+        "conversation_id": null,
+        "error_occurred": null,
+        "copy_id": null
+      },
+      "styles": {
+        "base": null,
+        "base_hover": null,
+        "base_active": null,
+        "base_border": null,
+        "base_subtle": null,
+        "base_primary": null,
+        "base_error": null,
+        "accent": null,
+        "accent_hover": null,
+        "accent_active": null,
+        "accent_border": null,
+        "accent_subtle": null,
+        "accent_primary": null,
+        "overlay_padding": null,
+        "button_radius": null,
+        "input_radius": null,
+        "bubble_radius": null,
+        "sheet_radius": null,
+        "compact_sheet_radius": null,
+        "dropdown_sheet_radius": null
+      },
+      "language_selector": false,
+      "supports_text_only": true,
+      "custom_avatar_path": null,
+      "language_presets": {}
+    },
+    "data_collection": {
+      "special_ability": {
+        "type": "string",
+        "description": "The character's special ability or power",
+        "dynamic_variable": "",
+        "constant_value": ""
+      },
+      "favorite_activity": {
+        "type": "string",
+        "description": "The character's favorite activity or hobby",
+        "dynamic_variable": "",
+        "constant_value": ""
+      },
+      "character_name": {
+        "type": "string",
+        "description": "The name of the character being created",
+        "dynamic_variable": "",
+        "constant_value": ""
+      }
+    },
+    "overrides": {
+      "conversation_config_override": {
+        "tts": {
+          "voice_id": false
+        },
+        "conversation": {
+          "text_only": true
+        },
+        "agent": {
+          "first_message": false,
+          "language": false,
+          "prompt": {
+            "prompt": false,
+            "native_mcp_server_ids": false
+          }
+        }
+      },
+      "custom_llm_extra_body": false,
+      "enable_conversation_initiation_client_data_from_webhook": false
+    },
+    "call_limits": {
+      "agent_concurrency_limit": -1,
+      "daily_limit": 100000,
+      "bursting_enabled": true
+    },
+    "ban": null,
+    "privacy": {
+      "record_voice": true,
+      "retention_days": -1,
+      "delete_transcript_and_pii": false,
+      "delete_audio": false,
+      "apply_to_existing_conversations": false,
+      "zero_retention_mode": false
+    },
+    "workspace_overrides": {
+      "conversation_initiation_client_data_webhook": null,
+      "webhooks": {
+        "post_call_webhook_id": null,
+        "send_audio": false
+      }
+    },
+    "testing": {
+      "test_ids": []
+    },
+    "safety": {
+      "is_blocked_ivc": false,
+      "is_blocked_non_ivc": false,
+      "ignore_safety_evaluation": false
+    }
+  },
+  "phone_numbers": [],
+  "workflow": {
+    "enabled": false,
+    "edges": {},
+    "nodes": {
+      "start_node": {
+        "type": "start",
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "access_info": {
+    "is_creator": true,
+    "creator_name": "caleb@kidbookbuilder.com",
+    "creator_email": "caleb@kidbookbuilder.com",
+    "role": "admin"
+  },
+  "tags": []
+}

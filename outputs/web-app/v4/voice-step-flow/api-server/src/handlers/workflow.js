@@ -15,12 +15,12 @@ const workflowJson = {
   sections: [
     {
       id: "group-1",
-      title: "1",
+      title: "Talk with Name Helper",
       order: 0,
       steps: [
         {
           id: "personal-intro",
-          title: "Personal Intro section covering user name, age, and hobbies",
+          title: "What is your name?",
           order: 0,
           sectionId: "group-1",
           agentId: "agent_01jz94kfyffcsteqk4t0yzvb19",
@@ -29,13 +29,12 @@ const workflowJson = {
     },
     {
       id: "group-2",
-      title: "2",
+      title: "Talk with Story Helper",
       order: 1,
       steps: [
         {
           id: "tell-me-your-story-style",
-          title:
-            "Tell Me Your Story Style section covering preferred story types and preference for funny or exciting stories",
+          title: "What stories do you love?",
           order: 1,
           sectionId: "group-2",
           agentId: "agent_01jz94kpdjekxv5c8n41z1tbc6",
@@ -44,13 +43,12 @@ const workflowJson = {
     },
     {
       id: "group-3",
-      title: "3",
+      title: "Talk with Character Helper",
       order: 2,
       steps: [
         {
           id: "create-your-character",
-          title:
-            "Create Your Character section covering character name, special ability, and favorite activity",
+          title: "Character name, special ability, and favorite activity",
           order: 2,
           sectionId: "group-3",
           agentId: "agent_01jz94kta6encvtk7rabyatkkb",

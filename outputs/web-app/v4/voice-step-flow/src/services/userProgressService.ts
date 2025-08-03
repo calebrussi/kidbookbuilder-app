@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseAvailable } from '../lib/supabase';
 
 export interface UserProgress {
   id?: string;
@@ -26,6 +26,11 @@ export interface StepProgress {
 export class UserProgressService {
   // Get user's workflow progress
   static async getUserProgress(workflowId: string): Promise<UserProgress | null> {
+    if (!isSupabaseAvailable || !supabase) {
+      console.log('🔌 Offline mode: Returning null for getUserProgress');
+      return null;
+    }
+    
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
@@ -48,6 +53,11 @@ export class UserProgressService {
 
   // Create or update user's workflow progress
   static async upsertUserProgress(progress: Partial<UserProgress>): Promise<UserProgress> {
+    if (!isSupabaseAvailable || !supabase) {
+      console.log('🔌 Offline mode: Mocking upsertUserProgress');
+      return { ...progress, id: 'offline-progress-' + Date.now() } as UserProgress;
+    }
+    
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {

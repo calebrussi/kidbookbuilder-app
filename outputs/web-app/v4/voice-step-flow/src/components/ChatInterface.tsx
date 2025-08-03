@@ -64,17 +64,16 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     onMessage: (message: ElevenLabsMessage) => {
       console.log('Chat interface received message:', message);
       
-      // Only process assistant messages here (user messages are handled in the sendMessage function)
-      if (message.isBot && progress) {
-        console.log('🤖 Processing assistant message:', message.content);
+      if (progress) {
+        console.log(`💬 Processing ${message.isBot ? 'AI' : 'user'} message:`, message.content);
         
-        // Save the assistant message to the user's progress
+        // Save the message to the user's progress (both user and AI messages)
         const updatedProgress = progressService.addMessage(
           progress, // Use progress from props, not currentProgress
           progress.currentStepId,
           {
             content: message.content,
-            role: message.source,
+            role: message.isBot ? "ai" : "user", // Set role based on isBot flag
           }
         );
 

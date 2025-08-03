@@ -68,7 +68,7 @@ class WorkflowService {
         sections: [
           {
             id: "introduction",
-            title: "Introduce Yourself",
+            title: "Talk with Name Helper",
             order: 0,
             steps: [
               {
@@ -82,7 +82,7 @@ class WorkflowService {
           },
           {
             id: "story-style", 
-            title: "Tell Me Your Story Style",
+            title: "Talk with Story Helper",
             order: 1,
             steps: [
               {
@@ -96,7 +96,7 @@ class WorkflowService {
           },
           {
             id: "character-creation",
-            title: "Create Your Character", 
+            title: "Talk with Character Helper", 
             order: 2,
             steps: [
               {
